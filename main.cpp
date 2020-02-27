@@ -8,6 +8,7 @@
 
 
 int main(){
+    // commentaartje
     TiXmlDocument doc;
     if(!doc.LoadFile("test.xml")) {
         std::cerr << doc.ErrorDesc() << std::endl;
