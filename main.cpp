@@ -11,6 +11,7 @@ int main(){
     // commentaartje
     std::map<std::string,Station> stationnen;
 
+
     TiXmlDocument doc;
     if(!doc.LoadFile("test.xml")) {
         std::cerr << doc.ErrorDesc() << std::endl;
@@ -26,8 +27,10 @@ int main(){
         std::string type = elem->Value();
 
         if (type == "STATION"){
-            Station huidige = Station();
             std::string stationnaam;
+            std::string volgende;
+            std::string vorige;
+            int spoor=0;
             for(TiXmlNode* e = elem->FirstChild(); e != NULL; e = e->NextSibling()){
                 std::string naam = e->Value();
                 if(naam == "naam"){
@@ -35,7 +38,6 @@ int main(){
                     if (text == NULL) {
                         continue;
                     }
-                    huidige.setFNaam(text->Value());
                     stationnaam = text->Value();
                 }
                 if(naam == "volgende"){
@@ -43,27 +45,65 @@ int main(){
                     if (text == NULL) {
                         continue;
                     }
-                    huidige.setFVolgende(text->Value());
+                    volgende = text->Value();
                 }
                 if(naam == "vorige"){
                     TiXmlText *text = e->FirstChild()->ToText();
                     if (text == NULL) {
                         continue;
                     }
-                    huidige.setFVorige(text->Value());
+                    vorige = text->Value();
                 }
                 if(naam == "spoor"){
                     TiXmlText *text = e->FirstChild()->ToText();
                     if (text == NULL) {
                         continue;
                     }
-                    huidige.setFSpoor(std::atol(text->Value()));
+                    spoor = std::atol(text->Value());
                 }
-
             }
-            stationnen[stationnaam] = huidige;
+            // todo: check if the values in stationnaam,volgende,vorige,spoor are valid
+            stationnen[stationnaam] = Station(stationnaam,volgende,vorige,spoor);
         }
-
+//        if (type == "TRAM"){
+//            int lijn=0;
+//            int zitplaatsen=0;
+//            int snelheid=0;
+//            std::string beginstation;
+//            for(TiXmlNode* e = elem->FirstChild(); e != NULL; e = e->NextSibling()){
+//                std::string naam = e->Value();
+//                if(naam == "lijn"){
+//                    TiXmlText *text = e->FirstChild()->ToText();
+//                    if (text == NULL) {
+//                        continue;
+//                    }
+//                    lijn = std::atol(text->Value());
+//                }
+//                if(naam == "zitplaatsen"){
+//                    TiXmlText *text = e->FirstChild()->ToText();
+//                    if (text == NULL) {
+//                        continue;
+//                    }
+//                    zitplaatsen = std::atol(text->Value());
+//                }
+//                if(naam == "snelheid"){
+//                    TiXmlText *text = e->FirstChild()->ToText();
+//                    if (text == NULL) {
+//                        continue;
+//                    }
+//                    snelheid = std::atol(text->Value());
+//                }
+//                if(naam == "beginStation"){
+//                    TiXmlText *text = e->FirstChild()->ToText();
+//                    if (text == NULL) {
+//                        continue;
+//                    }
+//                    beginstation = std::atol(text->Value());
+//                }
+//            }
+//            // todo: check if the values in stationnaam,volgende,vorige,spoor are valid
+//
+//        }
     }
     doc.Clear();
     return 0;
