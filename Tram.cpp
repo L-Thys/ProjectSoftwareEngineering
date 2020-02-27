@@ -3,4 +3,10 @@
 //
 
 #include "Tram.h"
-Tram::Tram() : fLijn(0), fSeats(0), fSpeed(0), fStartStation(NULL){}
+
+Tram::Tram(const int fLijn, const int fSeats, const int fSpeed, std::string fStartStation) {
+    Tram::fLijn = fLijn;
+    Tram::fSeats = fSeats;
+    Tram::fSpeed = fSpeed;
+    Tram::fStartStation = fStartStation;
+}
