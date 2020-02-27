@@ -4,4 +4,5 @@
  - xml begrijpen/ doen werken
  - contracten 
  - datastructuur bedenken
- - tests schrijven
+ - tests schrijven 
+ - test test
