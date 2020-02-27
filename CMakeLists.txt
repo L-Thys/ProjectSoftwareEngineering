@@ -12,10 +12,10 @@ include_directories(gtest/include)
 link_directories(gtest/lib)
 
 # Set source files for RELEASE target
-set(RELEASE_SOURCE_FILES main.cpp)
+set(RELEASE_SOURCE_FILES main.cpp tinyXML/tinyxmlparser.cpp tinyXML/tinyxmlerror.cpp tinyXML/tinyxml.h tinyXML/tinyxml.cpp tinyXML/tinystr.h tinyXML/tinystr.cpp)
 
 # Set source files for DEBUG target
-set(DEBUG_SOURCE_FILES main.cpp)
+set(DEBUG_SOURCE_FILES main.cpp tinyXML/tinyxmlparser.cpp tinyXML/tinyxmlerror.cpp tinyXML/tinyxml.h tinyXML/tinyxml.cpp tinyXML/tinystr.h tinyXML/tinystr.cpp)
 
 # Create RELEASE target
 add_executable(PSE ${RELEASE_SOURCE_FILES})
