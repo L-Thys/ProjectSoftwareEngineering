@@ -19,13 +19,13 @@ public:
      * @param fSpeed : an integer that indicates the max speed of the Tram
      * @param fStartStation : a string that is the name of the home station of this Tram
      * */
-    Tram(int fLijn, int fSeats, int fSpeed, std::string fStartStation);
+    Tram(int _Lijn, int _Seats, int _Speed, std::string _StartStation);
 
 private:
-    int fLijn;
-    int fSeats;
-    int fSpeed;
-    std::string fStartStation;
+    int _Lijn;
+    int _Seats;
+    int _Speed;
+    std::string _StartStation;
 };
 
 

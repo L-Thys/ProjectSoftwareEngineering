@@ -4,9 +4,9 @@
 
 #include "Tram.h"
 
-Tram::Tram(const int fLijn, const int fSeats, const int fSpeed, std::string fStartStation) {
-    Tram::fLijn = fLijn;
-    Tram::fSeats = fSeats;
-    Tram::fSpeed = fSpeed;
-    Tram::fStartStation = fStartStation;
+Tram::Tram(const int _Lijn, const int _Seats, const int _Speed, std::string _StartStation) {
+    Tram::_Lijn = _Lijn;
+    Tram::_Seats = _Seats;
+    Tram::_Speed = _Speed;
+    Tram::_StartStation = _StartStation;
 }
