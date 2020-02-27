@@ -21,12 +21,25 @@ int main(){
     }
     for(TiXmlElement* elem = root->FirstChildElement(); elem != NULL; elem = elem->NextSiblingElement()) {
         std::string type = elem->Value();
-        const char* naam;
+
         if (type == "STATION"){
-            naam = elem->Attribute("naam");
-            if(naam != NULL)
-                std::cout << naam << std::endl; // Do stuff with it
+            
+            for(TiXmlNode* e = elem->FirstChild(); e != NULL; e = e->NextSibling()){
+                std::string naam = e->Value();
+                if(naam == "naam" ){
+                    for(TiXmlNode* te = e->FirstChild(); te != NULL; te = te->NextSibling()) {
+                        TiXmlText *text = te->ToText();
+                        if (text == NULL) {
+                            continue;
+                        }
+                        std::string t = text->Value();
+                        std::cout << t << std::endl;
+                    }
+                }
+
+            }
         }
     }
+    doc.Clear();
     return 0;
 }
