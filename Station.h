@@ -15,23 +15,7 @@ private:
     int fSpoor;
 
 public:
-    Station();
-
-    const std::string &getFNaam() const;
-
-    void setFNaam(const std::string &fNaam);
-
-    const std::string &getFVolgende() const;
-
-    void setFVolgende(const std::string &fVolgende);
-
-    const std::string &getFVorige() const;
-
-    void setFVorige(const std::string &fVorige);
-
-    int getFSpoor() const;
-
-    void setFSpoor(int fSpoor);
+    Station(const std::string &fNaam, const std::string &fVolgende, const std::string &fVorige, int fSpoor);
 
 };
 
