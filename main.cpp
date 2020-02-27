@@ -65,45 +65,45 @@ int main(){
             // todo: check if the values in stationnaam,volgende,vorige,spoor are valid
             stationnen[stationnaam] = Station(stationnaam,volgende,vorige,spoor);
         }
-        if (type == "TRAM"){
-            int lijn=0;
-            int zitplaatsen=0;
-            int snelheid=0;
-            std::string beginstation;
-            for(TiXmlNode* e = elem->FirstChild(); e != NULL; e = e->NextSibling()){
-                std::string naam = e->Value();
-                if(naam == "lijn"){
-                    TiXmlText *text = e->FirstChild()->ToText();
-                    if (text == NULL) {
-                        continue;
-                    }
-                    lijn = std::atol(text->Value());
-                }
-                if(naam == "zitplaatsen"){
-                    TiXmlText *text = e->FirstChild()->ToText();
-                    if (text == NULL) {
-                        continue;
-                    }
-                    zitplaatsen = std::atol(text->Value());
-                }
-                if(naam == "snelheid"){
-                    TiXmlText *text = e->FirstChild()->ToText();
-                    if (text == NULL) {
-                        continue;
-                    }
-                    snelheid = std::atol(text->Value());
-                }
-                if(naam == "beginStation"){
-                    TiXmlText *text = e->FirstChild()->ToText();
-                    if (text == NULL) {
-                        continue;
-                    }
-                    beginstation = std::atol(text->Value());
-                }
-            }
-            // todo: check if the values in stationnaam,volgende,vorige,spoor are valid
-
-        }
+//        if (type == "TRAM"){
+//            int lijn=0;
+//            int zitplaatsen=0;
+//            int snelheid=0;
+//            std::string beginstation;
+//            for(TiXmlNode* e = elem->FirstChild(); e != NULL; e = e->NextSibling()){
+//                std::string naam = e->Value();
+//                if(naam == "lijn"){
+//                    TiXmlText *text = e->FirstChild()->ToText();
+//                    if (text == NULL) {
+//                        continue;
+//                    }
+//                    lijn = std::atol(text->Value());
+//                }
+//                if(naam == "zitplaatsen"){
+//                    TiXmlText *text = e->FirstChild()->ToText();
+//                    if (text == NULL) {
+//                        continue;
+//                    }
+//                    zitplaatsen = std::atol(text->Value());
+//                }
+//                if(naam == "snelheid"){
+//                    TiXmlText *text = e->FirstChild()->ToText();
+//                    if (text == NULL) {
+//                        continue;
+//                    }
+//                    snelheid = std::atol(text->Value());
+//                }
+//                if(naam == "beginStation"){
+//                    TiXmlText *text = e->FirstChild()->ToText();
+//                    if (text == NULL) {
+//                        continue;
+//                    }
+//                    beginstation = std::atol(text->Value());
+//                }
+//            }
+//            // todo: check if the values in stationnaam,volgende,vorige,spoor are valid
+//
+//        }
     }
     doc.Clear();
     return 0;
