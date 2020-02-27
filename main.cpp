@@ -5,10 +5,14 @@
 #include "tinyXML/tinyxml.h"
 #include "iostream"
 #include "string"
+#include "map"
+#include "Station.h"
 
 
 int main(){
     // commentaartje
+    std::map<std::string,Station> stationnen;
+
     TiXmlDocument doc;
     if(!doc.LoadFile("test.xml")) {
         std::cerr << doc.ErrorDesc() << std::endl;
@@ -24,22 +28,44 @@ int main(){
         std::string type = elem->Value();
 
         if (type == "STATION"){
-            
+            Station huidige = Station();
+            std::string stationnaam;
             for(TiXmlNode* e = elem->FirstChild(); e != NULL; e = e->NextSibling()){
                 std::string naam = e->Value();
-                if(naam == "naam" ){
-                    for(TiXmlNode* te = e->FirstChild(); te != NULL; te = te->NextSibling()) {
-                        TiXmlText *text = te->ToText();
-                        if (text == NULL) {
-                            continue;
-                        }
-                        std::string t = text->Value();
-                        std::cout << t << std::endl;
+                if(naam == "naam"){
+                    TiXmlText *text = e->FirstChild()->ToText();
+                    if (text == NULL) {
+                        continue;
                     }
+                    huidige.setFNaam(text->Value());
+                    stationnaam = text->Value();
+                }
+                if(naam == "volgende"){
+                    TiXmlText *text = e->FirstChild()->ToText();
+                    if (text == NULL) {
+                        continue;
+                    }
+                    huidige.setFVolgende(text->Value());
+                }
+                if(naam == "vorige"){
+                    TiXmlText *text = e->FirstChild()->ToText();
+                    if (text == NULL) {
+                        continue;
+                    }
+                    huidige.setFVorige(text->Value());
+                }
+                if(naam == "spoor"){
+                    TiXmlText *text = e->FirstChild()->ToText();
+                    if (text == NULL) {
+                        continue;
+                    }
+                    huidige.setFSpoor(std::atol(text->Value()));
                 }
 
             }
+            stationnen[stationnaam] = huidige;
         }
+
     }
     doc.Clear();
     return 0;

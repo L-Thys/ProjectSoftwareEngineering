@@ -4,6 +4,9 @@
 
 #include "Station.h"
 
+
+Station::Station() {}
+
 const std::string &Station::getFNaam() const {
     return fNaam;
 }
@@ -12,19 +15,19 @@ void Station::setFNaam(const std::string &fNaam) {
     Station::fNaam = fNaam;
 }
 
-Station *Station::getFVolgende() const {
+const std::string &Station::getFVolgende() const {
     return fVolgende;
 }
 
-void Station::setFVolgende(Station *fVolgende) {
+void Station::setFVolgende(const std::string &fVolgende) {
     Station::fVolgende = fVolgende;
 }
 
-Station *Station::getFVorige() const {
+const std::string &Station::getFVorige() const {
     return fVorige;
 }
 
-void Station::setFVorige(Station *fVorige) {
+void Station::setFVorige(const std::string &fVorige) {
     Station::fVorige = fVorige;
 }
 
@@ -35,5 +38,3 @@ int Station::getFSpoor() const {
 void Station::setFSpoor(int fSpoor) {
     Station::fSpoor = fSpoor;
 }
-
-Station::Station() {}

@@ -10,8 +10,8 @@
 class Station {
 private:
     std::string fNaam;
-    Station* fVolgende;
-    Station* fVorige;
+    std::string fVolgende;
+    std::string fVorige;
     int fSpoor;
 
 public:
@@ -21,13 +21,13 @@ public:
 
     void setFNaam(const std::string &fNaam);
 
-    Station *getFVolgende() const;
+    const std::string &getFVolgende() const;
 
-    void setFVolgende(Station *fVolgende);
+    void setFVolgende(const std::string &fVolgende);
 
-    Station *getFVorige() const;
+    const std::string &getFVorige() const;
 
-    void setFVorige(Station *fVorige);
+    void setFVorige(const std::string &fVorige);
 
     int getFSpoor() const;
 
