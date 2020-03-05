@@ -19,7 +19,6 @@ public:
      * */
     Station(const std::string &_Naam, const std::string &_Volgende, const std::string &_Vorige, int _Spoor);
 
-
     const std::string &getNaam() const;
 
     const std::string &getVolgende() const;
@@ -32,7 +31,7 @@ private:
     std::string _Naam;
     std::string _Volgende;
     std::string _Vorige;
-    int _Spoor;
+    int _Spoor;                 // zal nog een lijst moeten worden
 };
 
 

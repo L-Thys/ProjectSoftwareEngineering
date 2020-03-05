@@ -42,6 +42,20 @@ public:
      * */
     void addTram (Tram* tram);
 
+    /**
+     * @brief : gegeven een naam zoekt deze methode een station dat dit als naam heeft
+     *
+     * @return : een pointer naar een station
+     * */
+    Station* findStation(std::string name);
+
+    /**
+     * @brief : gegeven een spoor geeft deze methode de tram terug die op dit spoor rijdt
+     *
+     * @return : een pointer naar een tram
+     * */
+    Tram* findTram(int spoor);
+
     bool isConsistent();
 
 private:
