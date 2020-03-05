@@ -8,45 +8,46 @@
 #include "library.h"
 
 class Station;
+
 class Tram;
 
 class Spoor {
 public:
 
     /**
-     * @brief : deze constructor maakt eeen spoor aan dat al een nummer heeft
+     * @brief : this constructor creates an object with a number as track-number
      *
-     * @param _track : dit is het cijfer dat dit spoor representeert
+     * @param _track : this is an integer that is going to be used as track-number
      * */
     Spoor(int _track);
 
     /**
+     * @brief : this constructor constructs a Spoor with a given Tram and a track-number
      *
-     *
-     * @param _track : dit is het cijfer dat dit spoor representeert
+     * @param _track : this is an integer that is going to be used as track-number
      * @param tram :
      * */
-    Spoor(int _track, Tram* tram);
+    Spoor(int _track, Tram *tram);
 
     /**
-     * @brief : deze constructor maakt een object aan en steekt hier de track-nummer in en steekt er al een station in
+     * @brief : this constructor constructs a Spoor with a given Tram and a Station
      *
-     * @param _track : dit is het cijfer dat dit spoor representeert
+     * @param _track : this is an integer that is going to be used as track-number
      * @param station :
      * */
-    Spoor(int _track, Station* station);
+    Spoor(int _track, Station *station);
 
     /**
      * @brief : deze methode voegt een tram toe aan de trams die rijden op dit spoor
      * */
-    void addTram(Tram* tram);
+    void addTram(Tram *tram);
 
-    void addStation(Station* station);
+    void addStation(Station *station);
 
 private:
     int _track;
-    std::vector<Station*> _stations;
-    std::vector<Tram*> _trams;
+    std::vector<Station *> _stations;
+    std::vector<Tram *> _trams;
 };
 
 
