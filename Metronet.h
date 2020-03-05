@@ -9,6 +9,9 @@
 #include "Tram.h"
 #include "Station.h"
 
+
+// TODO : maak een destructor aan
+
 class Metronet {
 public:
     /**
@@ -39,6 +42,7 @@ public:
      * */
     void addTram (Tram* tram);
 
+    bool isConsistent();
 
 private:
     std::map<std::string, Station*> _stations;

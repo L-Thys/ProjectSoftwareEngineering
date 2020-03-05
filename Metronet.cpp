@@ -19,3 +19,19 @@ void Metronet::addStation(Station *station) {
 void Metronet::addTram(Tram *tram) {
     Metronet::_trams.insert(std::pair<int, Tram*>(tram->getLijn(), tram));
 }
+
+bool Metronet::isConsistent() {
+    try {
+        for (std::map<std::string, Station *>::iterator station = _stations.begin();
+             station != _stations.end(); station++) {
+            if (station->second->getSpoor() == 0) {
+                throw
+            }
+        }
+    }
+    catch(){
+
+    }
+}
+
+
