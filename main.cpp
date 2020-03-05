@@ -7,6 +7,29 @@
 #include "Station.h"
 #include "Tram.h"
 
+/**
+ * @brief checks if string s represents an integer
+ * @param s
+ * @return true if s represents an intiger, false if not
+ */
+bool is_Integer(const std::string& s){
+    std::string::const_iterator it = s.begin();
+    while (it != s.end() && std::isdigit(*it)) ++it;
+    return !s.empty() && it == s.end();
+}
+
+/**
+ * @brief checks if string s is a valid string, according to the specification:
+ * String = Letter { Letter } and Letter = "a" ... "z" | "A" ... "Z"
+ * @param s
+ * @return true if s is valid, false if not
+ */
+bool is_valid_String(const std::string& s){
+    std::string::const_iterator it = s.begin();
+    while (it != s.end() && ((*it >= 97 && *it <= 122) || (*it >= 65 && *it <= 90))) ++it;
+    return !s.empty() && it == s.end();
+}
+
 
 // TODO : extra simulatie functie zodat main niet te groot wordt
 
@@ -47,7 +70,7 @@ int main(){
                 std::string naam = attribuut->Value();
                 if(naam == "naam"){
                     TiXmlText *text = attribuut->FirstChild()->ToText();
-                    if (text == NULL) {
+                    if (text == NULL or !is_valid_String(text->Value())) {
                         std::cerr << "ongeldige informatie" << std::endl;
                         continue;
                     }
@@ -55,7 +78,7 @@ int main(){
                 }
                 else if(naam == "volgende"){
                     TiXmlText *text = attribuut->FirstChild()->ToText();
-                    if (text == NULL) {
+                    if (text == NULL or !is_valid_String(text->Value())) {
                         std::cerr << "ongeldige informatie" << std::endl;
                         continue;
                     }
@@ -63,7 +86,7 @@ int main(){
                 }
                 else if(naam == "vorige"){
                     TiXmlText *text = attribuut->FirstChild()->ToText();
-                    if (text == NULL) {
+                    if (text == NULL or !is_valid_String(text->Value())) {
                         std::cerr << "ongeldige informatie" << std::endl;
                         continue;
                     }
@@ -71,7 +94,8 @@ int main(){
                 }
                 else if(naam == "spoor"){
                     TiXmlText *text = attribuut->FirstChild()->ToText();
-                    if (text == NULL) {
+
+                    if (text == NULL or !is_Integer(text->Value())) {
                         std::cerr << "ongeldige informatie" << std::endl;
                         continue;
                     }
@@ -95,15 +119,15 @@ int main(){
                 std::string naam = attribuut->Value();
                 if(naam == "lijn"){
                     TiXmlText *text = attribuut->FirstChild()->ToText();
-                    if (text == NULL) {
+                    if (text == NULL or !is_Integer(text->Value())) {
                         std::cerr << "ongeldige informatie" << std::endl;
                         continue;
                     }
                     lijn = std::atol(text->Value());
                 }
-                else if(naam == "zitplaatsen"){
+                else if(naam == "zitplaatsen" ){
                     TiXmlText *text = attribuut->FirstChild()->ToText();
-                    if (text == NULL) {
+                    if (text == NULL or !is_Integer(text->Value())) {
                         std::cerr << "ongeldige informatie" << std::endl;
                         continue;
                     }
@@ -111,7 +135,7 @@ int main(){
                 }
                 else if(naam == "snelheid"){
                     TiXmlText *text = attribuut->FirstChild()->ToText();
-                    if (text == NULL) {
+                    if (text == NULL or !is_Integer(text->Value())) {
                         std::cerr << "ongeldige informatie" << std::endl;
                         continue;
                     }
@@ -119,7 +143,7 @@ int main(){
                 }
                 else if(naam == "beginStation"){
                     TiXmlText *text = attribuut->FirstChild()->ToText();
-                    if (text == NULL) {
+                    if (text == NULL or !is_valid_String(text->Value()) ) {
                         std::cerr << "ongeldige informatie" << std::endl;
                         continue;
                     }
