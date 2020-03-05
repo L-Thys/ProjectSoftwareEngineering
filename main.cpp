@@ -64,107 +64,84 @@ Metronet* readFromXml(const char* file){
 
         // herken het type element
         // als het element STATION is
-        if (type == "STATION"){
-            std::string stationnaam;
-            std::string volgende;
-            std::string vorige;
-            int spoor=0;
+        try {
+            if (type == "STATION"){
+                std::string stationnaam;
+                std::string volgende;
+                std::string vorige;
+                int spoor=-1;
 
-            // lees verdere informatie voor het element
-            for(TiXmlNode* attribuut = element->FirstChild(); attribuut != NULL; attribuut = attribuut->NextSibling()){
-                // todo: try catch voor ongeldige informatie
-                std::string naam = attribuut->Value();
-                if(naam == "naam"){
-                    TiXmlText *text = attribuut->FirstChild()->ToText();
-                    if (text == NULL or !is_valid_String(text->Value())) {
-                        std::cerr << "ongeldige informatie" << std::endl;
-                        continue;
-                    }
-                    stationnaam = text->Value();
-                }
-                else if(naam == "volgende"){
-                    TiXmlText *text = attribuut->FirstChild()->ToText();
-                    if (text == NULL or !is_valid_String(text->Value())) {
-                        std::cerr << "ongeldige informatie" << std::endl;
-                        continue;
-                    }
-                    volgende = text->Value();
-                }
-                else if(naam == "vorige"){
-                    TiXmlText *text = attribuut->FirstChild()->ToText();
-                    if (text == NULL or !is_valid_String(text->Value())) {
-                        std::cerr << "ongeldige informatie" << std::endl;
-                        continue;
-                    }
-                    vorige = text->Value();
-                }
-                else if(naam == "spoor"){
-                    TiXmlText *text = attribuut->FirstChild()->ToText();
+                // lees verdere informatie voor het element
+                for(TiXmlNode* attribuut = element->FirstChild(); attribuut != NULL; attribuut = attribuut->NextSibling()){
 
-                    if (text == NULL or !is_Integer(text->Value())) {
-                        std::cerr << "ongeldige informatie" << std::endl;
-                        continue;
+                    std::string naam = attribuut->Value();
+                    if(naam == "naam"){
+                        TiXmlText *text = attribuut->FirstChild()->ToText();
+                        if (text == NULL or !is_valid_String(text->Value())) throw ongeldige_informatie();
+                        stationnaam = text->Value();
                     }
-                    spoor = std::atol(text->Value());
-                }else{
-                    std::cerr << "ongeldige informatie" << std::endl;
+                    else if(naam == "volgende"){
+                        TiXmlText *text = attribuut->FirstChild()->ToText();
+                        if (text == NULL or !is_valid_String(text->Value())) throw ongeldige_informatie();
+                        volgende = text->Value();
+                    }
+                    else if(naam == "vorige"){
+                        TiXmlText *text = attribuut->FirstChild()->ToText();
+                        if (text == NULL or !is_valid_String(text->Value())) throw ongeldige_informatie();
+                        vorige = text->Value();
+                    }
+                    else if(naam == "spoor"){
+                        TiXmlText *text = attribuut->FirstChild()->ToText();
+
+                        if (text == NULL or !is_Integer(text->Value())) throw ongeldige_informatie();
+                        spoor = std::atol(text->Value());
+                    }else throw ongeldige_informatie();
                 }
+                // voeg een Station met deze informatie toe aan stations in metronet
+                Station* station = new Station(stationnaam,volgende,vorige,spoor);
+                metronet->addStation(station);
             }
-            // voeg een Station met deze informatie toe aan stations in metronet
-            Station* station = new Station(stationnaam,volgende,vorige,spoor);
-            metronet->addStation(station);
-        }
 
-        // als het element TRAM is
-        else if (type == "TRAM"){
-            int lijn=0;
-            int zitplaatsen=0;
-            int snelheid=0;
-            std::string beginstation;
-            // lees verdere informatie voor het element
-            for(TiXmlNode* attribuut = element->FirstChild(); attribuut != NULL; attribuut = attribuut->NextSibling()){
-                std::string naam = attribuut->Value();
-                if(naam == "lijn"){
-                    TiXmlText *text = attribuut->FirstChild()->ToText();
-                    if (text == NULL or !is_Integer(text->Value())) {
-                        std::cerr << "ongeldige informatie" << std::endl;
-                        continue;
+                // als het element TRAM is
+            else if (type == "TRAM"){
+                int lijn=-1;
+                int zitplaatsen=-1;
+                int snelheid=-1;
+                std::string beginstation;
+                // lees verdere informatie voor het element
+                for(TiXmlNode* attribuut = element->FirstChild(); attribuut != NULL; attribuut = attribuut->NextSibling()){
+                    std::string naam = attribuut->Value();
+                    if(naam == "lijn"){
+                        TiXmlText *text = attribuut->FirstChild()->ToText();
+                        if (text == NULL or !is_Integer(text->Value())) throw ongeldige_informatie();
+                        lijn = std::atol(text->Value());
                     }
-                    lijn = std::atol(text->Value());
-                }
-                else if(naam == "zitplaatsen" ){
-                    TiXmlText *text = attribuut->FirstChild()->ToText();
-                    if (text == NULL or !is_Integer(text->Value())) {
-                        std::cerr << "ongeldige informatie" << std::endl;
-                        continue;
+                    else if(naam == "zitplaatsen" ){
+                        TiXmlText *text = attribuut->FirstChild()->ToText();
+                        if (text == NULL or !is_Integer(text->Value())) throw ongeldige_informatie();
+                        zitplaatsen = std::atol(text->Value());
                     }
-                    zitplaatsen = std::atol(text->Value());
-                }
-                else if(naam == "snelheid"){
-                    TiXmlText *text = attribuut->FirstChild()->ToText();
-                    if (text == NULL or !is_Integer(text->Value())) {
-                        std::cerr << "ongeldige informatie" << std::endl;
-                        continue;
+                    else if(naam == "snelheid"){
+                        TiXmlText *text = attribuut->FirstChild()->ToText();
+                        if (text == NULL or !is_Integer(text->Value())) throw ongeldige_informatie();
+                        snelheid = std::atol(text->Value());
                     }
-                    snelheid = std::atol(text->Value());
+                    else if(naam == "beginStation"){
+                        TiXmlText *text = attribuut->FirstChild()->ToText();
+                        if (text == NULL or !is_valid_String(text->Value()) ) throw ongeldige_informatie();
+                        beginstation = text->Value();
+                    }else throw ongeldige_informatie();
                 }
-                else if(naam == "beginStation"){
-                    TiXmlText *text = attribuut->FirstChild()->ToText();
-                    if (text == NULL or !is_valid_String(text->Value()) ) {
-                        std::cerr << "ongeldige informatie" << std::endl;
-                        continue;
-                    }
-                    beginstation = text->Value();
-                }else{
-                    std::cerr << "ongeldige informatie" << std::endl;
-                }
+                // voeg een Tram met deze informatie toe aan trammen
+                Tram* tram = new Tram(lijn,zitplaatsen,snelheid,beginstation);
+                metronet->addTram(tram);
             }
-            // voeg een Tram met deze informatie toe aan trammen
-            Tram* tram = new Tram(lijn,zitplaatsen,snelheid,beginstation);
-            metronet->addTram(tram);
-        }
-        else{
-            std::cerr << "onherkenbaar element" << std::endl;
+            else{
+                std::cerr << "onherkenbaar element" << std::endl;
+            }
+        } catch (ongeldige_informatie& e){
+            std::cerr << e.what() << std::endl;
+            continue;
         }
     }
     doc.Clear();

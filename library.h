@@ -10,6 +10,7 @@
 #include <vector>
 #include <map>
 #include <iostream>
+#include "OurExceptions.h"
 
 
 #endif //PSE_LIBRARY_H

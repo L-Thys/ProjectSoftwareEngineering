@@ -8,10 +8,10 @@
 
 #include <bits/exception.h>
 
-class onherkenbaar_element: public std::exception{
+class ongeldige_informatie: public std::exception{
 public:
     virtual const char* what() const throw(){
-        return "herkenbaar element";
+        return "ongeldige informatie";
     }
 };
 
