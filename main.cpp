@@ -141,6 +141,9 @@ Metronet* readFromXml(const char* file){
             continue;
         }
     }
+    if(!metronet->isConsistent()){
+        std::cerr << "inconsistente metronet" << std::endl;
+    }
     doc.Clear();
     return metronet;
 }
