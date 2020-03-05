@@ -13,10 +13,27 @@ class Tram;
 class Spoor {
 public:
 
+    /**
+     * @brief : deze constructor maakt eeen spoor aan dat al een nummer heeft
+     *
+     * @param _track : dit is het cijfer dat dit spoor representeert
+     * */
     Spoor(int _track);
 
+    /**
+     *
+     *
+     * @param _track : dit is het cijfer dat dit spoor representeert
+     * @param tram :
+     * */
     Spoor(int _track, Tram* tram);
 
+    /**
+     * @brief : deze constructor maakt een object aan en steekt hier de track-nummer in en steekt er al een station in
+     *
+     * @param _track : dit is het cijfer dat dit spoor representeert
+     * @param station :
+     * */
     Spoor(int _track, Station* station);
 
     /**

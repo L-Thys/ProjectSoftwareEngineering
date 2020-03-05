@@ -41,19 +41,18 @@ bool Metronet::isConsistent() {
     }
 
     for (std::map<int, Tram *>::iterator tram = _trams.begin(); tram != _trams.end(); tram++){
-        if (tram->second->getLijn() != Metronet::findStation(tram->second->getStartStation())->getSpoor()){
-            return false;
-        }
-
         // we zoeken het homestation in het network
         std::string home = tram->second->getStartStation();
         if (Metronet::_stations.find(home) == Metronet::_stations.end()){
             return false;
         }
 
+        if (tram->second->getLijn() != Metronet::findStation(tram->second->getStartStation())->getSpoor()){
+            return false;
+        }
     }
 
-// TODO : • elk spoor heeft exact 1 tram.
+// TODO : • elk spoor heeft exact 1 tram. ~EN~  • elk spoor komt maximaal 1 keer voor in een station.
 
     return true;
 }
