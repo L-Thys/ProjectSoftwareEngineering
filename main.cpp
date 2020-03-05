@@ -44,6 +44,7 @@ int main(){
                 if(naam == "naam"){
                     TiXmlText *text = attribuut->FirstChild()->ToText();
                     if (text == NULL) {
+                        std::cerr << "ongeldige informatie" << std::endl;
                         continue;
                     }
                     stationnaam = text->Value();
@@ -51,6 +52,7 @@ int main(){
                 else if(naam == "volgende"){
                     TiXmlText *text = attribuut->FirstChild()->ToText();
                     if (text == NULL) {
+                        std::cerr << "ongeldige informatie" << std::endl;
                         continue;
                     }
                     volgende = text->Value();
@@ -58,6 +60,7 @@ int main(){
                 else if(naam == "vorige"){
                     TiXmlText *text = attribuut->FirstChild()->ToText();
                     if (text == NULL) {
+                        std::cerr << "ongeldige informatie" << std::endl;
                         continue;
                     }
                     vorige = text->Value();
@@ -65,6 +68,7 @@ int main(){
                 else if(naam == "spoor"){
                     TiXmlText *text = attribuut->FirstChild()->ToText();
                     if (text == NULL) {
+                        std::cerr << "ongeldige informatie" << std::endl;
                         continue;
                     }
                     spoor = std::atol(text->Value());
@@ -88,7 +92,7 @@ int main(){
                 if(naam == "lijn"){
                     TiXmlText *text = attribuut->FirstChild()->ToText();
                     if (text == NULL) {
-
+                        std::cerr << "ongeldige informatie" << std::endl;
                         continue;
                     }
                     lijn = std::atol(text->Value());
@@ -96,6 +100,7 @@ int main(){
                 else if(naam == "zitplaatsen"){
                     TiXmlText *text = attribuut->FirstChild()->ToText();
                     if (text == NULL) {
+                        std::cerr << "ongeldige informatie" << std::endl;
                         continue;
                     }
                     zitplaatsen = std::atol(text->Value());
@@ -103,6 +108,7 @@ int main(){
                 else if(naam == "snelheid"){
                     TiXmlText *text = attribuut->FirstChild()->ToText();
                     if (text == NULL) {
+                        std::cerr << "ongeldige informatie" << std::endl;
                         continue;
                     }
                     snelheid = std::atol(text->Value());
@@ -110,6 +116,7 @@ int main(){
                 else if(naam == "beginStation"){
                     TiXmlText *text = attribuut->FirstChild()->ToText();
                     if (text == NULL) {
+                        std::cerr << "ongeldige informatie" << std::endl;
                         continue;
                     }
                     beginstation = text->Value();
