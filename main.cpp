@@ -33,11 +33,9 @@ bool is_valid_String(const std::string& s){
 
 Metronet* readFromXml(const char* file);
 
-
-
-int main(){
-    Metronet* metronet = readFromXml("test.xml");
-    return 0;
+int main(int argc, char** argv) {
+::testing::InitGoogleTest(&argc, argv);
+return RUN_ALL_TESTS();
 }
 
 Metronet* readFromXml(const char* file){
@@ -146,4 +144,38 @@ Metronet* readFromXml(const char* file){
     }
     doc.Clear();
     return metronet;
+}
+
+class myTestFixture1: public ::testing::Test {
+public:
+    myTestFixture1( ) {
+        metronet = readFromXml("test.xml");
+        Station* A = new Station("A","B","C",12);
+        Station* B = new Station("B","C","A",12);
+        Station* C = new Station("C","A","B",12);
+        lijst.insert(std::pair<std::string, Station*>("A",A));
+        lijst.insert(std::pair<std::string, Station*>("B",B));
+        lijst.insert(std::pair<std::string, Station*>("C",C));
+    }
+
+    void SetUp( ) {
+        // code here will execute just before the test ensues
+    }
+
+    void TearDown( ) {
+        // code here will be called just after the test completes
+        // ok to through exceptions from here if need be
+    }
+
+    ~myTestFixture1( )  {
+        // cleanup any pending stuff, but no exceptions allowed
+    }
+    Metronet* metronet;
+    std::map<std::string, Station *> lijst;
+    // put in any custom data members that you need
+};
+
+TEST_F(myTestFixture1, readFromXml){
+    EXPECT_EQ(lijst, metronet->getStations());
+
 }

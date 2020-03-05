@@ -11,6 +11,7 @@
 #include <map>
 #include <iostream>
 #include "OurExceptions.h"
+#include "gtest/include/gtest/gtest.h"
 
 
 #endif //PSE_LIBRARY_H
