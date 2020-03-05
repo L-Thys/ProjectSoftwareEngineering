@@ -48,26 +48,28 @@ int main(){
                     }
                     stationnaam = text->Value();
                 }
-                if(naam == "volgende"){
+                else if(naam == "volgende"){
                     TiXmlText *text = attribuut->FirstChild()->ToText();
                     if (text == NULL) {
                         continue;
                     }
                     volgende = text->Value();
                 }
-                if(naam == "vorige"){
+                else if(naam == "vorige"){
                     TiXmlText *text = attribuut->FirstChild()->ToText();
                     if (text == NULL) {
                         continue;
                     }
                     vorige = text->Value();
                 }
-                if(naam == "spoor"){
+                else if(naam == "spoor"){
                     TiXmlText *text = attribuut->FirstChild()->ToText();
                     if (text == NULL) {
                         continue;
                     }
                     spoor = std::atol(text->Value());
+                }else{
+                    std::cerr << "ongeldige informatie" << std::endl;
                 }
             }
             // voeg een Station met deze informatie toe aan stationnen
@@ -75,7 +77,7 @@ int main(){
         }
 
         // als het element TRAM is
-        if (type == "TRAM"){
+        else if (type == "TRAM"){
             int lijn=0;
             int zitplaatsen=0;
             int snelheid=0;
@@ -86,34 +88,40 @@ int main(){
                 if(naam == "lijn"){
                     TiXmlText *text = attribuut->FirstChild()->ToText();
                     if (text == NULL) {
+
                         continue;
                     }
                     lijn = std::atol(text->Value());
                 }
-                if(naam == "zitplaatsen"){
+                else if(naam == "zitplaatsen"){
                     TiXmlText *text = attribuut->FirstChild()->ToText();
                     if (text == NULL) {
                         continue;
                     }
                     zitplaatsen = std::atol(text->Value());
                 }
-                if(naam == "snelheid"){
+                else if(naam == "snelheid"){
                     TiXmlText *text = attribuut->FirstChild()->ToText();
                     if (text == NULL) {
                         continue;
                     }
                     snelheid = std::atol(text->Value());
                 }
-                if(naam == "beginStation"){
+                else if(naam == "beginStation"){
                     TiXmlText *text = attribuut->FirstChild()->ToText();
                     if (text == NULL) {
                         continue;
                     }
                     beginstation = text->Value();
+                }else{
+                    std::cerr << "ongeldige informatie" << std::endl;
                 }
             }
             // voeg een Tram met deze informatie toe aan trammen
             trammen.insert(std::pair<int,Tram>(lijn,Tram(lijn,zitplaatsen,snelheid,beginstation)));
+        }
+        else{
+            std::cerr << "onherkenbaar element" << std::endl;
         }
     }
     doc.Clear();
