@@ -33,9 +33,10 @@ bool is_valid_String(const std::string& s){
 
 Metronet* readFromXml(const char* file);
 
-int main(int argc, char** argv) {
-::testing::InitGoogleTest(&argc, argv);
-return RUN_ALL_TESTS();
+int main(){
+    Metronet* metronet = readFromXml("foutetest1.xml");
+    metronet->getStations();
+    return 0;
 }
 
 Metronet* readFromXml(const char* file){
@@ -73,25 +74,22 @@ Metronet* readFromXml(const char* file){
                 for(TiXmlNode* attribuut = element->FirstChild(); attribuut != NULL; attribuut = attribuut->NextSibling()){
 
                     std::string naam = attribuut->Value();
+                    if (attribuut->FirstChild() == NULL) throw ongeldige_informatie();
+                    TiXmlText *text = attribuut->FirstChild()->ToText();
                     if(naam == "naam"){
-                        TiXmlText *text = attribuut->FirstChild()->ToText();
-                        if (text == NULL or !is_valid_String(text->Value())) throw ongeldige_informatie();
+                        if (!is_valid_String(text->Value())) throw ongeldige_informatie();
                         stationnaam = text->Value();
                     }
                     else if(naam == "volgende"){
-                        TiXmlText *text = attribuut->FirstChild()->ToText();
-                        if (text == NULL or !is_valid_String(text->Value())) throw ongeldige_informatie();
+                        if (!is_valid_String(text->Value())) throw ongeldige_informatie();
                         volgende = text->Value();
                     }
                     else if(naam == "vorige"){
-                        TiXmlText *text = attribuut->FirstChild()->ToText();
-                        if (text == NULL or !is_valid_String(text->Value())) throw ongeldige_informatie();
+                        if (!is_valid_String(text->Value())) throw ongeldige_informatie();
                         vorige = text->Value();
                     }
                     else if(naam == "spoor"){
-                        TiXmlText *text = attribuut->FirstChild()->ToText();
-
-                        if (text == NULL or !is_Integer(text->Value())) throw ongeldige_informatie();
+                        if (!is_Integer(text->Value())) throw ongeldige_informatie();
                         spoor = std::atol(text->Value());
                     }else throw ongeldige_informatie();
                 }
@@ -109,24 +107,22 @@ Metronet* readFromXml(const char* file){
                 // lees verdere informatie voor het element
                 for(TiXmlNode* attribuut = element->FirstChild(); attribuut != NULL; attribuut = attribuut->NextSibling()){
                     std::string naam = attribuut->Value();
+                    if (attribuut->FirstChild() == NULL) throw ongeldige_informatie();
+                    TiXmlText *text = attribuut->FirstChild()->ToText();
                     if(naam == "lijn"){
-                        TiXmlText *text = attribuut->FirstChild()->ToText();
-                        if (text == NULL or !is_Integer(text->Value())) throw ongeldige_informatie();
+                        if (!is_Integer(text->Value())) throw ongeldige_informatie();
                         lijn = std::atol(text->Value());
                     }
                     else if(naam == "zitplaatsen" ){
-                        TiXmlText *text = attribuut->FirstChild()->ToText();
-                        if (text == NULL or !is_Integer(text->Value())) throw ongeldige_informatie();
+                        if (!is_Integer(text->Value())) throw ongeldige_informatie();
                         zitplaatsen = std::atol(text->Value());
                     }
                     else if(naam == "snelheid"){
-                        TiXmlText *text = attribuut->FirstChild()->ToText();
-                        if (text == NULL or !is_Integer(text->Value())) throw ongeldige_informatie();
+                        if (!is_Integer(text->Value())) throw ongeldige_informatie();
                         snelheid = std::atol(text->Value());
                     }
                     else if(naam == "beginStation"){
-                        TiXmlText *text = attribuut->FirstChild()->ToText();
-                        if (text == NULL or !is_valid_String(text->Value()) ) throw ongeldige_informatie();
+                        if (!is_valid_String(text->Value()) ) throw ongeldige_informatie();
                         beginstation = text->Value();
                     }else throw ongeldige_informatie();
                 }
@@ -144,38 +140,4 @@ Metronet* readFromXml(const char* file){
     }
     doc.Clear();
     return metronet;
-}
-
-class myTestFixture1: public ::testing::Test {
-public:
-    myTestFixture1( ) {
-        metronet = readFromXml("test.xml");
-        Station* A = new Station("A","B","C",12);
-        Station* B = new Station("B","C","A",12);
-        Station* C = new Station("C","A","B",12);
-        lijst.insert(std::pair<std::string, Station*>("A",A));
-        lijst.insert(std::pair<std::string, Station*>("B",B));
-        lijst.insert(std::pair<std::string, Station*>("C",C));
-    }
-
-    void SetUp( ) {
-        // code here will execute just before the test ensues
-    }
-
-    void TearDown( ) {
-        // code here will be called just after the test completes
-        // ok to through exceptions from here if need be
-    }
-
-    ~myTestFixture1( )  {
-        // cleanup any pending stuff, but no exceptions allowed
-    }
-    Metronet* metronet;
-    std::map<std::string, Station *> lijst;
-    // put in any custom data members that you need
-};
-
-TEST_F(myTestFixture1, readFromXml){
-    EXPECT_EQ(lijst, metronet->getStations());
-
 }
