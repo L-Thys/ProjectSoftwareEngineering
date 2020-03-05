@@ -8,6 +8,8 @@
 #include "Tram.h"
 #include "Metronet.h"
 
+// todo: voor lotte: gtest
+
 /**
  * @brief checks if string s represents an integer
  * @param s
@@ -35,9 +37,10 @@ Metronet* readFromXml(const char* file);
 
 int main(){
     Metronet* metronet = readFromXml("foutetest1.xml");
-    metronet->getStations();
+    if(!metronet->isConsistent()) return 1;
     return 0;
 }
+
 
 Metronet* readFromXml(const char* file){
     // maak een map stationnen aan, waar een station op naam gezocht kan worden
