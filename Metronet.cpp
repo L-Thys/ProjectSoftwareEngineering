@@ -38,10 +38,6 @@ bool Metronet::isConsistent() {
         else if (station->second->getSpoor() != Metronet::findStation(station->second->getVorige())->getSpoor()){
             return false;
         }
-
-        // als geen enkele fout geweest is
-        return true;
-
     }
 
     for (std::map<int, Tram *>::iterator tram = _trams.begin(); tram != _trams.end(); tram++){
@@ -55,9 +51,11 @@ bool Metronet::isConsistent() {
             return false;
         }
 
-        // er is geen enkele fout gevonden
-        return true;
     }
+
+// TODO : • elk spoor heeft exact 1 tram.
+
+    return true;
 }
 
 Tram * Metronet::findTram(int spoor) {

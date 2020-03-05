@@ -8,6 +8,7 @@
 #include "library.h"
 #include "Tram.h"
 #include "Station.h"
+#include "Spoor.h"
 
 
 // TODO : maak een destructor aan
@@ -61,6 +62,7 @@ public:
 private:
     std::map<std::string, Station*> _stations;
     std::map<int, Tram*> _trams;
+    std::map<int, Spoor*> _tracks;
 };
 
 
