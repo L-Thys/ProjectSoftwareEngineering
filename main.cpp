@@ -8,6 +8,8 @@
 #include "Tram.h"
 #include "Metronet.h"
 
+// todo: voor lotte: gtest
+
 /**
  * @brief checks if string s represents an integer
  * @param s
@@ -22,7 +24,7 @@ bool is_Integer(const std::string& s){
 /**
  * @brief checks if string s is a valid string, according to the specification:
  * String = Letter { Letter } and Letter = "a" ... "z" | "A" ... "Z"
- * @param s
+ * @param s: string
  * @return true if s is valid, false if not
  */
 bool is_valid_String(const std::string& s){
@@ -35,10 +37,16 @@ Metronet* readFromXml(const char* file);
 
 int main(){
     Metronet* metronet = readFromXml("foutetest1.xml");
-    metronet->getStations();
+    metronet->isConsistent();
+    delete metronet;
     return 0;
 }
 
+/**
+ * @brief reads xml file that's made up according to Specificatie 1.0 and makes a Metronet that reflects the xml
+ * @param file: string, path to file from which to read
+ * @return the Metronet that was made
+ */
 Metronet* readFromXml(const char* file){
     // maak een map stationnen aan, waar een station op naam gezocht kan worden
     // maak een map trammen aan, waar een tram op nummer gezocht kan worden
@@ -137,6 +145,9 @@ Metronet* readFromXml(const char* file){
             std::cerr << e.what() << std::endl;
             continue;
         }
+    }
+    if(!metronet->isConsistent()){
+        std::cerr << "inconsistente metronet" << std::endl;
     }
     doc.Clear();
     return metronet;

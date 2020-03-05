@@ -16,4 +16,20 @@ public:
 };
 
 
+class AnExeption: public std::exception{
+
+    const char* message;
+public:
+
+    AnExeption(const char * message){
+        this->message = message;
+    }
+
+
+    virtual const char* what() const throw(){
+        return message;
+    }
+};
+
+
 #endif //PSE_OUREXCEPTIONS_H
