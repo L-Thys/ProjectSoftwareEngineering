@@ -8,6 +8,8 @@
 #include "Tram.h"
 
 
+// TODO : extra simulatie functie zodat main niet te groot wordt
+
 int main(){
     // maak een map stationnen aan, waar een station op naam gezocht kan worden
     // maak een map trammen aan, waar een tram op nummer gezocht kan worden
@@ -31,6 +33,7 @@ int main(){
     // while bestand niet volledig gelezen
     for(TiXmlElement* element = root->FirstChildElement(); element != NULL; element = element->NextSiblingElement()) {
         std::string type = element->Value();
+
         // herken het type element
         // als het element STATION is
         if (type == "STATION"){
@@ -38,6 +41,7 @@ int main(){
             std::string volgende;
             std::string vorige;
             int spoor=0;
+
             // lees verdere informatie voor het element
             for(TiXmlNode* attribuut = element->FirstChild(); attribuut != NULL; attribuut = attribuut->NextSibling()){
                 std::string naam = attribuut->Value();

@@ -21,6 +21,14 @@ public:
      * */
     Tram(int _Lijn, int _Seats, int _Speed, std::string _StartStation);
 
+    int getLijn() const;
+
+    int getSeats() const;
+
+    int getSpeed() const;
+
+    const std::string &getStartStation() const;
+
 private:
     int _Lijn;
     int _Seats;
