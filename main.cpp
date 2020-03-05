@@ -6,6 +6,7 @@
 #include "library.h"
 #include "Station.h"
 #include "Tram.h"
+#include "Metronet.h"
 
 /**
  * @brief checks if string s represents an integer
@@ -30,27 +31,31 @@ bool is_valid_String(const std::string& s){
     return !s.empty() && it == s.end();
 }
 
+Metronet* readFromXml(const char* file);
 
-// TODO : extra simulatie functie zodat main niet te groot wordt
+
 
 int main(){
+    Metronet* metronet = readFromXml("test.xml");
+    return 0;
+}
+
+Metronet* readFromXml(const char* file){
     // maak een map stationnen aan, waar een station op naam gezocht kan worden
     // maak een map trammen aan, waar een tram op nummer gezocht kan worden
-    std::map<std::string,Station> stationnen;
-    std::map<int,Tram> trammen;
-
+    Metronet* metronet = new Metronet();
 
     // open het invoerbestand
     TiXmlDocument doc;
-    if(!doc.LoadFile("test.xml")) {
+    if(!doc.LoadFile(file)) {
         std::cerr << doc.ErrorDesc() << std::endl;
-        return 1;
+        return metronet;
     }
     TiXmlElement* root = doc.FirstChildElement();
     if(root == NULL) {
         std::cerr << "Failed to load file: No root element." << std::endl;
         doc.Clear();
-        return 1;
+        return metronet;
     }
 
     // while bestand niet volledig gelezen
@@ -67,6 +72,7 @@ int main(){
 
             // lees verdere informatie voor het element
             for(TiXmlNode* attribuut = element->FirstChild(); attribuut != NULL; attribuut = attribuut->NextSibling()){
+                // todo: try catch voor ongeldige informatie
                 std::string naam = attribuut->Value();
                 if(naam == "naam"){
                     TiXmlText *text = attribuut->FirstChild()->ToText();
@@ -104,8 +110,9 @@ int main(){
                     std::cerr << "ongeldige informatie" << std::endl;
                 }
             }
-            // voeg een Station met deze informatie toe aan stationnen
-            stationnen.insert(std::pair<std::string,Station>(stationnaam,Station(stationnaam,volgende,vorige,spoor)));
+            // voeg een Station met deze informatie toe aan stations in metronet
+            Station* station = new Station(stationnaam,volgende,vorige,spoor);
+            metronet->addStation(station);
         }
 
         // als het element TRAM is
@@ -153,12 +160,13 @@ int main(){
                 }
             }
             // voeg een Tram met deze informatie toe aan trammen
-            trammen.insert(std::pair<int,Tram>(lijn,Tram(lijn,zitplaatsen,snelheid,beginstation)));
+            Tram* tram = new Tram(lijn,zitplaatsen,snelheid,beginstation);
+            metronet->addTram(tram);
         }
         else{
             std::cerr << "onherkenbaar element" << std::endl;
         }
     }
     doc.Clear();
-    return 0;
+    return metronet;
 }
