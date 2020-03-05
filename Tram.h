@@ -12,12 +12,12 @@ class Tram {
 public:
 
     /**
-     * @brief Constructor of Tram, the given parameters are set as members
+     * @brief Constructor van een tram, de meegegeven parameters worden members
      *
-     * @param fLijn : an integer that indicates the line this Tram rides
-     * @param fSeats : an integer that indicates the amount of passengers are allowed on the Tram
-     * @param fSpeed : an integer that indicates the max speed of the Tram
-     * @param fStartStation : a string that is the name of the home station of this Tram
+     * @param fLijn : een integer dat aanduidt welke route deze team rijdt
+     * @param fSeats : een integer dat aanduidt hoeveel passagiers op het voertuig kunnen
+     * @param fSpeed : een integer dat de max speed aanduidt
+     * @param fStartStation : een string dat de naam van het startstation van deze tram zal zijn
      * */
     Tram(int _Lijn, int _Seats, int _Speed, std::string _StartStation);
 

@@ -5,5 +5,5 @@
 #include "Station.h"
 
 
-Station::Station(const std::string &fNaam, const std::string &fVolgende, const std::string &fVorige, int fSpoor)
-        : fNaam(fNaam), fVolgende(fVolgende), fVorige(fVorige), fSpoor(fSpoor) {}
+Station::Station(const std::string &_Naam, const std::string &_Volgende, const std::string &_Vorige, int _Spoor)
+        : _Naam(_Naam), _Volgende(_Volgende), _Vorige(_Vorige), _Spoor(_Spoor) {}
