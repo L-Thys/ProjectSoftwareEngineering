@@ -16,7 +16,7 @@
 class Metronet {
 public:
     /**
-     * @brief : deze methode geeft de verzameling stationnen terug
+     * @brief :
      *
      * @return : geeft de map van strings en Station-pointers terug
      * */

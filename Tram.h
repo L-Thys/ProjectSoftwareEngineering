@@ -12,21 +12,43 @@ class Tram {
 public:
 
     /**
-     * @brief Constructor van een tram, de meegegeven parameters worden members
+     * @brief : the constructor of an object of type Tram, this constructor takes 4 parameters to initialise the object
+     *          all members will be initialised by at least one of these parameters
      *
-     * @param fLijn : een integer dat aanduidt welke route deze team rijdt
-     * @param fSeats : een integer dat aanduidt hoeveel passagiers op het voertuig kunnen
-     * @param fSpeed : een integer dat de max speed aanduidt
-     * @param fStartStation : een string dat de naam van het startstation van deze tram zal zijn
+     * @param _Lijn : an integer which indicates on which line this Tram rides
+     * @param _Seats : an integer that represents the amount of people that could use this tram
+     * @param _Speed : an integer that indicates the maximum speed of the Tram
+     * @param _StartStation : a string which is the name of the station where the Tram begins its trajectory
      * */
     Tram(int _Lijn, int _Seats, int _Speed, std::string _StartStation);
 
-    int getLijn() const;
+    /**
+     * @brief : this method is used to see on which trajectory this Tram is used
+     *
+     * @return : the return is of type integer which indicates the 'Lijn'
+     */
+    const int getLijn() const;
 
-    int getSeats() const;
+    /**
+     * @brief : this method is a getter of the Seats
+     *          this is useful to know how many people can be seated inside the Tram
+     *
+     * @return : an integer that is the exact amount of seats on the Tram
+     */
+    const int getSeats() const;
 
-    int getSpeed() const;
+    /**
+     * @brief : this method is the getter to retrieve the speed of this vehicle, this is always constant
+     *
+     * @return : a constant integer which is the exact speed
+     */
+    const int getSpeed() const;
 
+    /**
+     * @brief : this method is the getter of the Start Station which is the input to use in the findStation method
+     *
+     * @return : the string which is the name of this trams start station
+     */
     const std::string &getStartStation() const;
 
 private:
