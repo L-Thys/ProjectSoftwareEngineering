@@ -21,5 +21,5 @@ const std::string &Station::getVorige() const {
 }
 
 int Station::getSpoor() const {
-    return _Spoor;
+    return _Spoor[0];                               // momentarily this vector only consists of 1, so we return only 1
 }

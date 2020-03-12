@@ -22,7 +22,7 @@ void Metronet::addTram(Tram *tram) {
 
 bool Metronet::isConsistent() {
 
-    // we bekijken elk station in ons network
+    // we check every station in our network
     for (std::map<std::string, Station *>::iterator station = _stations.begin();
         station != _stations.end(); station++) {
 

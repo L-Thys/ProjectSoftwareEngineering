@@ -5,7 +5,7 @@
 #ifndef PSE_STATION_H
 #define PSE_STATION_H
 
-#include "string"
+#include "library.h"
 
 class Station {
 public:
@@ -45,7 +45,8 @@ public:
     const std::string &getVorige() const;
 
     /**
-     * @brief : this method returns Spoor from this station
+     * @brief : this method returns Spoor from this station, the member _Spoor consists momentarily only of 1 Spoor
+     *          the return is thus the first, and only, Spoor in the vector of integers
      *
      * @return :  this returns the integer that indicates which Spoor we use in this station
      */
@@ -55,7 +56,7 @@ private:
     std::string _Naam;
     std::string _Volgende;
     std::string _Vorige;
-    int _Spoor;                 // zal nog een lijst moeten worden
+    std::vector<int> _Spoor;                 // zal nog een lijst moeten worden
 };
 
 

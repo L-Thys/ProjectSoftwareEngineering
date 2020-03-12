@@ -62,7 +62,6 @@ public:
 private:
     std::map<std::string, Station*> _stations;
     std::map<int, Tram*> _trams;
-    std::map<int, Spoor*> _tracks;
 };
 
 
