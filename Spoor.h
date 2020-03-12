@@ -25,7 +25,7 @@ public:
      * @brief : this constructor constructs a Spoor with a given Tram and a track-number
      *
      * @param _track : this is an integer that is going to be used as track-number
-     * @param tram :
+     * @param tram : a Tram type parameter which is gonna be added to
      * */
     Spoor(int _track, Tram *tram);
 
@@ -38,10 +38,17 @@ public:
     Spoor(int _track, Station *station);
 
     /**
-     * @brief : deze methode voegt een tram toe aan de trams die rijden op dit spoor
+     * @brief : this method adds a tram
+     *
+     * @param tram : an object of type Tram which is going to be added
      * */
     void addTram(Tram *tram);
 
+    /**
+     * @brief : this method adds a station
+     *
+     * @param station : an object of type Station which is going to be added
+     */
     void addStation(Station *station);
 
 private:
