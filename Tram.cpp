@@ -11,15 +11,15 @@ Tram::Tram(const int _Lijn, const int _Seats, const int _Speed, std::string _Sta
     Tram::_StartStation = _StartStation;
 }
 
-int Tram::getLijn() const {
+const int Tram::getLijn() const {
     return _Lijn;
 }
 
-int Tram::getSeats() const {
+const int Tram::getSeats() const {
     return _Seats;
 }
 
-int Tram::getSpeed() const {
+const int Tram::getSpeed() const {
     return _Speed;
 }
 
