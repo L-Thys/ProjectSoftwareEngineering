@@ -52,11 +52,13 @@ public:
      */
     int getSpoor() const;
 
+    std::vector<int> getSporen();
+
 private:
     std::string _Naam;
     std::string _Volgende;
     std::string _Vorige;
-    std::vector<int> _Spoor;                 // zal nog een lijst moeten worden
+    std::vector<int> _Sporen;
 };
 
 

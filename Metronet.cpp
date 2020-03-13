@@ -31,21 +31,28 @@ bool Metronet::isConsistent() {
             return false;
         }
 
-        // ~ If the station has a valid Spoor, we check if the following and the previous Station also have this Spoor ~ //        if(Metronet::findStation(station->second->getVolgende())==NULL) return false; //check of volgende een station is dat bestaat
-        else if (station->second->getSpoor() != Metronet::findStation(station->second->getVolgende())->getSpoor()){
+        // ~ If the station has a valid Spoor, we check if the following and the previous Station also have this Spoor ~ //
+        if(Metronet::findStation(station->second->getVolgende())==NULL
+        or station->second->getSpoor() != Metronet::findStation(station->second->getVolgende())->getSpoor())
+        {
             return false;       // we return false if the equality of the integers in the Spoor member is false
         }
-        if(Metronet::findStation(station->second->getVorige())==NULL) return false; //check of vorige een station is dat bestaat
-        else if (station->second->getSpoor() != Metronet::findStation(station->second->getVorige())->getSpoor()){
+
+        if(Metronet::findStation(station->second->getVorige())==NULL
+        or station->second->getSpoor() != Metronet::findStation(station->second->getVorige())->getSpoor())
+        {
             return false;       // idem
         }
+
+        /* The input of a station is standard given with only 1 track for now, we thus have always no duplicates*/
+        if (station->second->getSporen().empty()) return false;
     }
     // ------------------------------------------- //
 
     // -- We now check every tram inside _trams if they are initiated correctly -- //
     std::vector<int> as_tracks;             // to be used later on
 
-      // tram is a pair <int Tram*>, we need to take tram.second to get the tram itself
+    // tram is a pair <int Tram*>, we need to take tram.second to get the tram itself
     for (std::map<int, Tram *>::iterator tram = _trams.begin(); tram != _trams.end(); tram++) {
 
         // ~ Home is the start Station of our tram, we check if this station is a valid station in our network ~ //
@@ -53,10 +60,8 @@ bool Metronet::isConsistent() {
         if (Metronet::_stations.find(home) == Metronet::_stations.end()) {
             return false;
         }
-        if(Metronet::findStation(tram->second->getStartStation())==NULL) return false; //check of startstation een station is dat bestaat
-        if (tram->second->getLijn() != Metronet::findStation(tram->second->getStartStation())->getSpoor()){
 
-        // ~ We also check if the Spoor of ou tram is equal to the Spoor that runs through its Start Station ~ //
+        // ~ We also check if the Spoor of the tram is equal to the Spoor that runs through its Start Station ~ //
         if (tram->second->getLijn() != Metronet::findStation(tram->second->getStartStation())->getSpoor()) {
             return false;
         }
@@ -77,8 +82,6 @@ bool Metronet::isConsistent() {
 
     }
     // --------------------------------------------------------------------------- //
-
-// TODO :• elk spoor komt maximaal 1 keer voor in een station.
 
     return true;
 }
