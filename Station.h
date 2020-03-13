@@ -7,6 +7,8 @@
 
 #include "library.h"
 
+// TODO : all ENSURE bij getters, de operators ook
+
 class Station {
 public:
     /**
@@ -32,43 +34,82 @@ public:
      * @return this returns a constant string in reference, this string is the name and may not be changed
      *
      * @pre the object must be properly initialized
-     *      --> REQUIRE (properlyInitialized(), "The Station is not properly or not initialized")
+     *      --> REQUIRE(properlyInitialized(), "The Station is not properly or not initialized")
+     *
+     * @post the return value must be a valid name (string)
+     *       --> ENSURE(is_valid_String(_Naam), "getNaam must return a valid string")
      */
-    const std::string &getNaam() const;
+    const std::string & getNaam();
 
     /**
      * @brief this method return the next station on the line
      *
      * @return this returns a string, also to be used in the findStation method
+     *
+     * @pre the object must be properly initialized
+     *      --> REQUIRE(properlyInitialized(), "Station was not initialized when calling getVolgende()")
+     *
+     * @post the method must return a valid name (string)
+     *       --> ENSURE(is_valid_String(_Volgende), "getVolgende must return a valid string")
      */
-    const std::string &getVolgende() const;
+    const std::string &getVolgende();
 
     /**
      * @brief returning a string, which is the name of the next station, to be used as input for the findStation in Metronet
      *
      * @return a string probably used as input
+     *
+     * @pre the oject must be properly initialized
+     *      --> REQUIRE(properlyInitialized(), "Station was not initialized when calling getVorige()")
+     *
+     * @post this method must return a valid name (string)
+     *       --> ENSURE(is_valid_String(_Vorige), "getVorige must return a valid string")
      */
-    const std::string &getVorige() const;
+    const std::string &getVorige();
 
     /**
      * @brief this method returns Spoor from this station, the member _Spoor consists momentarily only of 1 Spoor
      *          the return is thus the first, and only, Spoor in the vector of integers
      *
      * @return this returns the integer that indicates which Spoor we use in this station
+     *
+     * @pre the object must be properly initialized
+     *      --> REQUIRE(properlyInitialized(), "Station was not initialized when calling getSpoor()")
+     *
+     * @post this method must return a valid integer,
+     *       but it is unnecessary to make an ENSURE because the compiler already made sure this was the case
      */
-    int getSpoor() const;
+    int getSpoor();
 
     bool operator==(const Station &rhs) const;
 
     bool operator!=(const Station &rhs) const;
 
+    /**
+     * @brief this method gives the full vector of tracks of the station, this is at the moment from a maximum length of 1
+     *
+     * @return a vector of integers that represent the tracks, these integers can be used in other methods
+     *
+     * @pre this object must be properly initialized
+     *      --> REQUIRE(properlyInitialized(), "Station was not initialized when calling getSporen()")
+     *
+     * @post this method must return a vector of integers,
+     *       an ENSURE is unnecessary due to the consistency of integers in the compiler
+     */
     std::vector<int> getSporen();
 
+    /**
+     * @brief this method needs no ENSURE or REQUIRE, it checks if the object is properly initialized by checking if the
+     *        'this' pointer still points to the same object as the _propInt member
+     *
+     * @return this method returns a boolean that indicates if the object is still properly initialized
+     */
     bool properlyInitialized();
 
 protected:
     /**
      * @brief this method ensures that all members but one, _Sporen, are valid according the given specifications
+     *        it is called within the properlyInitialized so it needs no REQUIRE
      *
      * @post this method ensures that _Naam is correct according to the specification that a name only consists of
      *       a-z, A-Z characters

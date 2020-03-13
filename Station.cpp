@@ -15,23 +15,31 @@ Station::Station(const std::string &_Naam, const std::string &_Volgende, const s
     validStationMembers();
 }
 
-const std::string &Station::getNaam() const {
+const std::string & Station::getNaam() {
+    REQUIRE(properlyInitialized(), "Station was not initialized when calling getNaam()");
+    ENSURE(is_valid_String(_Naam), "getNaam must return a valid string");
     return _Naam;
 }
 
-const std::string &Station::getVolgende() const {
+const std::string &Station::getVolgende() {
+    REQUIRE(properlyInitialized(), "Station was not initialized when calling getVolgende()");
+    ENSURE(is_valid_String(_Volgende), "getVolgende must return a valid string");
     return _Volgende;
 }
 
-const std::string &Station::getVorige() const {
+const std::string &Station::getVorige() {
+    REQUIRE(properlyInitialized(), "Station was not initialized when calling getVorige()");
+    ENSURE(is_valid_String(_Vorige), "getVorige must return a valid string");
     return _Vorige;
 }
 
-int Station::getSpoor() const {
+int Station::getSpoor() {
+    REQUIRE(properlyInitialized(), "Station was not initialized when calling getSpoor()");
     return _Sporen[0];                               // momentarily this vector only consists of 1, so we return only 1
 }
 
 std::vector<int> Station::getSporen() {
+    REQUIRE(properlyInitialized(), "Station was not initialized when calling getSporen()");
     return Station::_Sporen;
 }
 
