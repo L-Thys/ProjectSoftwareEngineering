@@ -3,6 +3,7 @@
 //
 
 #include "Tram.h"
+#include "DesignByContract.h"
 
 Tram::Tram(const int _Lijn, const int _Seats, const int _Speed, std::string _StartStation) {
     Tram::_Lijn = _Lijn;

@@ -73,7 +73,7 @@ Metronet* readFromXml(const char* file){
                 metronet->addStation(station);
             }
 
-                // als het element TRAM is
+            // als het element TRAM is
             else if (type == "TRAM"){
                 int lijn=-1;
                 int zitplaatsen=-1;

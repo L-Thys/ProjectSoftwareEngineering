@@ -86,6 +86,7 @@ int main(int argc, char **argv) {
 
 // tests function is_valid_String()
 TEST (validstringTest, ValidString) {
+    EXPECT_TRUE(is_valid_String("a"));
     EXPECT_TRUE(is_valid_String("abc"));
     EXPECT_TRUE(is_valid_String("Abc"));
 }
@@ -102,6 +103,7 @@ TEST(validstringTest, NonValidString){
 // tests function is_Integer()
 TEST(validInteger, validInt){
     EXPECT_TRUE(is_Integer("348"));
+    EXPECT_TRUE(is_Integer("3"));
 }
 TEST(validInteger, NonValidString){
     EXPECT_FALSE(is_Integer("a23"));
@@ -120,6 +122,7 @@ TEST(readFromXml, input){
     EXPECT_EQ(1,size);
 }
 TEST(readFromXml, wronginput){
+    // todo: toevoegen
     readFromXml("wrongInput1.xml");
 }
 
