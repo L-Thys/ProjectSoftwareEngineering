@@ -29,3 +29,14 @@ int Station::getSpoor() const {
 std::vector<int> Station::getSporen() {
     return Station::_Sporen;
 }
+
+bool Station::operator==(const Station &rhs) const {
+    return _Naam == rhs._Naam &&
+           _Volgende == rhs._Volgende &&
+           _Vorige == rhs._Vorige &&
+           _Sporen == rhs._Sporen;
+}
+
+bool Station::operator!=(const Station &rhs) const {
+    return !(rhs == *this);
+}

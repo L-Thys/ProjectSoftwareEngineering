@@ -26,3 +26,14 @@ const int Tram::getSpeed() const {
 const std::string &Tram::getStartStation() const {
     return _StartStation;
 }
+
+bool Tram::operator==(const Tram &rhs) const {
+    return _Lijn == rhs._Lijn &&
+           _Seats == rhs._Seats &&
+           _Speed == rhs._Speed &&
+           _StartStation == rhs._StartStation;
+}
+
+bool Tram::operator!=(const Tram &rhs) const {
+    return !(rhs == *this);
+}

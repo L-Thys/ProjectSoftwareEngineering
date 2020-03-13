@@ -12,12 +12,12 @@ const std::map<int, Tram *> &Metronet::getTrams() const {
     return _trams;
 }
 
-void Metronet::addStation(Station *station) {
-    Metronet::_stations.insert(std::pair<std::string, Station*>(station->getNaam(), station));
+bool Metronet::addStation(Station *station) {
+    return Metronet::_stations.insert(std::pair<std::string, Station*>(station->getNaam(), station)).second;
 }
 
-void Metronet::addTram(Tram *tram) {
-    Metronet::_trams.insert(std::pair<int, Tram*>(tram->getLijn(), tram));
+bool Metronet::addTram(Tram *tram) {
+    return Metronet::_trams.insert(std::pair<int, Tram*>(tram->getLijn(), tram)).second;
 }
 
 bool Metronet::isConsistent() {
@@ -86,6 +86,7 @@ bool Metronet::isConsistent() {
     return true;
 }
 
+// if spoor isn't in the list, NULL is returned, so it's best to check if you get NULL from this function before using the returned value
 Tram * Metronet::findTram(int spoor) {
     try {
         return Metronet::_trams.at(spoor);
@@ -97,6 +98,7 @@ Tram * Metronet::findTram(int spoor) {
 
 }
 
+// if name isn't in the list, NULL is returned, so it's best to check if you get NULL from this function before using the returned value
 Station * Metronet::findStation(std::string name) {
     try {
         return Metronet::_stations.at(name);

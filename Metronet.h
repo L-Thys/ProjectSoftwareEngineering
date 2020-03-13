@@ -33,15 +33,19 @@ public:
      * @brief : deze methode steekt een gegeven station in ons netwerk
      *
      * @param station : een pointer naar een station object dat als pair zal geinsert worden in de overeenkomstige map
+     *
+     * @return : true als toevoegen gelukt is, false als er al een station met dezelfde naam bestaat
      * */
-    void addStation(Station* station);
+    bool addStation(Station* station);
 
     /**
      * @brief : deze methode steekt een gegeven tram in ons netwerk
      *
      * @param tram : een pointer naar een tram object dat als pair zal geinsert worden in de overeenkomstige map
+     *
+     * @return : true als toevoegen gelukt is, false als er al een station met dezelfde naam bestaat
      * */
-    void addTram (Tram* tram);
+    bool addTram (Tram* tram);
 
     /**
      * @brief : gegeven een naam zoekt deze methode een station dat dit als naam heeft

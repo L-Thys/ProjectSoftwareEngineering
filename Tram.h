@@ -51,6 +51,10 @@ public:
      */
     const std::string &getStartStation() const;
 
+    bool operator==(const Tram &rhs) const;
+
+    bool operator!=(const Tram &rhs) const;
+
 private:
     int _Lijn;
     int _Seats;

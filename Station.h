@@ -52,6 +52,10 @@ public:
      */
     int getSpoor() const;
 
+    bool operator==(const Station &rhs) const;
+
+    bool operator!=(const Station &rhs) const;
+
     std::vector<int> getSporen();
 
 private:
