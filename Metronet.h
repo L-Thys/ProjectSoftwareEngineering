@@ -113,8 +113,20 @@ public:
      */
     bool isConsistent();
 
+    /**
+     * @brief this method needs no ENSURE or REQUIRE, it checks if the object is properly initialized by checking if the
+     *        'this' pointer still points to the same object as the _propInt member
+     *
+     * @return this method returns a boolean that indicates if the object is still properly initialized
+     */
     bool properlyInitialized();
 
+    /**
+     * @brief this method needs no ENSURE or REQUIRE, it checks if the object is properly initialized by checking if the
+     *        'this' pointer still points to the same object as the _propInt member
+     *
+     * @return this method returns a boolean that indicates if the object is properly deleted
+     */
     bool properlyDeleted();
 
 private:
