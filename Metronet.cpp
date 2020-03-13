@@ -99,12 +99,30 @@ Tram * Metronet::findTram(int spoor) {
 }
 
 // if name isn't in the list, NULL is returned, so it's best to check if you get NULL from this function before using the returned value
-Station * Metronet::findStation(std::string name) {
+Station * Metronet::findStation(const std::string& name) {
     try {
         return Metronet::_stations.at(name);
     }
     catch(std::out_of_range& e){
         return NULL;
     }
+}
+
+Metronet::~Metronet() {
+    for(std::map<int,Tram*>::iterator it=_trams.begin(); it!=_trams.end(); ++it){
+        delete it->second;
+    }
+    for(std::map<std::string, Station*>::iterator it=_stations.begin(); it!=_stations.end(); ++it){
+        delete it->second;
+    }
+}
+
+Metronet::Metronet() {
+    _propInit = this;
+    ENSURE(properlyInitialized(), "A constructor must end in a properlyInitialized state");
+}
+
+bool Metronet::properlyInitialized() {
+    return _propInit == this;
 }
 

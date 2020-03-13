@@ -11,10 +11,12 @@
 #include "Spoor.h"
 
 
-// TODO : maak een destructor aan
-
 class Metronet {
 public:
+    Metronet();
+
+    virtual ~Metronet();
+
     /**
      * @brief :
      *
@@ -52,7 +54,7 @@ public:
      *
      * @return : een pointer naar een station
      * */
-    Station* findStation(std::string name);
+    Station* findStation(const std::string& name);
 
     /**
      * @brief : gegeven een spoor geeft deze methode de tram terug die op dit spoor rijdt
@@ -63,9 +65,13 @@ public:
 
     bool isConsistent();
 
+    bool properlyInitialized();
+
 private:
     std::map<std::string, Station*> _stations;
     std::map<int, Tram*> _trams;
+
+    Metronet* _propInit;
 };
 
 
