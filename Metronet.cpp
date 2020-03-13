@@ -4,19 +4,23 @@
 
 #include "Metronet.h"
 
-const std::map<std::string, Station *> &Metronet::getStations() const {
+const std::map<std::string, Station *> &Metronet::getStations() {
+    REQUIRE (properlyInitialized(), "The Metronet was not properly or not initialized before calling getStations");
     return _stations;
 }
 
-const std::map<int, Tram *> &Metronet::getTrams() const {
+const std::map<int, Tram *> &Metronet::getTrams() {
+    REQUIRE (properlyInitialized(), "The Metronet was not properly or not initialized before calling getTrams");
     return _trams;
 }
 
 bool Metronet::addStation(Station *station) {
+    REQUIRE (properlyInitialized(), "The Metronet was not properly or not initialized before calling addStation");
     return Metronet::_stations.insert(std::pair<std::string, Station*>(station->getNaam(), station)).second;
 }
 
 bool Metronet::addTram(Tram *tram) {
+    REQUIRE (properlyInitialized(), "The Metronet was not properly or not initialized before calling addTram");
     return Metronet::_trams.insert(std::pair<int, Tram*>(tram->getLijn(), tram)).second;
 }
 
@@ -88,6 +92,7 @@ bool Metronet::isConsistent() {
 
 // if spoor isn't in the list, NULL is returned, so it's best to check if you get NULL from this function before using the returned value
 Tram * Metronet::findTram(int spoor) {
+    REQUIRE (properlyInitialized(), "The Metronet was not properly or not initialized before calling findTram");
     try {
         return Metronet::_trams.at(spoor);
     }
@@ -100,6 +105,7 @@ Tram * Metronet::findTram(int spoor) {
 
 // if name isn't in the list, NULL is returned, so it's best to check if you get NULL from this function before using the returned value
 Station * Metronet::findStation(const std::string& name) {
+    REQUIRE (properlyInitialized(), "The Metronet was not properly or not initialized before calling findStation");
     try {
         return Metronet::_stations.at(name);
     }
@@ -115,6 +121,7 @@ Metronet::~Metronet() {
     for(std::map<std::string, Station*>::iterator it=_stations.begin(); it!=_stations.end(); ++it){
         delete it->second;
     }
+    ENSURE (properlyDeleted(), "A destructor must end in a properlyDeleted state");
 }
 
 Metronet::Metronet() {
@@ -124,5 +131,15 @@ Metronet::Metronet() {
 
 bool Metronet::properlyInitialized() {
     return _propInit == this;
+}
+
+bool Metronet::properlyDeleted() {
+    for(std::map<int,Tram*>::iterator it=_trams.begin(); it!=_trams.end(); ++it){
+        if(it->second != NULL) return false;
+    }
+    for(std::map<std::string, Station*>::iterator it=_stations.begin(); it!=_stations.end(); ++it){
+        if(it->second != NULL) return false;
+    }
+    return true;
 }
 

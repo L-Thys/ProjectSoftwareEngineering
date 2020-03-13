@@ -13,28 +13,53 @@
 
 class Metronet {
 public:
+    /**
+     * @brief : the constructor of an object of type Metronet, this constructor takes no parameters to initialise the object
+
+     *
+     * @post This constructor will make sure the object is properly initialized
+     *       --> ENSURE (properlyInitialized(), "A constructor must end in a properlyInitialized state");
+     */
     Metronet();
 
-    virtual ~Metronet();
-
     /**
-     * @brief :
+     * @brief: the destructor of an object of type Metronet
      *
-     * @return : geeft de map van strings en Station-pointers terug
-     * */
-    const std::map<std::string, Station *> &getStations() const;
+     * @pre : the object must be properly initialized
+     *      --> REQUIRE (properlyInitialized(), "The Metronet was not properly or not initialized before calling the destructor")
+     *
+     * @post : the destructor will make sure all pointers are NULL because the objects they were pointing to have been deleted
+     *      --> ENSURE (properlyDeleted(), "A destructor must end in a properlyDeleted state");
+     */
+    virtual ~Metronet();
 
     /**
      * @brief : deze methode geeft de verzameling trammen terug
      *
+     * @pre : the object must be properly initialized
+     *      --> REQUIRE (properlyInitialized(), "The Metronet was not properly or not initialized before calling getStations")
+     *
+     * @return : geeft de map van strings en Station-pointers terug
+     * */
+    const std::map<std::string, Station *> &getStations();
+
+    /**
+     * @brief : deze methode geeft de verzameling trammen terug
+     *
+     * @pre : the object must be properly initialized
+     *      --> REQUIRE (properlyInitialized(), "The Metronet was not properly or not initialized before calling getTrams")
+     *
      * @return : geeft de map van strings en Tram-pointers terug
      * */
-    const std::map<int, Tram *> &getTrams() const;
+    const std::map<int, Tram *> &getTrams();
 
     /**
      * @brief : deze methode steekt een gegeven station in ons netwerk
      *
      * @param station : een pointer naar een station object dat als pair zal geinsert worden in de overeenkomstige map
+     *
+     * @pre : the object must be properly initialized
+     *      --> REQUIRE (properlyInitialized(), "The Metronet was not properly or not initialized before calling addStation")
      *
      * @return : true als toevoegen gelukt is, false als er al een station met dezelfde naam bestaat
      * */
@@ -45,12 +70,18 @@ public:
      *
      * @param tram : een pointer naar een tram object dat als pair zal geinsert worden in de overeenkomstige map
      *
+     * @pre : the object must be properly initialized
+     *      --> REQUIRE (properlyInitialized(), "The Metronet was not properly or not initialized before calling addTram")
+     *
      * @return : true als toevoegen gelukt is, false als er al een station met dezelfde naam bestaat
      * */
     bool addTram (Tram* tram);
 
     /**
      * @brief : gegeven een naam zoekt deze methode een station dat dit als naam heeft
+     *
+     * @pre : the object must be properly initialized
+     *      --> REQUIRE (properlyInitialized(), "The Metronet was not properly or not initialized before calling findStation")
      *
      * @return : een pointer naar een station
      * */
@@ -59,13 +90,19 @@ public:
     /**
      * @brief : gegeven een spoor geeft deze methode de tram terug die op dit spoor rijdt
      *
+     * @pre : the object must be properly initialized
+     *      --> REQUIRE (properlyInitialized(), "The Metronet was not properly or not initialized before calling findTram")
+     *
      * @return : een pointer naar een tram
      * */
     Tram* findTram(int spoor);
 
+
     bool isConsistent();
 
     bool properlyInitialized();
+
+    bool properlyDeleted();
 
 private:
     std::map<std::string, Station*> _stations;

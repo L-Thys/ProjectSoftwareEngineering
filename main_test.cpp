@@ -14,7 +14,7 @@
 class ValidMetronetTest: public ::testing::Test {
 public:
     ValidMetronetTest() {
-        metronet = new Metronet;
+        metronet = new Metronet();
         Station* station1 = new Station("A","B","C",12);
         Station* station2 = new Station("B","C","A",12);
         Station* station3 = new Station("C","A","B",12);
