@@ -8,6 +8,10 @@
 Station::Station(const std::string &_Naam, const std::string &_Volgende, const std::string &_Vorige, int _Spoor)
         : _Naam(_Naam), _Volgende(_Volgende), _Vorige(_Vorige) {
     Station::_Sporen.push_back(_Spoor);             // because we are not sure what happens if we write _Sporen(_Spoor)
+    Station::_propInit = this;
+
+    // We make sure that the object is properly initialized by using the ENSURE function
+    ENSURE(properlyInitialized(), "A constructor must end in a properlyInitialized state");
 }
 
 const std::string &Station::getNaam() const {
@@ -40,3 +44,13 @@ bool Station::operator==(const Station &rhs) const {
 bool Station::operator!=(const Station &rhs) const {
     return !(rhs == *this);
 }
+
+bool Station::properlyInitialized() {
+    return _propInit == this;
+}
+
+bool Station::validStationMembers() {
+    return is_valid_String(Station::_Naam) &&
+}
+
+
