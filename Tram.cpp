@@ -10,6 +10,12 @@ Tram::Tram(const int _Lijn, const int _Seats, const int _Speed, std::string _Sta
     Tram::_Seats = _Seats;
     Tram::_Speed = _Speed;
     Tram::_StartStation = _StartStation;
+
+    Tram::_propInit = this;
+    // We make sure that the object is properly initialized by using the ENSURE function
+    ENSURE(properlyInitialized(), "A constructor must end in a properlyInitialized state");
+
+    ENSURE(validTramMembers(),"The parameter _StartStation must be a valid string");
 }
 
 const int Tram::getLijn() const {
@@ -37,4 +43,12 @@ bool Tram::operator==(const Tram &rhs) const {
 
 bool Tram::operator!=(const Tram &rhs) const {
     return !(rhs == *this);
+}
+
+bool Tram::properlyInitialized() {
+    return _propInit == this;
+}
+
+bool Tram::validTramMembers() {
+    return is_valid_String(_StartStation);
 }

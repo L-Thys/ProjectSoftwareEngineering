@@ -19,6 +19,10 @@ public:
      * @param _Seats : an integer that represents the amount of people that could use this tram
      * @param _Speed : an integer that indicates the maximum speed of the Tram
      * @param _StartStation : a string which is the name of the station where the Tram begins its trajectory
+     *
+     * @post This constructor will make sure the object is properly initialized
+     *       --> ENSURE (properlyInitialized(), "A constructor must end in a properlyInitialized state");
+     *       --> ENSURE(validTramMembers(),"The parameter _StartStation must be a valid string");
      * */
     Tram(int _Lijn, int _Seats, int _Speed, std::string _StartStation);
 
@@ -55,11 +59,17 @@ public:
 
     bool operator!=(const Tram &rhs) const;
 
+    bool properlyInitialized();
+
+    bool validTramMembers();
+
 private:
     int _Lijn;
     int _Seats;
     int _Speed;
     std::string _StartStation;
+
+    Tram* _propInit;
 };
 
 
