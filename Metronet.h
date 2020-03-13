@@ -98,6 +98,19 @@ public:
     Tram* findTram(int spoor);
 
 
+    /**
+     * @brief we check if a network is consistent, this means that the station has only 1 track,
+     *        a next station and a previous station which are valid stations
+     *        and every track occurs a maximum of 1 time (now it is trivial) in the object.
+     *        The trams have a track which is the same as the track in their start station,
+     *        the tracks only have 1 tram and
+     *        the start station of a tram is a valid station.
+     *
+     * @return a boolean which indicates if the network is consistent
+     *
+     * @pre this object must be properly initialized
+     *      --> REQUIRE (properlyInitialized(), "The Metronet was not properly or not initialized before calling isConsistent")
+     */
     bool isConsistent();
 
     bool properlyInitialized();

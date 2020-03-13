@@ -25,7 +25,7 @@ bool Metronet::addTram(Tram *tram) {
 }
 
 bool Metronet::isConsistent() {
-
+    REQUIRE (properlyInitialized(), "The Metronet was not properly or not initialized before calling isConsistent");
     // -- We check every station in our network -- //
     for (std::map<std::string, Station *>::iterator station = _stations.begin();
         station != _stations.end(); station++) {

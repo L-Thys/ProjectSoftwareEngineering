@@ -16,7 +16,10 @@ Station::Station(const std::string &_Naam, const std::string &_Volgende, const s
 }
 
 const std::string & Station::getNaam() {
+    // we need to have a correctly initialized object
     REQUIRE(properlyInitialized(), "Station was not initialized when calling getNaam()");
+
+    // we ensure that the name is a correct string
     ENSURE(is_valid_String(_Naam), "getNaam must return a valid string");
     return _Naam;
 }
