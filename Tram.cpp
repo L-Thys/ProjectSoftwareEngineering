@@ -18,19 +18,23 @@ Tram::Tram(const int _Lijn, const int _Seats, const int _Speed, std::string _Sta
     ENSURE(validTramMembers(),"The parameter _StartStation must be a valid string");
 }
 
-const int Tram::getLijn() const {
+const int Tram::getLijn(){
+    REQUIRE (properlyInitialized(), "The Tram was not properly or not initialized before calling getLijn");
     return _Lijn;
 }
 
-const int Tram::getSeats() const {
+const int Tram::getSeats(){
+    REQUIRE (properlyInitialized(), "The Tram was not properly or not initialized before calling getSeats");
     return _Seats;
 }
 
-const int Tram::getSpeed() const {
+const int Tram::getSpeed(){
+    REQUIRE (properlyInitialized(), "The Tram was not properly or not initialized before calling getSpeed");
     return _Speed;
 }
 
-const std::string &Tram::getStartStation() const {
+const std::string &Tram::getStartStation() {
+    REQUIRE (properlyInitialized(), "The Tram was not properly or not initialized before calling getStartStation");
     return _StartStation;
 }
 

@@ -22,7 +22,7 @@ public:
      *
      * @post This constructor will make sure the object is properly initialized
      *       --> ENSURE (properlyInitialized(), "A constructor must end in a properlyInitialized state");
-     *       --> ENSURE(validTramMembers(),"The parameter _StartStation must be a valid string");
+     *       --> ENSURE (validTramMembers(),"The parameter _StartStation must be a valid string");
      * */
     Tram(int _Lijn, int _Seats, int _Speed, std::string _StartStation);
 
@@ -30,30 +30,42 @@ public:
      * @brief : this method is used to see on which trajectory this Tram is used
      *
      * @return : the return is of type integer which indicates the 'Lijn'
+     *
+     * @pre : the object must be properly initialized
+     *      --> REQUIRE (properlyInitialized(), "The Tram was not properly or not initialized before calling getLijn")
      */
-    const int getLijn() const;
+    const int getLijn();
 
     /**
      * @brief : this method is a getter of the Seats
      *          this is useful to know how many people can be seated inside the Tram
      *
      * @return : an integer that is the exact amount of seats on the Tram
+     *
+     * * @pre : the object must be properly initialized
+     *      --> REQUIRE (properlyInitialized(), "The Tram was not properly or not initialized before calling getSeats")
      */
-    const int getSeats() const;
+    const int getSeats();
 
     /**
      * @brief : this method is the getter to retrieve the speed of this vehicle, this is always constant
      *
      * @return : a constant integer which is the exact speed
+     *
+     * * @pre : the object must be properly initialized
+     *      --> REQUIRE (properlyInitialized(), "The Tram was not properly or not initialized before calling getSpeed")
      */
-    const int getSpeed() const;
+    const int getSpeed();
 
     /**
      * @brief : this method is the getter of the Start Station which is the input to use in the findStation method
      *
      * @return : the string which is the name of this trams start station
+     *
+     * * @pre : the object must be properly initialized
+     *      --> REQUIRE (properlyInitialized(), "The Tram was not properly or not initialized before calling getStartStation")
      */
-    const std::string &getStartStation() const;
+    const std::string &getStartStation();
 
     bool operator==(const Tram &rhs) const;
 
