@@ -35,6 +35,7 @@ const int Tram::getSpeed(){
 
 const std::string &Tram::getStartStation() {
     REQUIRE (properlyInitialized(), "The Tram was not properly or not initialized before calling getStartStation");
+    ENSURE(is_valid_String(_StartStation), "getStartStation must return a valid string");
     return _StartStation;
 }
 

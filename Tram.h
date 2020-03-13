@@ -33,6 +33,9 @@ public:
      *
      * @pre : the object must be properly initialized
      *      --> REQUIRE (properlyInitialized(), "The Tram was not properly or not initialized before calling getLijn")
+     *
+     * @post this method must return a valid integer,
+     *       but it is unnecessary to make an ENSURE because the compiler already made sure this was the case
      */
     const int getLijn();
 
@@ -42,8 +45,11 @@ public:
      *
      * @return : an integer that is the exact amount of seats on the Tram
      *
-     * * @pre : the object must be properly initialized
+     * @pre : the object must be properly initialized
      *      --> REQUIRE (properlyInitialized(), "The Tram was not properly or not initialized before calling getSeats")
+     *
+     * @post this method must return a valid integer,
+     *       but it is unnecessary to make an ENSURE because the compiler already made sure this was the case
      */
     const int getSeats();
 
@@ -52,8 +58,11 @@ public:
      *
      * @return : a constant integer which is the exact speed
      *
-     * * @pre : the object must be properly initialized
+     *  @pre : the object must be properly initialized
      *      --> REQUIRE (properlyInitialized(), "The Tram was not properly or not initialized before calling getSpeed")
+     *
+     * @post this method must return a valid integer,
+     *       but it is unnecessary to make an ENSURE because the compiler already made sure this was the case
      */
     const int getSpeed();
 
@@ -62,8 +71,11 @@ public:
      *
      * @return : the string which is the name of this trams start station
      *
-     * * @pre : the object must be properly initialized
+     * @pre : the object must be properly initialized
      *      --> REQUIRE (properlyInitialized(), "The Tram was not properly or not initialized before calling getStartStation")
+     *
+     * @post the return value must be a valid StartStation (string)
+     *       --> ENSURE(is_valid_String(_Naam), "getNaam must return a valid string")
      */
     const std::string &getStartStation();
 
@@ -71,8 +83,19 @@ public:
 
     bool operator!=(const Tram &rhs) const;
 
+    /**
+     * @brief this method needs no ENSURE or REQUIRE, it checks if the object is properly initialized by checking if the
+     *        'this' pointer still points to the same object as the _propInt member
+     *
+     * @return this method returns a boolean that indicates if the object is still properly initialized
+     */
     bool properlyInitialized();
 
+    /**
+     * @brief this method checks that _Startstation is valid according the given specifications
+     *
+     * @return this method returns a boolean that indicates if _Startstation is valid
+     */
     bool validTramMembers();
 
 private:
