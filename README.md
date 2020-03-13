@@ -6,3 +6,5 @@
  - datastructuur bedenken
  - tests schrijven 
  - test test
+ 
+#### !De files Spoor.h en Spoor.cpp zijn nog geen deel van versie 1!
