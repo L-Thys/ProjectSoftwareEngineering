@@ -22,7 +22,7 @@ public:
      * @param _Spoor this is an integer that represents the track (Spoor) that runs through
      *
      * @post This constructor will make sure the object is properly initialized
-     *       --> ENSURE (properlyInitialized(), "A constructor must end in a properlyInitialized state");
+     *       --> ENSURE (properlyInitialized(), "A constructor must end in a properlyInitialized state")
      * */
     Station(const std::string &_Naam, const std::string &_Volgende, const std::string &_Vorige, int _Spoor);
 
@@ -66,7 +66,19 @@ public:
 
     bool properlyInitialized();
 
-    bool validStationMembers();
+protected:
+    /**
+     * @brief this method ensures that all members but one, _Sporen, are valid according the given specifications
+     *
+     * @post this method ensures that _Naam is correct according to the specification that a name only consists of
+     *       a-z, A-Z characters
+     *       --> ENSURE(is_valid_String(_Naam), "A station has to have a name consisting of a-z, A-Z")
+     * @post this method ensures that _Volgende is a valid name of a station, so this can be used in other methods
+     *       --> ENSURE(is_valid_String(_Volgende), "A station's next station should be a valid name")
+     * @post this method ensures that _Vorige is a valid name of a station, so it could be used in other methods
+     *       --> ENSURE(is_valid_String(_Vorige), "A station's previous station should be a valid name")
+     */
+    void validStationMembers();
 
 private:
     std::string _Naam;

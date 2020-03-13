@@ -12,6 +12,7 @@ Station::Station(const std::string &_Naam, const std::string &_Volgende, const s
 
     // We make sure that the object is properly initialized by using the ENSURE function
     ENSURE(properlyInitialized(), "A constructor must end in a properlyInitialized state");
+    validStationMembers();
 }
 
 const std::string &Station::getNaam() const {
@@ -49,8 +50,13 @@ bool Station::properlyInitialized() {
     return _propInit == this;
 }
 
-bool Station::validStationMembers() {
-    return is_valid_String(Station::_Naam) &&
+void Station::validStationMembers() {
+    // we ensure that all the members are valid
+    ENSURE(is_valid_String(_Naam), "A station has to have a name consisting of a-z, A-Z");
+    ENSURE(is_valid_String(_Volgende), "A station's next station should be a valid name");
+    ENSURE(is_valid_String(_Vorige), "A station's previous station should be a valid name");
+
+    // the tracks in _Sporen are always valid integers, otherwise the compiler will give an error
 }
 
 
