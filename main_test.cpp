@@ -53,8 +53,7 @@ TEST(readFromXml, input){
     EXPECT_EQ(1,size);
 }
 TEST(readFromXml, wronginput){
-    // todo for lotte: something is going wrong here in ReadFromXml()
-//    readFromXml("wrongInput1.xml");
+    readFromXml("wrongInput1.xml");
 }
 
 // tests isConsistent() in metronet

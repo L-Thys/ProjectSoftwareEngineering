@@ -10,7 +10,7 @@
 #include "systeem.h"
 
 int main(){
-    Metronet* metronet = readFromXml("foutetest1.xml");
+    Metronet* metronet = readFromXml("wrongInput1.xml");
     metronet->isConsistent();
     delete metronet;
     return 0;
