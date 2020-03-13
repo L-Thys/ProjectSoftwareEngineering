@@ -14,6 +14,8 @@
 #include "gtest/include/gtest/gtest.h"
 #include "DesignByContract.h"
 
+// TODO : desing by contract
+
 /**
  * @brief checks if string s is a valid string, according to the specification:
  * String = Letter { Letter } and Letter = "a" ... "z" | "A" ... "Z"
