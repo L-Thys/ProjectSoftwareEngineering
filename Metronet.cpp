@@ -3,6 +3,9 @@
 //
 
 #include "Metronet.h"
+#include <fstream>
+#include <string>
+#include <iostream>
 
 const std::map<std::string, Station *> &Metronet::getStations() {
     REQUIRE (properlyInitialized(), "The Metronet was not properly or not initialized before calling getStations");
@@ -143,3 +146,26 @@ bool Metronet::properlyDeleted() {
     return true;
 }
 
+void Metronet::writeToFile(const char *filename) {
+    // Open uitvoerbestand
+    std::ofstream file(filename);
+
+    // WHILE Nog stations beschikbaar
+    for (std::map<std::string,Station*>::iterator it = _stations.begin(); it != _stations.end(); ++it) {
+        // Schrijf station-gegevens ui
+        file << "Station " << it->second->getNaam() << std::endl;
+        file << "<- Station " << it->second->getVorige() << std::endl;
+        file << "-> Station " << it->second->getVolgende() << std::endl;
+        file << "Spoor " << it->second->getSpoor() << std::endl;
+    }
+
+    file << std::endl;
+    //WHILE Nog voertuigen beschikbaar
+    for (std::map<int,Tram*>::iterator it = _trams.begin(); it != _trams.end() ; ++it) {
+        // Schrijf voertuig-gegevens uit
+        file << "Tram " << it->second->getLijn() << " in " << it->second->getCurrentStation();
+        file << ", " << it->second->getSeats() << " zitplaatsen" << std::endl;
+    }
+    // Sluit uitvoerbestand
+    file.close();
+}

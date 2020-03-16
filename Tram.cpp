@@ -10,6 +10,7 @@ Tram::Tram(const int _Lijn, const int _Seats, const int _Speed, std::string _Sta
     Tram::_Seats = _Seats;
     Tram::_Speed = _Speed;
     Tram::_StartStation = _StartStation;
+    Tram::_CurrentStation = _StartStation;
 
     Tram::_propInit = this;
     // We make sure that the object is properly initialized by using the ENSURE function
@@ -56,4 +57,12 @@ bool Tram::properlyInitialized() {
 
 bool Tram::validTramMembers() {
     return is_valid_String(_StartStation);
+}
+
+const std::string &Tram::getCurrentStation() const {
+    return _CurrentStation;
+}
+
+void Tram::setCurrentStation(const std::string &currentStation) {
+    _CurrentStation = currentStation;
 }

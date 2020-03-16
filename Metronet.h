@@ -129,6 +129,15 @@ public:
      */
     bool properlyDeleted();
 
+    /**
+     * @brief writes the information about the metronet to an outputfile with filename param filename
+     *
+     * @param filename : the name of the file to which the information is to be written
+     *
+     * @pre : there's at least one station in _stations and at least
+     */
+    void writeToFile(const char *filename);
+
 private:
     std::map<std::string, Station*> _stations;
     std::map<int, Tram*> _trams;
