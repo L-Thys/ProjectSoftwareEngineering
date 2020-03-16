@@ -122,19 +122,31 @@ public:
     bool properlyInitialized();
 
     /**
-     * @brief this method needs no ENSURE or REQUIRE, it checks if the object is properly initialized by checking if the
-     *        'this' pointer still points to the same object as the _propInt member
+     * @brief this method needs no ENSURE or REQUIRE, it checks if the object is properly deleted
      *
      * @return this method returns a boolean that indicates if the object is properly deleted
      */
     bool properlyDeleted();
 
     /**
+     * @pre this object must be properly initialized
+     *      --> REQUIRE (properlyInitialized(), "The Metronet was not properly or not initialized before calling isConsistent")
+     *
+     * @return whether there's at least one station in _stations and at least one tram in _trams
+     */
+    bool mapsAreNotEmpty();
+
+    /**
      * @brief writes the information about the metronet to an outputfile with filename param filename
      *
      * @param filename : the name of the file to which the information is to be written
      *
-     * @pre : there's at least one station in _stations and at least
+     *  @pre this object must be properly initialized
+     *      --> REQUIRE (properlyInitialized(), "The Metronet was not properly or not initialized before calling writeToFile")
+     *
+     * @pre : there's at least one station in _stations and at least one tram in _trams
+     *      and the metronet is consistent
+     *      --> REQUIRE(mapsAreNotEmpty() && isConsistent(), "this object should contain a consistent metronet")
      */
     void writeToFile(const char *filename);
 

@@ -147,6 +147,8 @@ bool Metronet::properlyDeleted() {
 }
 
 void Metronet::writeToFile(const char *filename) {
+    REQUIRE(mapsAreNotEmpty() && isConsistent(), "this object should contain a consistent metronet");
+    REQUIRE (properlyInitialized(), "The Metronet was not properly or not initialized before calling writeToFile");
     // Open uitvoerbestand
     std::ofstream file(filename);
 
@@ -168,4 +170,9 @@ void Metronet::writeToFile(const char *filename) {
     }
     // Sluit uitvoerbestand
     file.close();
+}
+
+bool Metronet::mapsAreNotEmpty() {
+    REQUIRE (properlyInitialized(), "The Metronet was not properly or not initialized before calling isConsistent");
+    return _trams.size() != 0 && _stations.size() != 0;
 }
