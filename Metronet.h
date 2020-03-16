@@ -147,6 +147,8 @@ public:
      * @pre : there's at least one station in _stations and at least one tram in _trams
      *      and the metronet is consistent
      *      --> REQUIRE(mapsAreNotEmpty() && isConsistent(), "this object should contain a consistent metronet")
+     *
+     * @post : there's a file with the information from this metronet written in it
      */
     void writeToFile(const char *filename);
 
