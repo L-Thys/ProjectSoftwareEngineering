@@ -147,7 +147,7 @@ bool Metronet::properlyDeleted() {
 }
 
 void Metronet::writeToFile(const char *filename) {
-    REQUIRE(mapsAreNotEmpty() && isConsistent(), "this object should contain a consistent metronet");
+    REQUIRE(mapsAreNotEmpty() && isConsistent(), "This object should contain a consistent metronet");
     REQUIRE (properlyInitialized(), "The Metronet was not properly or not initialized before calling writeToFile");
     // Open uitvoerbestand
     std::ofstream file(filename);
@@ -178,7 +178,7 @@ bool Metronet::mapsAreNotEmpty() {
 }
 
 bool Metronet::drive(const int _spoor, std::string &_station) {
-    REQUIRE(properlyInitialized(), "Metronet was not initialized when calling drive");
+    REQUIRE(properlyInitialized(), "The Metronet was not properly or not initialized before calling drive");
     REQUIRE(is_valid_String(_station), "The given station wasn't a valid name of a station");
 
     // we find the 2 corresponding objects
@@ -211,7 +211,7 @@ bool Metronet::drive(const int _spoor, std::string &_station) {
 
 void Metronet::driveAutomaticaly(int n) {
     REQUIRE (properlyInitialized(), "The Metronet was not properly or not initialized before calling writeToFile");
-    REQUIRE(mapsAreNotEmpty() && isConsistent(), "this object should contain a consistent metronet");
+    REQUIRE(mapsAreNotEmpty() && isConsistent(), "This object should contain a consistent metronet");
     for (int i = 0; i < n; ++i) {
         for (std::map<int,Tram*>::iterator it = _trams.begin(); it != _trams.end() ; ++it) {
             Station* station = findStation(it->second->getCurrentStation());

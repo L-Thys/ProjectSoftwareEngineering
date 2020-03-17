@@ -17,7 +17,7 @@ Station::Station(const std::string &_Naam, const std::string &_Volgende, const s
 
 const std::string & Station::getNaam() {
     // we need to have a correctly initialized object
-    REQUIRE(properlyInitialized(), "Station was not initialized when calling getNaam()");
+    REQUIRE(properlyInitialized(), "The station was not properly or not initialized before calling getNaam");
 
     // we ensure that the name is a correct string
     ENSURE(is_valid_String(_Naam), "getNaam must return a valid string");
@@ -25,24 +25,24 @@ const std::string & Station::getNaam() {
 }
 
 const std::string &Station::getVolgende() {
-    REQUIRE(properlyInitialized(), "Station was not initialized when calling getVolgende()");
+    REQUIRE(properlyInitialized(), "The station was not properly or not initialized before calling getVolgende");
     ENSURE(is_valid_String(_Volgende), "getVolgende must return a valid string");
     return _Volgende;
 }
 
 const std::string &Station::getVorige() {
-    REQUIRE(properlyInitialized(), "Station was not initialized when calling getVorige()");
+    REQUIRE(properlyInitialized(), "The station was not properly or not initialized before calling getVorige");
     ENSURE(is_valid_String(_Vorige), "getVorige must return a valid string");
     return _Vorige;
 }
 
 int Station::getSpoor() {
-    REQUIRE(properlyInitialized(), "Station was not initialized when calling getSpoor()");
+    REQUIRE(properlyInitialized(), "The station was not properly or not initialized before calling getSpoor");
     return _Sporen[0];                               // momentarily this vector only consists of 1, so we return only 1
 }
 
 std::vector<int> Station::getSporen() {
-    REQUIRE(properlyInitialized(), "Station was not initialized when calling getSporen()");
+    REQUIRE(properlyInitialized(), "The station was not properly or not initialized before calling getSporen");
     return Station::_Sporen;
 }
 
