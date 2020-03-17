@@ -179,10 +179,17 @@ bool Metronet::mapsAreNotEmpty() {
 
 bool Metronet::drive(const int _spoor, std::string &_station) {
     REQUIRE(properlyInitialized(), "Metronet was not initialized when calling drive");
+    REQUIRE(is_valid_String(_station), "The given station wasn't a valid name of a station");
 
     // we find the 2 corresponding objects
     Tram* cTram = findTram(_spoor);
     Station* cStation = findStation(_station);
+
+    // we check if both are valid
+    if (cTram == NULL || cStation == NULL){
+        std::cout << "A invalid parameter is given. There is no corresponding Tram or Station." << std::endl;
+        return false;
+    }
 
     // we check if the needed tram its station is indeed the needed station
     if (cTram->getCurrentStation() == _station){                // if so, we move it
@@ -194,6 +201,8 @@ bool Metronet::drive(const int _spoor, std::string &_station) {
         std::cout << "Tram " << _spoor << " drove from station " << oSt << " to station " << nSt << std::endl;
         return true;
     }
+
+    // the given station and the current station do not aling, it is not possible to move a Tram that is not there
     else {                                                      // if not we give an error message
         std::cerr << "There is no Tram present on track " << _spoor << " in station " << _station << ". Give another instruction." << std::endl;
         return false;

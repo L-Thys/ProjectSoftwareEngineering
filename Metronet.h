@@ -152,6 +152,21 @@ public:
      */
     void writeToFile(const char *filename);
 
+    /**
+     * @brief this method moves, if possible, the Tram present on the given line which is located in the given station
+     *        to the next station.
+     *
+     * @pre the object must be properly initialized
+     *      --> REQUIRE(properlyInitialized(), "Metronet was not initialized when calling drive")
+     *
+     * @pre the given string must be a valid name for a station
+     *      --> REQUIRE(is_valid_String(_station), "The given station wasn't a valid name of a station")
+     *
+     * @param _spoor this is a integer that we use to find the right Tram we need to move
+     * @param _station this is the station from where we move the tram, this isn't necessarily the right one
+     *
+     * @return this method returns a boolean that indicates if the move is successfully executed
+     */
     bool drive(int _spoor, std::string &_station);
 
     /**
