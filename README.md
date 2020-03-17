@@ -1,10 +1,9 @@
 # ProjectSoftwareEngineering
 ### To Do
- - testing begrijpen/ doen werken
- - xml begrijpen/ doen werken
  - contracten 
- - datastructuur bedenken
  - tests schrijven 
- - test test
+ - DOCs en comments
+ - het gelijk maken van errors
+ - heel veel test schrijven
  
 #### !De files Spoor.h en Spoor.cpp zijn nog geen deel van versie 1!
