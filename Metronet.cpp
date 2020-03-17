@@ -179,17 +179,22 @@ bool Metronet::mapsAreNotEmpty() {
 
 bool Metronet::drive(const int _spoor, std::string &_station) {
     REQUIRE(properlyInitialized(), "Metronet was not initialized when calling drive");
+
+    // we find the 2 corresponding objects
     Tram* cTram = findTram(_spoor);
     Station* cStation = findStation(_station);
 
-    if (cTram->getCurrentStation() == _station){
-        std::string oSt = cTram->getCurrentStation();
-        cTram->setCurrentStation(cStation->getVolgende());
-        std::string nSt = cTram->getCurrentStation();
+    // we check if the needed tram its station is indeed the needed station
+    if (cTram->getCurrentStation() == _station){                // if so, we move it
+        std::string oSt = cTram->getCurrentStation();           // we shortly save the station
+        cTram->setCurrentStation(cStation->getVolgende());      // we move the Tram
+        std::string nSt = cTram->getCurrentStation();           // we save the new station
+
+        // the message of movement is given by printing the track (also tram name), the start and finish station
         std::cout << "Tram " << _spoor << " drove from station " << oSt << " to station " << nSt << std::endl;
         return true;
     }
-    else {
+    else {                                                      // if not we give an error message
         std::cerr << "There is no Tram present on track " << _spoor << " in station " << _station << ". Give another instruction." << std::endl;
         return false;
     }
