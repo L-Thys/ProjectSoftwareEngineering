@@ -154,6 +154,21 @@ public:
 
     bool drive(int _spoor, std::string &_station);
 
+    /**
+     * @brief lets the simulation run for a certain time (n)
+     *
+     * @pre this object must be properly initialized
+     *      --> REQUIRE (properlyInitialized(), "The Metronet was not properly or not initialized before calling writeToFile")
+     *
+     * @pre : there's at least one station in _stations and at least one tram in _trams
+     *      and the metronet is consistent
+     *      --> REQUIRE(mapsAreNotEmpty() && isConsistent(), "this object should contain a consistent metronet")
+     *
+     *
+     * @param n: the amount of time cycles
+     */
+    void driveAutomaticaly(int n);
+
 private:
     std::map<std::string, Station*> _stations;
     std::map<int, Tram*> _trams;

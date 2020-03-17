@@ -199,3 +199,14 @@ bool Metronet::drive(const int _spoor, std::string &_station) {
         return false;
     }
 }
+
+void Metronet::driveAutomaticaly(int n) {
+    REQUIRE (properlyInitialized(), "The Metronet was not properly or not initialized before calling writeToFile");
+    REQUIRE(mapsAreNotEmpty() && isConsistent(), "this object should contain a consistent metronet");
+    for (int i = 0; i < n; ++i) {
+        for (std::map<int,Tram*>::iterator it = _trams.begin(); it != _trams.end() ; ++it) {
+            Station* station = findStation(it->second->getCurrentStation());
+            drive(it->second->getLijn(), const_cast<std::string &>(station->getVolgende()));
+        }
+    }
+}
