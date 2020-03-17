@@ -174,5 +174,23 @@ void Metronet::writeToFile(const char *filename) {
 
 bool Metronet::mapsAreNotEmpty() {
     REQUIRE (properlyInitialized(), "The Metronet was not properly or not initialized before calling isConsistent");
-    return _trams.size() != 0 && _stations.size() != 0;
+    return !_trams.empty() && !_stations.empty();
+}
+
+bool Metronet::drive(const int _spoor, std::string &_station) {
+    REQUIRE(properlyInitialized(), "Metronet was not initialized when calling drive");
+    Tram* cTram = findTram(_spoor);
+    Station* cStation = findStation(_station);
+
+    if (cTram->getCurrentStation() == _station){
+        std::string oSt = cTram->getCurrentStation();
+        cTram->setCurrentStation(cStation->getVolgende());
+        std::string nSt = cTram->getCurrentStation();
+        std::cout << "Tram " << _spoor << " drove from station " << oSt << " to station " << nSt << std::endl;
+        return true;
+    }
+    else {
+        std::cerr << "There is no Tram present on track " << _spoor << " in station " << _station << ". Give another instruction." << std::endl;
+        return false;
+    }
 }

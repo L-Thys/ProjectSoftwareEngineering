@@ -98,18 +98,16 @@ public:
      */
     bool validTramMembers();
 
+    const std::string &getCurrentStation() const;
+
+    void setCurrentStation(const std::string &currentStation);
+
 private:
     int _Lijn;
     int _Seats;
     int _Speed;
     std::string _StartStation;
     std::string _CurrentStation;
-public:
-    const std::string &getCurrentStation() const;
-
-    void setCurrentStation(const std::string &currentStation);
-
-private:
 
     Tram* _propInit;
 };

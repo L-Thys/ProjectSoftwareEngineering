@@ -152,6 +152,8 @@ public:
      */
     void writeToFile(const char *filename);
 
+    bool drive(int _spoor, std::string &_station);
+
 private:
     std::map<std::string, Station*> _stations;
     std::map<int, Tram*> _trams;
