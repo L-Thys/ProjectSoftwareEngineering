@@ -38,7 +38,7 @@ const std::string &Station::getVorige() {
 
 int Station::getSpoor() {
     REQUIRE(properlyInitialized(), "The station was not properly or not initialized before calling getSpoor");
-    return _Sporen[0];                               // momentarily this vector only consists of 1, so we return only 1
+    return _Sporen[0];      // momentarily this vector only consists of 1, so we return only 1
 }
 
 std::vector<int> Station::getSporen() {
