@@ -49,3 +49,4 @@ TEST(validInteger, NonValidString){
     EXPECT_FALSE(is_Integer(" "));
     EXPECT_FALSE(is_Integer(""));
 }
+
