@@ -2,6 +2,6 @@
 ### To Do
  - tests schrijven 
  - heel veel test schrijven
- - volgens conventies
+ - volgens conventies maken
  
 #### !De files Spoor.h en Spoor.cpp zijn nog geen deel van versie 1!
