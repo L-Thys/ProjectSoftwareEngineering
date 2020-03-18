@@ -2,7 +2,7 @@
 ### To Do
  - contracten 
  - tests schrijven 
- - DOCs en comments
+ - DOCs
  - errors in juiste vorm in station.cpp
  - heel veel test schrijven
  
