@@ -399,7 +399,10 @@ TEST_F(ValidMetronetTest, Consistence){
     EXPECT_TRUE(metronet->isConsistent());
 }
 
-TEST(Consistence, stationNotConsistent){
+// TODO : de testen voor als er meerdere tracks zijn en als een track meerdere keren in een station voorkomt
+
+// the test with a wrong next station
+TEST(Consistence, stationNextNotConsistent){
     Metronet* net = new Metronet();
     Station* st1 = new Station("A", "B", "B", 1);
     Station* st2 = new Station("B", "C", "A", 1);
@@ -411,22 +414,98 @@ TEST(Consistence, stationNotConsistent){
     delete net;
 }
 
+// the test with a wrong previous station
+TEST(Consistence, stationPreviousNotConsistent){
+    Metronet* net = new Metronet();
+    Station* st1 = new Station("A", "B", "B", 1);
+    Station* st2 = new Station("B", "A", "C", 1);
+    Tram* tr1 = new Tram(1, 20, 40, "A");
+    net->addStation(st1);
+    net->addStation(st2);
+    net->addTram(tr1);
+    EXPECT_FALSE(net->isConsistent());
+    delete net;
+}
+
+// the test with the wong track
+TEST(Consistence, stationTrackNotConsistent){
+    Metronet* net = new Metronet();
+    Station* st1 = new Station("A", "B", "B", 2);
+    Station* st2 = new Station("B", "A", "A", 1);
+    Tram* tr1 = new Tram(1, 20, 40, "A");
+    net->addStation(st1);
+    net->addStation(st2);
+    net->addTram(tr1);
+    EXPECT_FALSE(net->isConsistent());
+    delete net;
+}
+
+// the test where the next's track is wrong
+TEST(Consistence, stationNextTrackNotConsistent){
+    Metronet* net = new Metronet();
+    Station* st1 = new Station("A", "B", "B", 1);
+    Station* st2 = new Station("B", "A", "A", 2);
+    Tram* tr1 = new Tram(1, 20, 40, "A");
+    net->addStation(st1);
+    net->addStation(st2);
+    net->addTram(tr1);
+    EXPECT_FALSE(net->isConsistent());
+    delete net;
+}
+
+TEST(Consistence, track1TramNotConsistent){
+    Metronet* net = new Metronet();
+    Station* st1 = new Station("A", "B", "B", 1);
+    Station* st2 = new Station("B", "A", "A", 1);
+    Tram* tr1 = new Tram(1, 20, 40, "A");
+    Tram* tr2 = new Tram(1, 30, 70, "B");
+    net->addStation(st1);
+    net->addStation(st2);
+    net->addTram(tr1);
+    net->addTram(tr2);
+    EXPECT_FALSE(net->isConsistent());
+    delete net;
+}
+
+TEST(Consistence, tramStartNotConsistent){
+    Metronet* net = new Metronet();
+    Station* st1 = new Station("A", "B", "B", 1);
+    Station* st2 = new Station("B", "A", "A", 1);
+    Tram* tr1 = new Tram(1, 20, 40, "C");
+    net->addStation(st1);
+    net->addStation(st2);
+    net->addTram(tr1);
+    EXPECT_FALSE(net->isConsistent());
+
+    delete net;
+}
+
+TEST(Consistence, stationStartTrackNotConsistent){
+    Metronet* net = new Metronet();
+    Station* st1 = new Station("A", "B", "B", 1);
+    Station* st2 = new Station("B", "C", "A", 1);
+    Tram* tr1 = new Tram(2, 20, 40, "A");
+    net->addStation(st1);
+    net->addStation(st2);
+    net->addTram(tr1);
+    EXPECT_FALSE(net->isConsistent());
+
+    delete net;
+}
+
 // todo: test writeToFile
 
 // tests drive
 TEST_F(ValidMetronetTest, driveTrue){
-    std::string a = "A";
-    EXPECT_TRUE(metronet->drive(12, a));
+    EXPECT_TRUE(metronet->drive(12, (std::string &) "A"));
     EXPECT_EQ("B",metronet->findTram(12)->getCurrentStation());
 }
 TEST_F(ValidMetronetTest, driveFalse1){
-    std::string b = "B";
-    EXPECT_FALSE(metronet->drive(12, b));
+    EXPECT_FALSE(metronet->drive(12, (std::string &) "B"));
     EXPECT_EQ("A",metronet->findTram(12)->getCurrentStation());
 }
 TEST_F(ValidMetronetTest, driveFalse2){
-    std::string a = "A";
-    EXPECT_FALSE(metronet->drive(13, a));
+    EXPECT_FALSE(metronet->drive(13, (std::string &) "A"));
 }
 
 // tests driveAutomaticaly
