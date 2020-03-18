@@ -476,20 +476,19 @@ TEST(Consistence, tramStartNotConsistent){
     net->addStation(st2);
     net->addTram(tr1);
     EXPECT_FALSE(net->isConsistent());
-
     delete net;
 }
 
+// the start station's track is not equal to the track of the tram
 TEST(Consistence, stationStartTrackNotConsistent){
     Metronet* net = new Metronet();
     Station* st1 = new Station("A", "B", "B", 1);
-    Station* st2 = new Station("B", "C", "A", 1);
+    Station* st2 = new Station("B", "A", "A", 1);
     Tram* tr1 = new Tram(2, 20, 40, "A");
     net->addStation(st1);
     net->addStation(st2);
     net->addTram(tr1);
     EXPECT_FALSE(net->isConsistent());
-
     delete net;
 }
 
