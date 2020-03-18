@@ -191,5 +191,18 @@ private:
     Metronet* _propInit;
 };
 
+/**
+ * @brief reads xml file that's made up according to Specificatie 1.0 and makes a Metronet that reflects the xml
+ *
+ * @param file: string, path to file from which to read
+ *
+ * @return the Metronet that was made
+ *
+ * @pre : this function has no prerequisites
+ *
+ * @post : this fuction must return a consistent metronet
+ *      --> ENSURE (metronet->isConsistent(), "The metronet from the xml-file must be consistent");
+ */
+Metronet* readFromXml(const char* file);
 
 #endif //PSE_METRONET_H
