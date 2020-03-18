@@ -15,7 +15,6 @@ class Metronet {
 public:
     /**
      * @brief : the constructor of an object of type Metronet, this constructor takes no parameters to initialise the object
-
      *
      * @post This constructor will make sure the object is properly initialized
      *       --> ENSURE (properlyInitialized(), "A constructor must end in a properlyInitialized state");
@@ -34,69 +33,75 @@ public:
     virtual ~Metronet();
 
     /**
-     * @brief : deze methode geeft de verzameling trammen terug
+     * @brief : this method gives the full set of stations back
      *
      * @pre : the object must be properly initialized
      *      --> REQUIRE (properlyInitialized(), "The Metronet was not properly or not initialized before calling getStations")
      *
-     * @return : geeft de map van strings en Station-pointers terug
+     * @return : a map of stations, with their name as search_key
      * */
     const std::map<std::string, Station *> &getStations();
 
     /**
-     * @brief : deze methode geeft de verzameling trammen terug
+     * @brief : this method returns all Trams inside the network
      *
      * @pre : the object must be properly initialized
      *      --> REQUIRE (properlyInitialized(), "The Metronet was not properly or not initialized before calling getTrams")
      *
-     * @return : geeft de map van strings en Tram-pointers terug
+     * @return : a map of Trams with their lines (integers) as their search_keys
      * */
     const std::map<int, Tram *> &getTrams();
 
     /**
-     * @brief : deze methode steekt een gegeven station in ons netwerk
+     * @brief : this method adds a Station to the collection of stations
      *
-     * @param station : een pointer naar een station object dat als pair zal geinsert worden in de overeenkomstige map
+     * @param station : a pointer to a station
      *
      * @pre : the object must be properly initialized
      *      --> REQUIRE (properlyInitialized(), "The Metronet was not properly or not initialized before calling addStation")
      *
-     * @return : true als toevoegen gelukt is, false als er al een station met dezelfde naam bestaat
+     * @return : boolean which indicates if the station could be added or not
      * */
     bool addStation(Station* station);
 
     /**
-     * @brief : deze methode steekt een gegeven tram in ons netwerk
+     * @brief : this method adds a tram to the collection of trams
      *
-     * @param tram : een pointer naar een tram object dat als pair zal geinsert worden in de overeenkomstige map
+     * @param tram : a pointer to a tram
      *
      * @pre : the object must be properly initialized
      *      --> REQUIRE (properlyInitialized(), "The Metronet was not properly or not initialized before calling addTram")
      *
-     * @return : true als toevoegen gelukt is, false als er al een station met dezelfde naam bestaat
+     * @return : boolean which indicates if the tram could be added or not
      * */
     bool addTram (Tram* tram);
 
     /**
-     * @brief : gegeven een naam zoekt deze methode een station dat dit als naam heeft
+     * @brief : given a name, this method searches the corresponding station in the collection
+     *
+     * @param name is the name of the station
      *
      * @pre : the object must be properly initialized
      *      --> REQUIRE (properlyInitialized(), "The Metronet was not properly or not initialized before calling findStation")
      *
-     * @return : een pointer naar een station
+     * @pre the name must be a valid name
+     *      --> REQUIRE (is_valid_String(name), "The given string is not a valid name for a Station")
+     *
+     * @return a pointer to a station, NULL if there is no corresponding station
      * */
     Station* findStation(const std::string& name);
 
     /**
-     * @brief : gegeven een spoor geeft deze methode de tram terug die op dit spoor rijdt
+     * @brief this method searches a Tram by using a given line and returns this
+     *
+     * @param spoor is an integer that will indicates the to-find Tram
      *
      * @pre : the object must be properly initialized
      *      --> REQUIRE (properlyInitialized(), "The Metronet was not properly or not initialized before calling findTram")
      *
-     * @return : een pointer naar een tram
+     * @return a pointer to the right Tram, returns NULL if no such Tram is found
      * */
     Tram* findTram(int spoor);
-
 
     /**
      * @brief we check if a network is consistent, this means that the station has only 1 track,
@@ -129,6 +134,8 @@ public:
     bool properlyDeleted();
 
     /**
+     * @brief this method check whether there are stations and trams in the network or not
+     *
      * @pre this object must be properly initialized
      *      --> REQUIRE (properlyInitialized(), "The Metronet was not properly or not initialized before calling isConsistent")
      *
@@ -148,7 +155,7 @@ public:
      *      and the metronet is consistent
      *      --> REQUIRE(mapsAreNotEmpty() && isConsistent(), "this object should contain a consistent metronet")
      *
-     * @post : there's a file with the information from this metronet written in it
+     * @post : there's a file with the information from this Metronet written in it
      */
     void writeToFile(const char *filename);
 
@@ -157,7 +164,7 @@ public:
      *        to the next station.
      *
      * @pre the object must be properly initialized
-     *      --> REQUIRE(properlyInitialized(), "Metronet was not initialized when calling drive")
+     *      --> REQUIRE(properlyInitialized(), "Metronet was not properly or no initialized before calling drive")
      *
      * @pre the given string must be a valid name for a station
      *      --> REQUIRE(is_valid_String(_station), "The given station wasn't a valid name of a station")

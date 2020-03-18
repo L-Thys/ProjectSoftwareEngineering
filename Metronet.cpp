@@ -110,6 +110,7 @@ Tram * Metronet::findTram(int spoor) {
 // if name isn't in the list, NULL is returned, so it's best to check if you get NULL from this function before using the returned value
 Station * Metronet::findStation(const std::string& name) {
     REQUIRE (properlyInitialized(), "The Metronet was not properly or not initialized before calling findStation");
+    REQUIRE (is_valid_String(name), "The given string is not a valid name for a Station");
     try {
         return Metronet::_stations.at(name);
     }
