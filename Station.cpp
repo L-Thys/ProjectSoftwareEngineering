@@ -70,4 +70,41 @@ void Station::validStationMembers() {
     // the tracks in _Sporen are always valid integers, otherwise the compiler will give an error
 }
 
+//---------------------------------//
+//// Tests
 
+class ValidStationTest: public ::testing::Test {
+public:
+    ValidStationTest() {
+        station = new Station("A","B","C",12);
+    }
+
+    void SetUp() {
+        // code here will execute just before the test ensues
+    }
+
+    void TearDown() {
+        delete station;
+    }
+
+    Station* station;
+
+};
+
+
+// tests getter functions from Station
+TEST_F(ValidStationTest, getters){
+    EXPECT_EQ("A",station->getNaam());
+    EXPECT_EQ("B",station->getVolgende());
+    EXPECT_EQ("C",station->getVorige());
+    EXPECT_EQ(12,station->getSpoor());
+    std::vector<int> testsporen;
+    testsporen.push_back(12);
+    EXPECT_EQ(testsporen, station->getSporen());
+
+}
+
+// tests properlyInitialized in metronet
+TEST_F(ValidStationTest, properlyInitialized){
+    EXPECT_TRUE(station->properlyInitialized());
+}

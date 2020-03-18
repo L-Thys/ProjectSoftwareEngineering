@@ -8,6 +8,8 @@
 #include <string>
 #include <iostream>
 
+
+
 const std::map<std::string, Station *> &Metronet::getStations() {
     REQUIRE (properlyInitialized(), "The Metronet was not properly or not initialized before calling getStations");
     return _stations;
@@ -126,7 +128,6 @@ Metronet::~Metronet() {
     for(std::map<std::string, Station*>::iterator it=_stations.begin(); it!=_stations.end(); ++it){
         delete it->second;
     }
-    ENSURE (properlyDeleted(), "A destructor must end in a properlyDeleted state");
 }
 
 Metronet::Metronet() {
@@ -138,15 +139,6 @@ bool Metronet::properlyInitialized() {
     return _propInit == this;
 }
 
-bool Metronet::properlyDeleted() {
-    for(std::map<int,Tram*>::iterator it=_trams.begin(); it!=_trams.end(); ++it){
-        if(it->second != NULL) return false;
-    }
-    for(std::map<std::string, Station*>::iterator it=_stations.begin(); it!=_stations.end(); ++it){
-        if(it->second != NULL) return false;
-    }
-    return true;
-}
 
 void Metronet::writeToFile(const char *filename) {
     REQUIRE(mapsAreNotEmpty() && isConsistent(), "This object should contain a consistent metronet");
@@ -325,3 +317,121 @@ Metronet* readFromXml(const char* file){
     ENSURE (metronet->isConsistent(), "The metronet from the xml-file must be consistent");
     return metronet;
 }
+
+//---------------------------------//
+//// Tests
+
+class ValidMetronetTest: public ::testing::Test {
+public:
+    ValidMetronetTest() {
+        metronet = new Metronet();
+        Station* station1 = new Station("A","B","C",12);
+        Station* station2 = new Station("B","C","A",12);
+        Station* station3 = new Station("C","A","B",12);
+        metronet->addStation(station1);
+        metronet->addStation(station2);
+        metronet->addStation(station3);
+        stations["A"]=station1;
+        stations["B"]=station2;
+        stations["C"]=station3;
+        Tram* tram = new Tram(12,60,60,"A");
+        metronet->addTram(tram);
+        trams[12]=tram;
+    }
+
+    void SetUp() {
+        // code here will execute just before the test ensues
+    }
+
+    void TearDown() {
+        delete metronet;
+    }
+    Metronet* metronet;
+    std::map<std::string, Station *> stations;
+    std::map<int, Tram *> trams;
+
+};
+
+
+// tests properlyInitialized in metronet
+TEST_F(ValidMetronetTest, properlyInitialized){
+    EXPECT_TRUE(metronet->properlyInitialized());
+}
+
+// tests mapsAreNotEmpty in metronet
+TEST_F(ValidMetronetTest, mapsAreNotEmpty){
+    EXPECT_TRUE(metronet->mapsAreNotEmpty());
+}
+
+// tests getter and find functions of Metronet
+TEST_F(ValidMetronetTest, gettersAndFinds){
+    Station* nullstation = NULL;
+    Tram* nulltram = NULL;
+    EXPECT_EQ(metronet->getStations(), stations);
+    EXPECT_EQ(metronet->getTrams(), trams);
+    EXPECT_EQ(*metronet->findStation("A"), *stations["A"]);
+    EXPECT_EQ(metronet->findStation("q"),nullstation);
+    EXPECT_EQ(*metronet->findTram(12),*trams[12]);
+    EXPECT_EQ(metronet->findTram(1),nulltram);
+}
+
+// tests adder functions of Metronet
+TEST_F(ValidMetronetTest, adders){
+    Tram* tram = new Tram(1,2,3,"A");
+    metronet->addTram(tram);
+    EXPECT_EQ(*metronet->findTram(1),*tram);
+
+    Station* station = new Station("Q","P","R",1);
+    metronet->addStation(station);
+    EXPECT_EQ(*metronet->findStation("Q"),*station);
+
+    //try to add station and tram with name that already exists
+    Station* stationA = new Station("Q","p","r",3);
+    EXPECT_FALSE(metronet->addStation(stationA));
+    EXPECT_EQ(*metronet->findStation("Q"),*station);
+
+    Tram* tramA = new Tram(1,3,4,"Q");
+    EXPECT_FALSE(metronet->addTram(tramA));
+    EXPECT_EQ(*metronet->findTram(1),*tram);
+}
+
+// tests isConsistent() in metronet
+TEST_F(ValidMetronetTest, Consistence){
+    EXPECT_TRUE(metronet->isConsistent());
+}
+
+// todo: test writeToFile
+
+// tests drive
+TEST_F(ValidMetronetTest, driveTrue){
+    EXPECT_TRUE(metronet->drive(12, (std::string &) "A"));
+    EXPECT_EQ("B",metronet->findTram(12)->getCurrentStation());
+}
+TEST_F(ValidMetronetTest, driveFalse1){
+    EXPECT_FALSE(metronet->drive(12, (std::string &) "B"));
+    EXPECT_EQ("A",metronet->findTram(12)->getCurrentStation());
+}
+TEST_F(ValidMetronetTest, driveFalse2){
+    EXPECT_FALSE(metronet->drive(13, (std::string &) "A"));
+}
+
+// tests driveAutomaticaly
+TEST_F(ValidMetronetTest, driveAutomaticaly){
+    metronet->driveAutomaticaly(5);
+    EXPECT_EQ("C",metronet->findTram(12)->getCurrentStation());
+}
+
+
+// tests readFromXml()
+TEST(readFromXml, input){
+    Metronet* metronet = readFromXml("test.xml");
+    int size = metronet->getStations().size();
+    EXPECT_EQ(3,size);
+    size = metronet->getTrams().size();
+    EXPECT_EQ(1,size);
+}
+TEST(readFromXml, wronginput){
+    // todo: toevoegen
+    //readFromXml("wrongInput1.xml");
+}
+

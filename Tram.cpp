@@ -66,3 +66,45 @@ const std::string &Tram::getCurrentStation() const {
 void Tram::setCurrentStation(const std::string &currentStation) {
     _CurrentStation = currentStation;
 }
+
+//---------------------------------//
+//// Tests
+
+class ValidTramTest: public ::testing::Test {
+public:
+    ValidTramTest() {
+        tram = new Tram(12,32,60,"A");
+    }
+
+    void SetUp() {
+        // code here will execute just before the test ensues
+    }
+
+    void TearDown() {
+        delete tram;
+    }
+
+    Tram* tram;
+
+};
+
+// tests getter and setter functions from Tram
+TEST_F(ValidTramTest, getters){
+    EXPECT_EQ(12,tram->getLijn());
+    EXPECT_EQ(32,tram->getSeats());
+    EXPECT_EQ(60,tram->getSpeed());
+    EXPECT_EQ("A",tram->getStartStation());
+    EXPECT_EQ("A",tram->getCurrentStation());
+    tram->setCurrentStation("B");
+    EXPECT_EQ("A",tram->getCurrentStation());
+}
+
+// tests properlyInitialized in metronet
+TEST_F(ValidTramTest, properlyInitialized){
+    EXPECT_TRUE(tram->properlyInitialized());
+}
+
+// tests properlyInitialized in metronet
+TEST_F(ValidTramTest, validTramMembers){
+    EXPECT_TRUE(tram->validTramMembers());
+}

@@ -27,8 +27,7 @@ public:
      * @pre : the object must be properly initialized
      *      --> REQUIRE (properlyInitialized(), "The Metronet was not properly or not initialized before calling the destructor")
      *
-     * @post : the destructor will make sure all pointers are NULL because the objects they were pointing to have been deleted
-     *      --> ENSURE (properlyDeleted(), "A destructor must end in a properlyDeleted state");
+     * @post : the destructor will make sure the object is properly deleted
      */
     virtual ~Metronet();
 
@@ -125,13 +124,6 @@ public:
      * @return this method returns a boolean that indicates if the object is still properly initialized
      */
     bool properlyInitialized();
-
-    /**
-     * @brief this method needs no ENSURE or REQUIRE, it checks if the object is properly deleted
-     *
-     * @return this method returns a boolean that indicates if the object is properly deleted
-     */
-    bool properlyDeleted();
 
     /**
      * @brief this method check whether there are stations and trams in the network or not
