@@ -13,6 +13,7 @@
 #include "OurExceptions.h"
 #include "gtest/include/gtest/gtest.h"
 #include "DesignByContract.h"
+#include "gtest/include/gtest/gtest.h"
 
 // TODO : desing by contract
 
@@ -24,7 +25,23 @@
  *
  * @return true if s is valid, false if not
  */
+
+
 bool is_valid_String(const std::string& s);
+// tests function is_valid_String()
+TEST (validstringTest, ValidString) {
+    EXPECT_TRUE(is_valid_String("a"));
+    EXPECT_TRUE(is_valid_String("abc"));
+    EXPECT_TRUE(is_valid_String("Abc"));
+}
+TEST(validstringTest, NonValidString){
+    EXPECT_FALSE(is_valid_String("a1"));
+    EXPECT_FALSE(is_valid_String("a b"));
+    EXPECT_FALSE(is_valid_String(" "));
+    EXPECT_FALSE(is_valid_String(""));
+    EXPECT_FALSE(is_valid_String("#"));
+    EXPECT_FALSE(is_valid_String("3"));
+}
 
 /**
  * @brief checks if string s represents an integer

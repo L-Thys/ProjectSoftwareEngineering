@@ -21,3 +21,31 @@ bool is_Integer(const std::string& s){
     while (it != s.end() && std::isdigit(*it)) ++it;
     return !s.empty() && it == s.end();
 }
+
+// tests function is_valid_String()
+TEST (validstring, ValidString) {
+    EXPECT_TRUE(is_valid_String("a"));
+    EXPECT_TRUE(is_valid_String("abc"));
+    EXPECT_TRUE(is_valid_String("Abc"));
+}
+TEST(validstring, NonValidString){
+    EXPECT_FALSE(is_valid_String("a1"));
+    EXPECT_FALSE(is_valid_String("a b"));
+    EXPECT_FALSE(is_valid_String(" "));
+    EXPECT_FALSE(is_valid_String(""));
+    EXPECT_FALSE(is_valid_String("#"));
+    EXPECT_FALSE(is_valid_String("3"));
+}
+
+// tests function is_Integer()
+TEST(validInteger, validInt){
+    EXPECT_TRUE(is_Integer("348"));
+    EXPECT_TRUE(is_Integer("3"));
+}
+TEST(validInteger, NonValidString){
+    EXPECT_FALSE(is_Integer("a23"));
+    EXPECT_FALSE(is_Integer("#"));
+    EXPECT_FALSE(is_Integer("2A"));
+    EXPECT_FALSE(is_Integer(" "));
+    EXPECT_FALSE(is_Integer(""));
+}
