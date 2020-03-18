@@ -84,11 +84,11 @@ bool Metronet::isConsistent() {
             if (*it == tram->second->getLijn()){
                 return false;
             }
-            else {      // if the line is not present in the as_tracks
-                        // we push it in so we ensure that duplicates are noticed
-                as_tracks.push_back(tram->second->getLijn());
-            }
+
         }
+
+        // we push it in so we ensure that duplicates are noticed
+        as_tracks.push_back(tram->second->getLijn());
 
     }
     // --------------------------------------------------------------------------- //
@@ -159,7 +159,7 @@ void Metronet::writeToFile(const char *filename) {
     //WHILE Nog voertuigen beschikbaar
     for (std::map<int,Tram*>::iterator it = _trams.begin(); it != _trams.end() ; ++it) {
         // Schrijf voertuig-gegevens uit
-        file << "Tram " << it->second->getLijn() << " in " << it->second->getCurrentStation();
+        file << "Tram " << it->second->getLijn() << " in Station " << it->second->getCurrentStation();
         file << ", " << it->second->getSeats() << " zitplaatsen" << std::endl;
     }
     // Sluit uitvoerbestand
@@ -333,7 +333,7 @@ public:
         stations["A"]=station1;
         stations["B"]=station2;
         stations["C"]=station3;
-        Tram* tram = new Tram(12,60,60,"A");
+        Tram* tram = new Tram(12,32,60,"A");
         metronet->addTram(tram);
         trams[12]=tram;
     }
@@ -453,20 +453,6 @@ TEST(Consistence, stationNextTrackNotConsistent){
     delete net;
 }
 
-TEST(Consistence, track1TramNotConsistent){
-    Metronet* net = new Metronet();
-    Station* st1 = new Station("A", "B", "B", 1);
-    Station* st2 = new Station("B", "A", "A", 1);
-    Tram* tr1 = new Tram(1, 20, 40, "A");
-    Tram* tr2 = new Tram(1, 30, 70, "B");
-    net->addStation(st1);
-    net->addStation(st2);
-    net->addTram(tr1);
-    net->addTram(tr2);
-    EXPECT_FALSE(net->isConsistent());
-    delete net;
-}
-
 TEST(Consistence, tramStartNotConsistent){
     Metronet* net = new Metronet();
     Station* st1 = new Station("A", "B", "B", 1);
@@ -492,19 +478,35 @@ TEST(Consistence, stationStartTrackNotConsistent){
     delete net;
 }
 
-// todo: test writeToFile
+TEST_F(ValidMetronetTest, writeToFile){
+    metronet->writeToFile("testresult.txt");
+    std::ifstream result ("testresult.txt");
+    std::ifstream compare ("testcomp.txt");
+    std::string resultstr;
+    std::string comparestr;
+    while(std::getline(compare,comparestr) ){
+        std::getline(result,resultstr);
+        EXPECT_EQ(resultstr,comparestr);
+    }
+    EXPECT_FALSE(std::getline(result,resultstr));
+    result.close();
+    compare.close();
+}
 
 // tests drive
 TEST_F(ValidMetronetTest, driveTrue){
-    EXPECT_TRUE(metronet->drive(12, (std::string &) "A"));
+    std::string a ="A";
+    EXPECT_TRUE(metronet->drive(12, a));
     EXPECT_EQ("B",metronet->findTram(12)->getCurrentStation());
 }
 TEST_F(ValidMetronetTest, driveFalse1){
-    EXPECT_FALSE(metronet->drive(12, (std::string &) "B"));
+    std::string b ="B";
+    EXPECT_FALSE(metronet->drive(12, b));
     EXPECT_EQ("A",metronet->findTram(12)->getCurrentStation());
 }
 TEST_F(ValidMetronetTest, driveFalse2){
-    EXPECT_FALSE(metronet->drive(13, (std::string &) "A"));
+    std::string a ="A";
+    EXPECT_FALSE(metronet->drive(13, a));
 }
 
 // tests driveAutomaticaly
@@ -521,9 +523,5 @@ TEST(readFromXml, input){
     EXPECT_EQ(3,size);
     size = metronet->getTrams().size();
     EXPECT_EQ(1,size);
-}
-TEST(readFromXml, wronginput){
-    // todo: toevoegen
-    //readFromXml("wrongInput1.xml");
 }
 
