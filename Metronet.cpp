@@ -400,6 +400,17 @@ TEST_F(ValidMetronetTest, Consistence){
     EXPECT_TRUE(metronet->isConsistent());
 }
 
+TEST(Consistence, stationNotConsistent){
+    Metronet* net = new Metronet();
+    Station* st1 = new Station("A", "B", "B", 1);
+    Station* st2 = new Station("B", "C", "A", 1);
+    Tram* tr1 = new Tram(1, 20, 40, "A");
+    net->addStation(st1);
+    net->addStation(st2);
+    net->addTram(tr1);
+    EXPECT_FALSE(net->isConsistent());
+}
+
 // todo: test writeToFile
 
 // tests drive
