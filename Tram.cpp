@@ -96,7 +96,7 @@ TEST_F(ValidTramTest, getters){
     EXPECT_EQ("A",tram->getStartStation());
     EXPECT_EQ("A",tram->getCurrentStation());
     tram->setCurrentStation("B");
-    EXPECT_EQ("A",tram->getCurrentStation());
+    EXPECT_EQ("B",tram->getCurrentStation());
 }
 
 // tests properlyInitialized in metronet

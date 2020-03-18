@@ -208,8 +208,7 @@ void Metronet::driveAutomaticaly(int n) {
     REQUIRE(mapsAreNotEmpty() && isConsistent(), "This object should contain a consistent metronet");
     for (int i = 0; i < n; ++i) {
         for (std::map<int,Tram*>::iterator it = _trams.begin(); it != _trams.end() ; ++it) {
-            Station* station = findStation(it->second->getCurrentStation());
-            drive(it->second->getLijn(), const_cast<std::string &>(station->getVolgende()));
+            drive(it->second->getLijn(), const_cast<std::string &>(it->second->getCurrentStation()));
         }
     }
 }
@@ -409,21 +408,25 @@ TEST(Consistence, stationNotConsistent){
     net->addStation(st2);
     net->addTram(tr1);
     EXPECT_FALSE(net->isConsistent());
+    delete net;
 }
 
 // todo: test writeToFile
 
 // tests drive
 TEST_F(ValidMetronetTest, driveTrue){
-    EXPECT_TRUE(metronet->drive(12, (std::string &) "A"));
+    std::string a = "A";
+    EXPECT_TRUE(metronet->drive(12, a));
     EXPECT_EQ("B",metronet->findTram(12)->getCurrentStation());
 }
 TEST_F(ValidMetronetTest, driveFalse1){
-    EXPECT_FALSE(metronet->drive(12, (std::string &) "B"));
+    std::string b = "B";
+    EXPECT_FALSE(metronet->drive(12, b));
     EXPECT_EQ("A",metronet->findTram(12)->getCurrentStation());
 }
 TEST_F(ValidMetronetTest, driveFalse2){
-    EXPECT_FALSE(metronet->drive(13, (std::string &) "A"));
+    std::string a = "A";
+    EXPECT_FALSE(metronet->drive(13, a));
 }
 
 // tests driveAutomaticaly
