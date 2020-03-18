@@ -34,7 +34,7 @@ public:
      * @return this returns a constant string in reference, this string is the name and may not be changed
      *
      * @pre the object must be properly initialized
-     *      --> REQUIRE(properlyInitialized(), "The Station is not properly or not initialized")
+     *      --> REQUIRE(properlyInitialized(), "The Station is not properly or not initialized before calling getNaam")
      *
      * @post the return value must be a valid name (string)
      *       --> ENSURE(is_valid_String(_Naam), "getNaam must return a valid string")
@@ -47,7 +47,7 @@ public:
      * @return this returns a string, also to be used in the findStation method
      *
      * @pre the object must be properly initialized
-     *      --> REQUIRE(properlyInitialized(), "Station was not initialized when calling getVolgende()")
+     *      --> REQUIRE(properlyInitialized(), "Station was not properly or not initialized before calling getVolgende")
      *
      * @post the method must return a valid name (string)
      *       --> ENSURE(is_valid_String(_Volgende), "getVolgende must return a valid string")
@@ -59,8 +59,8 @@ public:
      *
      * @return a string probably used as input
      *
-     * @pre the oject must be properly initialized
-     *      --> REQUIRE(properlyInitialized(), "Station was not initialized when calling getVorige()")
+     * @pre the object must be properly initialized
+     *      --> REQUIRE(properlyInitialized(), "Station was not properly or not initialized before calling getVorige")
      *
      * @post this method must return a valid name (string)
      *       --> ENSURE(is_valid_String(_Vorige), "getVorige must return a valid string")
@@ -74,7 +74,7 @@ public:
      * @return this returns the integer that indicates which Spoor we use in this station
      *
      * @pre the object must be properly initialized
-     *      --> REQUIRE(properlyInitialized(), "Station was not initialized when calling getSpoor()")
+     *      --> REQUIRE(properlyInitialized(), "Station was not properly or not initialized before calling getSpoor")
      *
      * @post this method must return a valid integer,
      *       but it is unnecessary to make an ENSURE because the compiler already made sure this was the case
@@ -91,7 +91,7 @@ public:
      * @return a vector of integers that represent the tracks, these integers can be used in other methods
      *
      * @pre this object must be properly initialized
-     *      --> REQUIRE(properlyInitialized(), "Station was not initialized when calling getSporen()")
+     *      --> REQUIRE(properlyInitialized(), "Station was not properly or not initialized before calling getSporen")
      *
      * @post this method must return a vector of integers,
      *       an ENSURE is unnecessary due to the consistency of integers in the compiler
