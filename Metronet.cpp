@@ -42,14 +42,14 @@ bool Metronet::isConsistent() {
         }
 
         // ~ If the station has a valid Spoor, we check if the following and the previous Station also have this Spoor ~ //
-        if(Metronet::findStation(station->second->getVolgende())==NULL
-        or station->second->getSpoor() != Metronet::findStation(station->second->getVolgende())->getSpoor())
+        if(station->second->getVolgende()==NULL
+        or station->second->getSpoor() != station->second->getVolgende()->getSpoor())
         {
             return false;       // we return false if the equality of the integers in the Spoor member is false
         }
 
-        if(Metronet::findStation(station->second->getVorige())==NULL
-        or station->second->getSpoor() != Metronet::findStation(station->second->getVorige())->getSpoor())
+        if(station->second->getVorige()==NULL
+        or station->second->getSpoor() !=station->second->getVorige()->getSpoor())
         {
             return false;       // idem
         }
@@ -240,8 +240,8 @@ Metronet* readFromXml(const char* file){
         try {
             if (type == "STATION"){
                 std::string stationnaam;
-                std::string volgende;
-                std::string vorige;
+                Station* volgende = NULL;
+                Station* vorige = NULL;
                 int spoor=-1;
 
                 // lees verdere informatie voor het element
@@ -256,28 +256,46 @@ Metronet* readFromXml(const char* file){
                     }
                     else if(naam == "volgende"){
                         if (!is_valid_String(text->Value())) throw ongeldige_informatie();
-                        volgende = text->Value();
+                        volgende = metronet->findStation(text->Value());
+                        if(volgende == NULL){
+                            volgende = new Station(text->Value(),NULL,NULL,-1);
+                            metronet->addStation(volgende);
+                        }
                     }
                     else if(naam == "vorige"){
                         if (!is_valid_String(text->Value())) throw ongeldige_informatie();
-                        vorige = text->Value();
+                        vorige = metronet->findStation(text->Value());
+                        if(vorige == NULL) {
+                            vorige = new Station(text->Value(),NULL,NULL,-1);
+                            metronet->addStation(vorige);
+                        }
                     }
                     else if(naam == "spoor"){
                         if (!is_Integer(text->Value())) throw ongeldige_informatie();
                         spoor = std::atol(text->Value());
                     }else throw ongeldige_informatie();
                 }
-                // voeg een Station met deze informatie toe aan stations in metronet
-                Station* station = new Station(stationnaam,volgende,vorige,spoor);
-                metronet->addStation(station);
+                // voeg een Station met deze informatie toe aan stations in metronet of pas een bestaande pointer aan
+                Station* station= metronet->findStation(stationnaam);
+                if(station != NULL){
+                    station->setVolgende(volgende);
+                    station->setVorige(vorige);
+                    std::vector<int> sporen;
+                    sporen.push_back(spoor);
+                    station->setSporen(sporen);
+                }else{
+                    station = new Station(stationnaam,volgende,vorige,spoor);
+                    metronet->addStation(station);
+                }
+
             }
 
-                // als het element TRAM is
+            // als het element TRAM is
             else if (type == "TRAM"){
                 int lijn=-1;
                 int zitplaatsen=-1;
                 int snelheid=-1;
-                std::string beginstation;
+                Station* beginstation = NULL;
                 // lees verdere informatie voor het element
                 for(TiXmlNode* attribuut = element->FirstChild(); attribuut != NULL; attribuut = attribuut->NextSibling()){
                     std::string naam = attribuut->Value();
@@ -297,7 +315,11 @@ Metronet* readFromXml(const char* file){
                     }
                     else if(naam == "beginStation"){
                         if (!is_valid_String(text->Value()) ) throw ongeldige_informatie();
-                        beginstation = text->Value();
+                        beginstation = metronet->findStation(text->Value());
+                        if(beginstation == NULL) {
+                            beginstation = new Station(text->Value(),NULL,NULL,-1);
+                            metronet->addStation(beginstation);
+                        }
                     }else throw ongeldige_informatie();
                 }
                 // voeg een Tram met deze informatie toe aan trammen
@@ -313,7 +335,9 @@ Metronet* readFromXml(const char* file){
         }
     }
     doc.Clear();
-    ENSURE (metronet->isConsistent(), "The metronet from the xml-file must be consistent");
+    if(!metronet->isConsistent()){
+        std::cerr << "The metronet from the xml-file isn't consistent"<<std::endl;
+    }
     return metronet;
 }
 
@@ -324,16 +348,18 @@ class ValidMetronetTest: public ::testing::Test {
 public:
     ValidMetronetTest() {
         metronet = new Metronet();
-        Station* station1 = new Station("A","B","C",12);
-        Station* station2 = new Station("B","C","A",12);
-        Station* station3 = new Station("C","A","B",12);
-        metronet->addStation(station1);
-        metronet->addStation(station2);
-        metronet->addStation(station3);
-        stations["A"]=station1;
-        stations["B"]=station2;
-        stations["C"]=station3;
-        Tram* tram = new Tram(12,32,60,"A");
+        Station* stationB = NULL;
+        Station* stationC = NULL;
+        Station* stationA = new Station("A", stationB,stationC,12);
+        stationB = new Station("B",stationC,stationA,12);
+        stationC = new Station("C",stationA,stationB,12);
+        metronet->addStation(stationA);
+        metronet->addStation(stationB);
+        metronet->addStation(stationC);
+        stations["A"]=stationA;
+        stations["B"]=stationB;
+        stations["C"]=stationB;
+        Tram* tram = new Tram(12,32,60,stationA);
         metronet->addTram(tram);
         trams[12]=tram;
     }
@@ -376,20 +402,20 @@ TEST_F(ValidMetronetTest, gettersAndFinds){
 
 // tests adder functions of Metronet
 TEST_F(ValidMetronetTest, adders){
-    Tram* tram = new Tram(1,2,3,"A");
+    Tram* tram = new Tram(1,2,3,metronet->findStation("A"));
     metronet->addTram(tram);
     EXPECT_EQ(*metronet->findTram(1),*tram);
 
-    Station* station = new Station("Q","P","R",1);
+    Station* station = new Station("Q",NULL,NULL,1);
     metronet->addStation(station);
     EXPECT_EQ(*metronet->findStation("Q"),*station);
 
     //try to add station and tram with name that already exists
-    Station* stationA = new Station("Q","p","r",3);
+    Station* stationA = new Station("Q",metronet->findStation("A"),NULL,3);
     EXPECT_FALSE(metronet->addStation(stationA));
     EXPECT_EQ(*metronet->findStation("Q"),*station);
 
-    Tram* tramA = new Tram(1,3,4,"Q");
+    Tram* tramA = new Tram(1,3,4,metronet->findStation("Q"));
     EXPECT_FALSE(metronet->addTram(tramA));
     EXPECT_EQ(*metronet->findTram(1),*tram);
 }

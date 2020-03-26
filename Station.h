@@ -26,7 +26,7 @@ public:
      * @post This constructor will make sure the object is properly initialized
      *       --> ENSURE (properlyInitialized(), "A constructor must end in a properlyInitialized state")
      * */
-    Station(const std::string &_Naam, const std::string &_Volgende, const std::string &_Vorige, int _Spoor);
+    Station(const std::string &_Naam, Station* _Volgende, Station* _Vorige, int _Spoor);
 
     /**
      * @brief this method returns the Name of the station for purposes like finding the station inside Metronet
@@ -52,7 +52,7 @@ public:
      * @post the method must return a valid name (string)
      *       --> ENSURE(is_valid_String(_Volgende), "getVolgende must return a valid string")
      */
-    const std::string &getVolgende();
+    Station* getVolgende();
 
     /**
      * @brief returning a string, which is the name of the next station, to be used as input for the findStation in Metronet
@@ -65,7 +65,7 @@ public:
      * @post this method must return a valid name (string)
      *       --> ENSURE(is_valid_String(_Vorige), "getVorige must return a valid string")
      */
-    const std::string &getVorige();
+    Station* getVorige();
 
     /**
      * @brief this method returns Spoor from this station, the member _Spoor consists momentarily only of 1 Spoor
@@ -106,6 +106,12 @@ public:
      */
     bool properlyInitialized();
 
+    void setVolgende(Station *volgende);
+
+    void setVorige(Station *vorige);
+
+    void setSporen(const std::vector<int> &sporen);
+
 protected:
     /**
      * @brief this method ensures that all members but one, _Sporen, are valid according the given specifications
@@ -123,8 +129,8 @@ protected:
 
 private:
     std::string _Naam;
-    std::string _Volgende;
-    std::string _Vorige;
+    Station* _Volgende;
+    Station* _Vorige;
     std::vector<int> _Sporen;
 
     Station * _propInit;

@@ -5,7 +5,7 @@
 #include "Station.h"
 
 
-Station::Station(const std::string &_Naam, const std::string &_Volgende, const std::string &_Vorige, int _Spoor)
+Station::Station(const std::string &_Naam, Station* _Volgende, Station* _Vorige, int _Spoor)
         : _Naam(_Naam), _Volgende(_Volgende), _Vorige(_Vorige) {
     Station::_Sporen.push_back(_Spoor);             // because we are not sure what happens if we write _Sporen(_Spoor)
     Station::_propInit = this;
@@ -24,13 +24,13 @@ const std::string & Station::getNaam() {
     return _Naam;
 }
 
-const std::string &Station::getVolgende() {
+Station* Station::getVolgende() {
     REQUIRE(properlyInitialized(), "The station was not properly or not initialized before calling getVolgende");
     ENSURE(is_valid_String(_Volgende), "getVolgende must return a valid string");
     return _Volgende;
 }
 
-const std::string &Station::getVorige() {
+Station* Station::getVorige() {
     REQUIRE(properlyInitialized(), "The station was not properly or not initialized before calling getVorige");
     ENSURE(is_valid_String(_Vorige), "getVorige must return a valid string");
     return _Vorige;
@@ -68,6 +68,18 @@ void Station::validStationMembers() {
     ENSURE(is_valid_String(_Vorige), "A station's previous station should be a valid name");
 
     // the tracks in _Sporen are always valid integers, otherwise the compiler will give an error
+}
+
+void Station::setVolgende(Station *volgende) {
+    _Volgende = volgende;
+}
+
+void Station::setVorige(Station *vorige) {
+    _Vorige = vorige;
+}
+
+void Station::setSporen(const std::vector<int> &sporen) {
+    _Sporen = sporen;
 }
 
 //---------------------------------//

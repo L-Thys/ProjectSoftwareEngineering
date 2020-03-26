@@ -24,7 +24,7 @@ public:
      *       --> ENSURE (properlyInitialized(), "A constructor must end in a properlyInitialized state");
      *       --> ENSURE (validTramMembers(),"The parameter _StartStation must be a valid string");
      * */
-    Tram(int _Lijn, int _Seats, int _Speed, std::string _StartStation);
+    Tram(int _Lijn, int _Seats, int _Speed, Station* _StartStation);
 
     /**
      * @brief : this method is used to see on which trajectory this Tram is used
@@ -98,16 +98,16 @@ public:
      */
     bool validTramMembers();
 
-    const std::string &getCurrentStation() const;
+    const Station* getCurrentStation() const;
 
-    void setCurrentStation(const std::string &currentStation);
+    void setCurrentStation(Station* currentStation);
 
 private:
     int _Lijn;
     int _Seats;
     int _Speed;
-    std::string _StartStation;
-    std::string _CurrentStation;
+    Station* _StartStation;
+    Station* _CurrentStation;
 
     Tram* _propInit;
 };

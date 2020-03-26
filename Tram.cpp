@@ -5,7 +5,7 @@
 #include "Tram.h"
 #include "DesignByContract.h"
 
-Tram::Tram(const int _Lijn, const int _Seats, const int _Speed, std::string _StartStation) {
+Tram::Tram(const int _Lijn, const int _Seats, const int _Speed, Station* _StartStation) {
     Tram::_Lijn = _Lijn;
     Tram::_Seats = _Seats;
     Tram::_Speed = _Speed;
@@ -55,15 +55,16 @@ bool Tram::properlyInitialized() {
     return _propInit == this;
 }
 
+
 bool Tram::validTramMembers() {
     return is_valid_String(_StartStation);
 }
 
-const std::string &Tram::getCurrentStation() const {
+const Station* Tram::getCurrentStation() const {
     return _CurrentStation;
 }
 
-void Tram::setCurrentStation(const std::string &currentStation) {
+void Tram::setCurrentStation(Station* currentStation) {
     _CurrentStation = currentStation;
 }
 
