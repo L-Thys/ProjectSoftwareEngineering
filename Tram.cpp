@@ -5,6 +5,16 @@
 #include "Tram.h"
 #include "DesignByContract.h"
 
+Tram::Tram() {
+    _Lijn = -1;
+    _Seats = -1;
+    _Speed = -1;
+    _StartStation = NULL;
+    _CurrentStation = NULL;
+
+    Tram::_propInit = this;
+}
+
 Tram::Tram(const int _Lijn, const int _Seats, const int _Speed, Station* _StartStation) {
     Tram::_Lijn = _Lijn;
     Tram::_Seats = _Seats;
@@ -16,7 +26,6 @@ Tram::Tram(const int _Lijn, const int _Seats, const int _Speed, Station* _StartS
     // We make sure that the object is properly initialized by using the ENSURE function
     ENSURE(properlyInitialized(), "A constructor must end in a properlyInitialized state");
 
-    ENSURE(validTramMembers(),"The parameter _StartStation must be a valid string");
 }
 
 const int Tram::getLijn(){
@@ -34,9 +43,8 @@ const int Tram::getSpeed(){
     return _Speed;
 }
 
-const std::string &Tram::getStartStation() {
+const Station* Tram::getStartStation() {
     REQUIRE (properlyInitialized(), "The Tram was not properly or not initialized before calling getStartStation");
-    ENSURE(is_valid_String(_StartStation), "getStartStation must return a valid string");
     return _StartStation;
 }
 
@@ -55,11 +63,6 @@ bool Tram::properlyInitialized() {
     return _propInit == this;
 }
 
-
-bool Tram::validTramMembers() {
-    return is_valid_String(_StartStation);
-}
-
 const Station* Tram::getCurrentStation() const {
     return _CurrentStation;
 }
@@ -68,13 +71,36 @@ void Tram::setCurrentStation(Station* currentStation) {
     _CurrentStation = currentStation;
 }
 
+bool Tram::drive(const Station *station) {
+    if (station == NULL){
+        std::cout << "A invalid parameter is given. There is no corresponding Station." << std::endl;
+        return false;
+    }
+    // we check if the needed tram its station is indeed the needed station
+    if (getCurrentStation() == station){                // if so, we move it
+        _CurrentStation = station->getVolgende();      // we move the Tram
+
+        // the message of movement is given by printing the track (also tram name), the start and finish station
+        std::cout << "Tram " << _Lijn << " drove from station " << station << " to station " << _CurrentStation << std::endl;
+        return true;
+    }
+
+        // the given station and the current station do not aling, it is not possible to move a Tram that is not there
+    else {                                                      // if not we give an error message
+        std::cerr << "There is no Tram present on track " << _Lijn << " in station " << station << ". Give another instruction." << std::endl;
+        return false;
+    }
+}
+
+
+
 //---------------------------------//
 //// Tests
 
 class ValidTramTest: public ::testing::Test {
 public:
     ValidTramTest() {
-        tram = new Tram(12,32,60,"A");
+        tram = new Tram(12,32,60,NULL);
     }
 
     void SetUp() {

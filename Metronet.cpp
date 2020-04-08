@@ -171,36 +171,20 @@ bool Metronet::mapsAreNotEmpty() {
     return !_trams.empty() && !_stations.empty();
 }
 
-bool Metronet::drive(const int _spoor, std::string &_station) {
+bool Metronet::drive(const int _spoor, const Station* _station) {
     REQUIRE(properlyInitialized(), "The Metronet was not properly or not initialized before calling drive");
-    REQUIRE(is_valid_String(_station), "The given station wasn't a valid name of a station");
 
     // we find the 2 corresponding objects
     Tram* cTram = findTram(_spoor);
-    Station* cStation = findStation(_station);
 
     // we check if both are valid
-    if (cTram == NULL || cStation == NULL){
+    if (cTram == NULL || _station == NULL){
         std::cout << "A invalid parameter is given. There is no corresponding Tram or Station." << std::endl;
         return false;
     }
 
-    // we check if the needed tram its station is indeed the needed station
-    if (cTram->getCurrentStation() == _station){                // if so, we move it
-        std::string oSt = cTram->getCurrentStation();           // we shortly save the station
-        cTram->setCurrentStation(cStation->getVolgende());      // we move the Tram
-        std::string nSt = cTram->getCurrentStation();           // we save the new station
+    return cTram->drive(_station);
 
-        // the message of movement is given by printing the track (also tram name), the start and finish station
-        std::cout << "Tram " << _spoor << " drove from station " << oSt << " to station " << nSt << std::endl;
-        return true;
-    }
-
-    // the given station and the current station do not aling, it is not possible to move a Tram that is not there
-    else {                                                      // if not we give an error message
-        std::cerr << "There is no Tram present on track " << _spoor << " in station " << _station << ". Give another instruction." << std::endl;
-        return false;
-    }
 }
 
 void Metronet::driveAutomaticaly(int n) {
@@ -208,7 +192,7 @@ void Metronet::driveAutomaticaly(int n) {
     REQUIRE(mapsAreNotEmpty() && isConsistent(), "This object should contain a consistent metronet");
     for (int i = 0; i < n; ++i) {
         for (std::map<int,Tram*>::iterator it = _trams.begin(); it != _trams.end() ; ++it) {
-            drive(it->second->getLijn(), const_cast<std::string &>(it->second->getCurrentStation()));
+            drive(it->second->getLijn(), it->second->getCurrentStation());
         }
     }
 }

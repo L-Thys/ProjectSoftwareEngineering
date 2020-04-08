@@ -12,6 +12,17 @@ class Tram {
 public:
 
     /**
+     * @brief : the constructor of an object of type Tram, this constructor takes no parameters to initialise the object
+     *          all members will be initialised to their non-consistent value
+     *          _Lijn, _Seats, _Speed : -1
+     *          _StartStation, _CurrentStation : NULL
+     *
+     * @post This constructor will make sure the object is properly initialized
+     *       --> ENSURE (properlyInitialized(), "A constructor must end in a properlyInitialized state");
+     * */
+    Tram();
+
+    /**
      * @brief : the constructor of an object of type Tram, this constructor takes 4 parameters to initialise the object
      *          all members will be initialised by at least one of these parameters
      *
@@ -22,7 +33,6 @@ public:
      *
      * @post This constructor will make sure the object is properly initialized
      *       --> ENSURE (properlyInitialized(), "A constructor must end in a properlyInitialized state");
-     *       --> ENSURE (validTramMembers(),"The parameter _StartStation must be a valid string");
      * */
     Tram(int _Lijn, int _Seats, int _Speed, Station* _StartStation);
 
@@ -77,7 +87,7 @@ public:
      * @post the return value must be a valid StartStation (string)
      *       --> ENSURE(is_valid_String(_Naam), "getNaam must return a valid string")
      */
-    const std::string &getStartStation();
+    const Station* getStartStation();
 
     bool operator==(const Tram &rhs) const;
 
@@ -101,6 +111,8 @@ public:
     const Station* getCurrentStation() const;
 
     void setCurrentStation(Station* currentStation);
+
+    bool drive(const Station* station);
 
 private:
     int _Lijn;

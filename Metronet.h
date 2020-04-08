@@ -166,7 +166,7 @@ public:
      *
      * @return this method returns a boolean that indicates if the move is successfully executed
      */
-    bool drive(int _spoor, std::string &_station);
+    bool drive(int _spoor, const Station* _station);
 
     /**
      * @brief lets the simulation run for a certain time (n)
