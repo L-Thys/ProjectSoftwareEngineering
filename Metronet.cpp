@@ -22,7 +22,9 @@ const std::vector<Tram *> &Metronet::getTrams() {
 
 bool Metronet::addStation(Station *station) {
     REQUIRE (properlyInitialized(), "The Metronet was not properly or not initialized before calling addStation");
-    return Metronet::_stations.insert(std::pair<std::string, Station*>(station->getNaam(), station)).second;
+    bool result = Metronet::_stations.insert(std::pair<std::string, Station*>(station->getNaam(), station)).second;
+    ENSURE(findStation(station->getNaam())==station || !result, "the station should be in the _station map if the result is True");
+    return result;
 }
 
 void Metronet::addTram(Tram *tram) {

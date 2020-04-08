@@ -68,28 +68,34 @@ const Station* Tram::getCurrentStation() const {
 }
 
 void Tram::setCurrentStation(Station* currentStation) {
+    REQUIRE (properlyInitialized(), "The Tram was not properly or not initialized before calling Tram");
     _CurrentStation = currentStation;
+    ENSURE(getCurrentStation()==currentStation, "the _CurrentStation should be currentStation");
 }
 
 bool Tram::drive(const Station *station) {
-    if (station == NULL){
-        std::cout << "A invalid parameter is given. There is no corresponding Station." << std::endl;
-        return false;
-    }
+    REQUIRE(properlyInitialized(), "Tram was not properly or no initialized before calling drive");
+    REQUIRE(station != NULL, "The given station-pointer was NULL");
+    bool result;
+
     // we check if the needed tram its station is indeed the needed station
     if (getCurrentStation() == station){                // if so, we move it
         _CurrentStation = station->getVolgende();      // we move the Tram
 
         // the message of movement is given by printing the track (also tram name), the start and finish station
         std::cout << "Tram " << _Lijn << " drove from station " << station << " to station " << _CurrentStation << std::endl;
-        return true;
+        result = true;
     }
 
         // the given station and the current station do not aling, it is not possible to move a Tram that is not there
     else {                                                      // if not we give an error message
         std::cerr << "There is no Tram present on track " << _Lijn << " in station " << station << ". Give another instruction." << std::endl;
-        return false;
+        result =false;
     }
+
+    ENSURE(getCurrentStation() == station->getVolgende() || !result, "drive was unsuccessful");
+    ENSURE(getCurrentStation() != NULL, "drive was unsuccessful");
+    return result;
 }
 
 

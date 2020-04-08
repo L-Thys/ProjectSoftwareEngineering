@@ -101,17 +101,42 @@ public:
      */
     bool properlyInitialized();
 
-    /**
-     * @brief this method checks that _Startstation is valid according the given specifications
-     *
-     * @return this method returns a boolean that indicates if _Startstation is valid
-     */
-    bool validTramMembers();
 
     const Station* getCurrentStation() const;
 
+    /**
+     * @brief : this method sets _CurrentStation to the variable currentStation
+     *
+     * @param currentStation : a pointer to a station
+     *
+     * @pre : the object must be properly initialized
+     *      --> REQUIRE (properlyInitialized(), "The Tram was not properly or not initialized before calling Tram")
+     *
+     * @post : the _CurrentStation should be currentStation
+     *      --> ENSURE(getCurrentStation()==currentStation, "the _CurrentStation should be currentStation")
+     * */
     void setCurrentStation(Station* currentStation);
 
+    /**
+     * @brief this method moves, if possible, the Tram which is located in the given station
+     *        to the next station.
+     *
+     * @pre the object must be properly initialized
+     *      --> REQUIRE(properlyInitialized(), "Tram was not properly or no initialized before calling drive")
+     *
+     * @pre the given string can't be NULL
+     *      --> REQUIRE(is_valid_String(_station), "The given station wasn't a valid name of a station")
+     *
+     * @post _CurrentStation should be the next Station from variable station if the output is true
+     *      --> ENSURE(getCurrentStation() == station->getVolgende() || !result, "drive was unsuccessful")
+     *
+     * @post _CurrentStation should not be NULL
+     *      --> ENSURE(getCurrentStation() != NULL, "drive was unsuccessful")
+     *
+     * @param station this is the station from where we move the tram, this isn't necessarily the right one
+     *
+     * @return this method returns a boolean that indicates if the move is successfully executed
+     */
     bool drive(const Station* station);
 
 private:
