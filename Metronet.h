@@ -49,7 +49,7 @@ public:
      *
      * @return : a map of Trams with their lines (integers) as their search_keys
      * */
-    const std::map<int, Tram *> &getTrams();
+    const std::vector<Tram *> &getTrams();
 
     /**
      * @brief : this method adds a Station to the collection of stations
@@ -73,7 +73,7 @@ public:
      *
      * @return : boolean which indicates if the tram could be added or not
      * */
-    bool addTram (Tram* tram);
+    void addTram (Tram* tram);
 
     /**
      * @brief : given a name, this method searches the corresponding station in the collection
@@ -89,18 +89,6 @@ public:
      * @return a pointer to a station, NULL if there is no corresponding station
      * */
     Station* findStation(const std::string& name);
-
-    /**
-     * @brief this method searches a Tram by using a given line and returns this
-     *
-     * @param spoor is an integer that will indicates the to-find Tram
-     *
-     * @pre : the object must be properly initialized
-     *      --> REQUIRE (properlyInitialized(), "The Metronet was not properly or not initialized before calling findTram")
-     *
-     * @return a pointer to the right Tram, returns NULL if no such Tram is found
-     * */
-    Tram* findTram(int spoor);
 
     /**
      * @brief we check if a network is consistent, this means that the station has only 1 track,
@@ -185,7 +173,7 @@ public:
 
 private:
     std::map<std::string, Station*> _stations;
-    std::map<int, Tram*> _trams;
+    std::vector<Tram*> _trams;
 
     Metronet* _propInit;
 };

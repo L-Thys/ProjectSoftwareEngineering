@@ -15,7 +15,7 @@ const std::map<std::string, Station *> &Metronet::getStations() {
     return _stations;
 }
 
-const std::map<int, Tram *> &Metronet::getTrams() {
+const std::vector<Tram *> &Metronet::getTrams() {
     REQUIRE (properlyInitialized(), "The Metronet was not properly or not initialized before calling getTrams");
     return _trams;
 }
@@ -25,9 +25,9 @@ bool Metronet::addStation(Station *station) {
     return Metronet::_stations.insert(std::pair<std::string, Station*>(station->getNaam(), station)).second;
 }
 
-bool Metronet::addTram(Tram *tram) {
+void Metronet::addTram(Tram *tram) {
     REQUIRE (properlyInitialized(), "The Metronet was not properly or not initialized before calling addTram");
-    return Metronet::_trams.insert(std::pair<int, Tram*>(tram->getLijn(), tram)).second;
+    Metronet::_trams.push_back(tram);
 }
 
 bool Metronet::isConsistent() {
@@ -96,18 +96,7 @@ bool Metronet::isConsistent() {
     return true;
 }
 
-// if spoor isn't in the list, NULL is returned, so it's best to check if you get NULL from this function before using the returned value
-Tram * Metronet::findTram(int spoor) {
-    REQUIRE (properlyInitialized(), "The Metronet was not properly or not initialized before calling findTram");
-    try {
-        return Metronet::_trams.at(spoor);
-    }
-    catch(std::out_of_range& e){
-        return NULL;
-    }
 
-
-}
 
 // if name isn't in the list, NULL is returned, so it's best to check if you get NULL from this function before using the returned value
 Station * Metronet::findStation(const std::string& name) {
@@ -157,10 +146,10 @@ void Metronet::writeToFile(const char *filename) {
 
     file << std::endl;
     //WHILE Nog voertuigen beschikbaar
-    for (std::map<int,Tram*>::iterator it = _trams.begin(); it != _trams.end() ; ++it) {
+    for (int i = 0; i < _trams.size() ; ++i) {
         // Schrijf voertuig-gegevens uit
-        file << "Tram " << it->second->getLijn() << " in Station " << it->second->getCurrentStation();
-        file << ", " << it->second->getSeats() << " zitplaatsen" << std::endl;
+        file << "Tram " << _trams[i]->getLijn() << " in Station " << _trams[i]->getCurrentStation();
+        file << ", " << _trams[i]->getSeats() << " zitplaatsen" << std::endl;
     }
     // Sluit uitvoerbestand
     file.close();
@@ -171,28 +160,14 @@ bool Metronet::mapsAreNotEmpty() {
     return !_trams.empty() && !_stations.empty();
 }
 
-bool Metronet::drive(const int _spoor, const Station* _station) {
-    REQUIRE(properlyInitialized(), "The Metronet was not properly or not initialized before calling drive");
 
-    // we find the 2 corresponding objects
-    Tram* cTram = findTram(_spoor);
-
-    // we check if both are valid
-    if (cTram == NULL || _station == NULL){
-        std::cout << "A invalid parameter is given. There is no corresponding Tram or Station." << std::endl;
-        return false;
-    }
-
-    return cTram->drive(_station);
-
-}
 
 void Metronet::driveAutomaticaly(int n) {
     REQUIRE (properlyInitialized(), "The Metronet was not properly or not initialized before calling writeToFile");
     REQUIRE(mapsAreNotEmpty() && isConsistent(), "This object should contain a consistent metronet");
     for (int i = 0; i < n; ++i) {
-        for (std::map<int,Tram*>::iterator it = _trams.begin(); it != _trams.end() ; ++it) {
-            drive(it->second->getLijn(), it->second->getCurrentStation());
+        for (int j = 0; i < _trams.size() ; ++i) {
+            _trams[j]->drive(_trams[j]->getCurrentStation());
         }
     }
 }
@@ -375,33 +350,22 @@ TEST_F(ValidMetronetTest, mapsAreNotEmpty){
 // tests getter and find functions of Metronet
 TEST_F(ValidMetronetTest, gettersAndFinds){
     Station* nullstation = NULL;
-    Tram* nulltram = NULL;
     EXPECT_EQ(metronet->getStations(), stations);
     EXPECT_EQ(metronet->getTrams(), trams);
     EXPECT_EQ(*metronet->findStation("A"), *stations["A"]);
     EXPECT_EQ(metronet->findStation("q"),nullstation);
-    EXPECT_EQ(*metronet->findTram(12),*trams[12]);
-    EXPECT_EQ(metronet->findTram(1),nulltram);
 }
 
 // tests adder functions of Metronet
 TEST_F(ValidMetronetTest, adders){
     Tram* tram = new Tram(1,2,3,metronet->findStation("A"));
     metronet->addTram(tram);
-    EXPECT_EQ(*metronet->findTram(1),*tram);
 
     Station* station = new Station("Q",NULL,NULL,1);
     metronet->addStation(station);
     EXPECT_EQ(*metronet->findStation("Q"),*station);
 
-    //try to add station and tram with name that already exists
-    Station* stationA = new Station("Q",metronet->findStation("A"),NULL,3);
-    EXPECT_FALSE(metronet->addStation(stationA));
-    EXPECT_EQ(*metronet->findStation("Q"),*station);
 
-    Tram* tramA = new Tram(1,3,4,metronet->findStation("Q"));
-    EXPECT_FALSE(metronet->addTram(tramA));
-    EXPECT_EQ(*metronet->findTram(1),*tram);
 }
 
 // tests isConsistent() in metronet
