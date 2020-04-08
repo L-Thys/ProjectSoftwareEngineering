@@ -11,6 +11,18 @@
 
 class Station {
 public:
+
+    /**
+     * @brief this constructor will make a station with no next or previous or name, this station would not be a very
+     *          useful station in our simulation because it can't do anything
+     *
+     * @param name is the only parameter given, this is the name we give the station
+     *
+     * @post this method ensure that our station is properly initialized
+     *      --> ENSURE properlyInitialized(), "A constructor must end in a properlyInitialized state")
+     */
+    Station(std::string name);
+
     /**
      * @brief constructor of a station, this constructor takes 4 parameters and initialises the whole object at once
      *        all the members that are initialised are strings, those are given in the constructor, only the track

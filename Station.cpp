@@ -4,6 +4,16 @@
 
 #include "Station.h"
 
+Station::Station(const std::string name){
+    Station::_Naam = name;                // the name is set on the empty string
+    Station::_Volgende = NULL;          // the next and previous station are seen as null_pointers
+    Station::_Vorige = NULL;
+    std::vector<int> null;              // a empty vector is made
+    Station::_Sporen = null;            // we associate the empty vector with the tracks of the station
+    Station::_propInit = this;
+
+    ENSURE(properlyInitialized(), "A constructor must end in a properlyInitialized state");
+}
 
 Station::Station(const std::string &_Naam, Station* _Volgende, Station* _Vorige, int _Spoor)
         : _Naam(_Naam), _Volgende(_Volgende), _Vorige(_Vorige) {
