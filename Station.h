@@ -51,7 +51,7 @@ public:
      * @post the return value must be a valid name (string)
      *       --> ENSURE(is_valid_String(_Naam), "getNaam must return a valid string")
      */
-    const std::string & getNaam();
+    const std::string & getNaam() const;
 
     /**
      * @brief this method return the next station on the line
@@ -91,7 +91,7 @@ public:
      * @post this method must return a valid integer,
      *       but it is unnecessary to make an ENSURE because the compiler already made sure this was the case
      */
-    int getSpoor();
+    int getSpoor() const;
 
     bool operator==(const Station &rhs) const;
 
@@ -116,7 +116,7 @@ public:
      *
      * @return this method returns a boolean that indicates if the object is still properly initialized
      */
-    bool properlyInitialized();
+    bool properlyInitialized() const;
 
     void setVolgende(Station *volgende);
 

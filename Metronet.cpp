@@ -39,7 +39,7 @@ bool Metronet::isConsistent() {
         station != _stations.end(); station++) {
 
         // ~ Spoor is automatically set on -1 to easily check if Spoor is changed or not ~ //
-        if (station->second->getSpoor() == -1) {
+        if (station->second->getSporen().size()==0 or station->second->getSpoor() == -1) {
             return false;
         }
 
@@ -67,16 +67,16 @@ bool Metronet::isConsistent() {
     std::vector<int> as_tracks;             // to be used later on
 
     // tram is a pair <int Tram*>, we need to take tram.second to get the tram itself
-    for (std::map<int, Tram *>::iterator tram = _trams.begin(); tram != _trams.end(); tram++) {
+    for (std::vector<Tram *>::iterator tram = _trams.begin(); tram != _trams.end(); tram++) {
 
         // ~ Home is the start Station of our tram, we check if this station is a valid station in our network ~ //
-        std::string home = tram->second->getStartStation();
-        if (Metronet::_stations.find(home) == Metronet::_stations.end()) {
+        const Station* home = (*tram)->getStartStation();
+        if (findStation(home->getNaam()) == NULL) {
             return false;
         }
 
         // ~ We also check if the Spoor of the tram is equal to the Spoor that runs through its Start Station ~ //
-        if (tram->second->getLijn() != Metronet::findStation(tram->second->getStartStation())->getSpoor()) {
+        if ((*tram)->getLijn() != Metronet::findStation((*tram)->getStartStation()->getNaam())->getSpoor()) {
             return false;
         }
 
@@ -85,7 +85,7 @@ bool Metronet::isConsistent() {
         for (std::vector<int>::iterator it = as_tracks.begin(); it != as_tracks.end(); it++){
 
             // if the line is already is the as_tracks, it has been used so we can't use it again, we return false
-            if (*it == tram->second->getLijn()){
+            if (*it == (*tram)->getLijn()){
                 return false;
             }
 
@@ -511,9 +511,16 @@ TEST(Consistence, stationNextTrackNotConsistent){
 
 TEST(Consistence, tramStartNotConsistent){
     Metronet* net = new Metronet();
-    Station* st1 = new Station("A", "B", "B", 1);
-    Station* st2 = new Station("B", "A", "A", 1);
-    Tram* tr1 = new Tram(1, 20, 40, "C");
+    Station* st1 = new Station("A");
+    Station* st2 = new Station("B", st1, st1, 1);
+    Station* st3 = new Station("C", st1, st1, 1);
+    Tram* tr1 = new Tram(1, 20, 40, st3);
+
+    st1->setVolgende(st2);
+    st1->setVorige(st2);
+    std::vector<int> vec; vec.push_back(1);
+    st1->setSporen(vec);
+
     net->addStation(st1);
     net->addStation(st2);
     net->addTram(tr1);
@@ -524,9 +531,12 @@ TEST(Consistence, tramStartNotConsistent){
 // the start station's track is not equal to the track of the tram
 TEST(Consistence, stationStartTrackNotConsistent){
     Metronet* net = new Metronet();
-    Station* st1 = new Station("A", "B", "B", 1);
-    Station* st2 = new Station("B", "A", "A", 1);
-    Tram* tr1 = new Tram(2, 20, 40, "A");
+    Station* st1 = new Station("A");
+    Station* st2 = new Station("B", st1, st1, 1);
+    Tram* tr1 = new Tram(2, 20, 40, st1);
+
+
+
     net->addStation(st1);
     net->addStation(st2);
     net->addTram(tr1);

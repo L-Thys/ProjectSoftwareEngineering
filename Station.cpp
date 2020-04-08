@@ -25,7 +25,7 @@ Station::Station(const std::string &_Naam, Station* _Volgende, Station* _Vorige,
     validStationMembers();
 }
 
-const std::string & Station::getNaam() {
+const std::string & Station::getNaam() const{
     // we need to have a correctly initialized object
     REQUIRE(properlyInitialized(), "The station was not properly or not initialized before calling getNaam");
 
@@ -46,7 +46,7 @@ Station* Station::getVorige() {
     return _Vorige;
 }
 
-int Station::getSpoor() {
+int Station::getSpoor() const{
     REQUIRE(properlyInitialized(), "The station was not properly or not initialized before calling getSpoor");
     return _Sporen[0];      // momentarily this vector only consists of 1, so we return only 1
 }
@@ -67,7 +67,7 @@ bool Station::operator!=(const Station &rhs) const {
     return !(rhs == *this);
 }
 
-bool Station::properlyInitialized() {
+bool Station::properlyInitialized() const{
     return _propInit == this;
 }
 
