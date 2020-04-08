@@ -110,7 +110,7 @@ public:
      * @param currentStation : a pointer to a station
      *
      * @pre : the object must be properly initialized
-     *      --> REQUIRE (properlyInitialized(), "The Tram was not properly or not initialized before calling Tram")
+     *      --> REQUIRE (properlyInitialized(), "The Tram was not properly or not initialized before calling setCurrentStation")
      *
      * @post : the _CurrentStation should be currentStation
      *      --> ENSURE(getCurrentStation()==currentStation, "the _CurrentStation should be currentStation")

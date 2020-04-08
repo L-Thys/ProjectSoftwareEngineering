@@ -74,22 +74,27 @@ bool Station::properlyInitialized() const{
 void Station::validStationMembers() {
     // we ensure that all the members are valid
     ENSURE(is_valid_String(_Naam), "A station has to have a name consisting of a-z, A-Z");
-    ENSURE(is_valid_String(_Volgende), "A station's next station should be a valid name");
-    ENSURE(is_valid_String(_Vorige), "A station's previous station should be a valid name");
+
 
     // the tracks in _Sporen are always valid integers, otherwise the compiler will give an error
 }
 
 void Station::setVolgende(Station *volgende) {
+    REQUIRE (properlyInitialized(), "The Station was not properly or not initialized before calling Station");
     _Volgende = volgende;
+    ENSURE(getVolgende()==volgende, "_Volgende should be equal to param volgende");
 }
 
 void Station::setVorige(Station *vorige) {
+    REQUIRE (properlyInitialized(), "The Station was not properly or not initialized before calling setVorige");
     _Vorige = vorige;
+    ENSURE(getVorige()==vorige, "_Vorige should be equal to param vorige");
 }
 
 void Station::setSporen(const std::vector<int> &sporen) {
+    REQUIRE (properlyInitialized(), "The Station was not properly or not initialized before calling setSporen");
     _Sporen = sporen;
+    ENSURE(getSporen()==sporen, "_Sporen should be equal to param sporen")
 }
 
 //---------------------------------//

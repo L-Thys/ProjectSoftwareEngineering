@@ -118,10 +118,43 @@ public:
      */
     bool properlyInitialized() const;
 
+    /**
+     * @brief : this method sets _Volgende to the param volgende
+     *
+     * @param volgende : a pointer to a station
+     *
+     * @pre : the object must be properly initialized
+     *      --> REQUIRE (properlyInitialized(), "The Station was not properly or not initialized before calling setVolgende")
+     *
+     * @post : _Volgende should be volgende
+     *      ENSURE(getVolgende()==volgende, "_Volgende should be equal to param volgende")
+     */
     void setVolgende(Station *volgende);
 
+    /**
+     * @brief : this method sets _Vorige to the param vorige
+     *
+     * @param vorige : a pointer to a station
+     *
+     * @pre : the object must be properly initialized
+     *      --> REQUIRE (properlyInitialized(), "The Station was not properly or not initialized before calling setVorige")
+     *
+     * @post : _Volgende should be volgende
+     *      ENSURE(getVorige()==vorige, "_Vorige should be equal to param vorige")
+     */
     void setVorige(Station *vorige);
 
+    /**
+     * @brief : this method sets _Sporen to the param sporen
+     *
+     * @param sporen : a vector of ints
+     *
+     * @pre : the object must be properly initialized
+     *      --> REQUIRE (properlyInitialized(), "The Station was not properly or not initialized before calling setSporen")
+     *
+     * @post : _Volgende should be volgende
+     *      ENSURE(getSporen()==sporen, "_Sporen should be equal to param sporen")
+     */
     void setSporen(const std::vector<int> &sporen);
 
 protected:
@@ -132,10 +165,6 @@ protected:
      * @post this method ensures that _Naam is correct according to the specification that a name only consists of
      *       a-z, A-Z characters
      *       --> ENSURE(is_valid_String(_Naam), "A station has to have a name consisting of a-z, A-Z")
-     * @post this method ensures that _Volgende is a valid name of a station, so this can be used in other methods
-     *       --> ENSURE(is_valid_String(_Volgende), "A station's next station should be a valid name")
-     * @post this method ensures that _Vorige is a valid name of a station, so it could be used in other methods
-     *       --> ENSURE(is_valid_String(_Vorige), "A station's previous station should be a valid name")
      */
     void validStationMembers();
 
