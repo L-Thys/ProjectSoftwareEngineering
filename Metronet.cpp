@@ -262,8 +262,6 @@ Metronet* readFromXml(const char* file){
             // als het element TRAM is
             else if (type == "TRAM"){
                 int lijn=-1;
-                int zitplaatsen=-1;
-                int snelheid=-1;
                 Station* beginstation = NULL;
                 std::string typenaam;
                 // lees verdere informatie voor het element
@@ -275,14 +273,6 @@ Metronet* readFromXml(const char* file){
                         if (!is_Integer(text->Value())) throw ongeldige_informatie();
                         lijn = std::atol(text->Value());
                     }
-                    else if(naam == "zitplaatsen" ){
-                        if (!is_Integer(text->Value())) throw ongeldige_informatie();
-                        zitplaatsen = std::atol(text->Value());
-                    }
-                    else if(naam == "snelheid"){
-                        if (!is_Integer(text->Value())) throw ongeldige_informatie();
-                        snelheid = std::atol(text->Value());
-                    }
                     else if(naam == "beginStation"){
                         if (!is_valid_String(text->Value()) ) throw ongeldige_informatie();
                         beginstation = metronet->findStation(text->Value());
@@ -292,12 +282,13 @@ Metronet* readFromXml(const char* file){
                         }
                     }
                     else if(naam == "type"){
-                        if ()
+                        if (!is_valid_tram_type(text->Value())) throw ongeldige_informatie();
+                        typenaam = text->Value();
                     }
                     else throw ongeldige_informatie();
                 }
                 // voeg een Tram met deze informatie toe aan trammen
-                Tram* tram = new Tram(lijn,zitplaatsen,snelheid,beginstation);
+                Tram* tram = new Tram(lijn,beginstation,typenaam);
                 metronet->addTram(tram);
             }
             else{

@@ -36,6 +36,8 @@ public:
      * */
     Tram(int _Lijn, int _Seats, int _Speed, Station* _StartStation);
 
+    Tram(int lijn, Station *startStation, const std::string &type);
+
     /**
      * @brief : this method is used to see on which trajectory this Tram is used
      *
@@ -145,6 +147,7 @@ private:
     int _Speed;
     Station* _StartStation;
     Station* _CurrentStation;
+    std::string _Type;
 
     Tram* _propInit;
 };

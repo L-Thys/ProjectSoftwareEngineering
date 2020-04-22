@@ -29,6 +29,23 @@ Tram::Tram(const int _Lijn, const int _Seats, const int _Speed, Station* _StartS
 
 }
 
+Tram::Tram(int lijn, Station *startStation, const std::string &type) : _Lijn(lijn), _StartStation(startStation),
+_Type(type) {
+    Tram::_CurrentStation = _StartStation;
+    if(type=="Albatros"){
+        _Seats = 72;
+        _Speed = 70;
+    }else if(type ==  "PCC"){
+        _Seats = 16;
+        _Speed = 40;
+    }
+    Tram::_propInit = this;
+    // We make sure that the object is properly initialized by using the ENSURE function
+    ENSURE(properlyInitialized(), "A constructor must end in a properlyInitialized state");
+
+}
+
+
 const int Tram::getLijn(){
     REQUIRE (properlyInitialized(), "The Tram was not properly or not initialized before calling getLijn");
     return _Lijn;
@@ -98,6 +115,7 @@ bool Tram::drive(const Station *station) {
     ENSURE(getCurrentStation() != NULL, "drive was unsuccessful");
     return result;
 }
+
 
 
 
