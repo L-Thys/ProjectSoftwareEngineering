@@ -33,8 +33,7 @@ const std::string & Station::getNaam() const{
     ENSURE(is_valid_String(_Naam), "getNaam must return a valid string");
     return _Naam;
 }
-
-const Station* Station::getVolgende() {
+Station* Station::getVolgende() const {
     REQUIRE(properlyInitialized(), "The station was not properly or not initialized before calling getVolgende");
     ENSURE(is_valid_String(_Volgende), "getVolgende must return a valid string");
     return _Volgende;
