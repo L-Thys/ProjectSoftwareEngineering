@@ -145,9 +145,17 @@ private:
     int _Lijn;
     int _Seats;
     int _Speed;
+    int _VoertuigNr;
+public:
+    int getVoertuigNr() const;
+
+    void setVoertuigNr(int voertuigNr);
+
+private:
     Station* _StartStation;
     Station* _CurrentStation;
     std::string _Type;
+
 
     Tram* _propInit;
 };

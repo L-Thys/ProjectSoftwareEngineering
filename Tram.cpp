@@ -116,6 +116,14 @@ bool Tram::drive(const Station *station) {
     return result;
 }
 
+int Tram::getVoertuigNr() const {
+    return _VoertuigNr;
+}
+
+void Tram::setVoertuigNr(int voertuigNr) {
+    _VoertuigNr = voertuigNr;
+}
+
 
 
 
