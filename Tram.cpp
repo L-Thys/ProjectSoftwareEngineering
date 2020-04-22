@@ -4,6 +4,7 @@
 
 #include "Tram.h"
 #include "DesignByContract.h"
+#include "Station.h"
 
 Tram::Tram() {
     _Lijn = -1;

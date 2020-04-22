@@ -34,13 +34,13 @@ const std::string & Station::getNaam() const{
     return _Naam;
 }
 
-Station* Station::getVolgende() {
+const Station* Station::getVolgende() {
     REQUIRE(properlyInitialized(), "The station was not properly or not initialized before calling getVolgende");
     ENSURE(is_valid_String(_Volgende), "getVolgende must return a valid string");
     return _Volgende;
 }
 
-Station* Station::getVorige() {
+Station* Station::getVorige() const {
     REQUIRE(properlyInitialized(), "The station was not properly or not initialized before calling getVorige");
     ENSURE(is_valid_String(_Vorige), "getVorige must return a valid string");
     return _Vorige;

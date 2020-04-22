@@ -64,7 +64,7 @@ public:
      * @post the method must return a valid name (string)
      *       --> ENSURE(is_valid_String(_Volgende), "getVolgende must return a valid string")
      */
-    Station* getVolgende();
+    const Station* getVolgende();
 
     /**
      * @brief returning a string, which is the name of the next station, to be used as input for the findStation in Metronet
@@ -77,7 +77,7 @@ public:
      * @post this method must return a valid name (string)
      *       --> ENSURE(is_valid_String(_Vorige), "getVorige must return a valid string")
      */
-    Station* getVorige();
+    Station* getVorige() const;
 
     /**
      * @brief this method returns Spoor from this station, the member _Spoor consists momentarily only of 1 Spoor
