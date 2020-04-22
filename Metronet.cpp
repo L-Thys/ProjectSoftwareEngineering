@@ -173,6 +173,8 @@ void Metronet::driveAutomaticaly(int n) {
     }
 }
 
+
+
 Metronet* readFromXml(const char* file){
     // maak een map stationnen aan, waar een station op naam gezocht kan worden
     // maak een map trammen aan, waar een tram op nummer gezocht kan worden
@@ -559,26 +561,11 @@ TEST_F(ValidMetronetTest, writeToFile){
     compare.close();
 }
 
-// tests drive
-TEST_F(ValidMetronetTest, driveTrue){
-    std::string a ="A";
-    EXPECT_TRUE(metronet->drive(12, a));
-    EXPECT_EQ("B",metronet->findTram(12)->getCurrentStation());
-}
-TEST_F(ValidMetronetTest, driveFalse1){
-    std::string b ="B";
-    EXPECT_FALSE(metronet->drive(12, b));
-    EXPECT_EQ("A",metronet->findTram(12)->getCurrentStation());
-}
-TEST_F(ValidMetronetTest, driveFalse2){
-    std::string a ="A";
-    EXPECT_FALSE(metronet->drive(13, a));
-}
 
 // tests driveAutomaticaly
 TEST_F(ValidMetronetTest, driveAutomaticaly){
     metronet->driveAutomaticaly(5);
-    EXPECT_EQ("C",metronet->findTram(12)->getCurrentStation());
+    EXPECT_EQ("C",metronet->getTrams()[0]->getCurrentStation());
 }
 
 
