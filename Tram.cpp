@@ -108,11 +108,9 @@ class ValidTramTest: public ::testing::Test {
 public:
     ValidTramTest() {
 
-        tram = new Tram(12,32,60,NULL);
-        stationA = new Station("A",NULL,NULL,12);
+        tram = new Tram(12,32,60,stationA);
+        stationA = new Station("A",stationB,stationB,12);
         stationB = new Station("B",stationA,stationA,12);
-        stationA->setVolgende(stationB);
-        stationA->setVorige(stationB);
     }
 
     void SetUp() {

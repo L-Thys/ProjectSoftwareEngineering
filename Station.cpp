@@ -102,7 +102,9 @@ void Station::setSporen(const std::vector<int> &sporen) {
 class ValidStationTest: public ::testing::Test {
 public:
     ValidStationTest() {
-        station = new Station("A","B","C",12);
+        station = new Station("A",stationB,stationC,12);
+        stationB = new Station("B",stationC,station,12);
+        stationC = new Station("C",station, stationB,12);
     }
 
     void SetUp() {
@@ -114,6 +116,8 @@ public:
     }
 
     Station* station;
+    Station* stationB;
+    Station* stationC;
 
 };
 
