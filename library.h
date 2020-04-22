@@ -38,4 +38,8 @@ bool is_valid_String(const std::string& s);
  */
 bool is_Integer(const std::string& s);
 
+bool is_valid_station_type(const std::string& s);
+
+bool is_valid_tram_type(const std::string& s);
+
 #endif //PSE_LIBRARY_H

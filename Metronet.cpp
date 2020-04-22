@@ -205,6 +205,7 @@ Metronet* readFromXml(const char* file){
                 Station* volgende = NULL;
                 Station* vorige = NULL;
                 int spoor=-1;
+                std::string typenaam;
 
                 // lees verdere informatie voor het element
                 for(TiXmlNode* attribuut = element->FirstChild(); attribuut != NULL; attribuut = attribuut->NextSibling()){
@@ -235,7 +236,12 @@ Metronet* readFromXml(const char* file){
                     else if(naam == "spoor"){
                         if (!is_Integer(text->Value())) throw ongeldige_informatie();
                         spoor = std::atol(text->Value());
-                    }else throw ongeldige_informatie();
+                    }
+                    else if(naam == "type"){
+                        if (!is_valid_station_type(text->Value())) throw ongeldige_informatie();
+                        typenaam = text->Value();
+                    }
+                    else throw ongeldige_informatie();
                 }
                 // voeg een Station met deze informatie toe aan stations in metronet of pas een bestaande pointer aan
                 Station* station= metronet->findStation(stationnaam);
@@ -245,8 +251,9 @@ Metronet* readFromXml(const char* file){
                     std::vector<int> sporen;
                     sporen.push_back(spoor);
                     station->setSporen(sporen);
+                    station->setType(type);
                 }else{
-                    station = new Station(stationnaam,volgende,vorige,spoor);
+                    station = new Station(stationnaam,volgende,vorige,spoor,typenaam);
                     metronet->addStation(station);
                 }
 
@@ -258,6 +265,7 @@ Metronet* readFromXml(const char* file){
                 int zitplaatsen=-1;
                 int snelheid=-1;
                 Station* beginstation = NULL;
+                std::string typenaam;
                 // lees verdere informatie voor het element
                 for(TiXmlNode* attribuut = element->FirstChild(); attribuut != NULL; attribuut = attribuut->NextSibling()){
                     std::string naam = attribuut->Value();
@@ -282,7 +290,11 @@ Metronet* readFromXml(const char* file){
                             beginstation = new Station(text->Value(),NULL,NULL,-1);
                             metronet->addStation(beginstation);
                         }
-                    }else throw ongeldige_informatie();
+                    }
+                    else if(naam == "type"){
+                        if ()
+                    }
+                    else throw ongeldige_informatie();
                 }
                 // voeg een Tram met deze informatie toe aan trammen
                 Tram* tram = new Tram(lijn,zitplaatsen,snelheid,beginstation);

@@ -40,6 +40,8 @@ public:
      * */
     Station(const std::string &_Naam, Station* _Volgende, Station* _Vorige, int _Spoor);
 
+    Station(const std::string &_Naam, Station* _Volgende, Station* _Vorige, int _Spoor, std::string _Type);
+
     /**
      * @brief this method returns the Name of the station for purposes like finding the station inside Metronet
      *
@@ -173,6 +175,13 @@ private:
     Station * _Volgende;
     Station * _Vorige;
     std::vector<int> _Sporen;
+    std::string _Type;
+public:
+    const std::string &getType() const;
+
+    void setType(const std::string &type);
+
+private:
 
     Station * _propInit;
 };

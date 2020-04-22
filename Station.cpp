@@ -25,6 +25,16 @@ Station::Station(const std::string &_Naam, Station* _Volgende, Station* _Vorige,
     validStationMembers();
 }
 
+Station::Station(const std::string &_Naam, Station* _Volgende, Station* _Vorige, int _Spoor, std::string _Type)
+        : _Naam(_Naam), _Volgende(_Volgende), _Vorige(_Vorige), _Type(_Type) {
+    Station::_Sporen.push_back(_Spoor);             // because we are not sure what happens if we write _Sporen(_Spoor)
+    Station::_propInit = this;
+
+    // We make sure that the object is properly initialized by using the ENSURE function
+    ENSURE(properlyInitialized(), "A constructor must end in a properlyInitialized state");
+    validStationMembers();
+}
+
 const std::string & Station::getNaam() const{
     // we need to have a correctly initialized object
     REQUIRE(properlyInitialized(), "The station was not properly or not initialized before calling getNaam");
@@ -94,6 +104,14 @@ void Station::setSporen(const std::vector<int> &sporen) {
     REQUIRE (properlyInitialized(), "The Station was not properly or not initialized before calling setSporen");
     _Sporen = sporen;
     ENSURE(getSporen()==sporen, "_Sporen should be equal to param sporen");
+}
+
+const std::string &Station::getType() const {
+    return _Type;
+}
+
+void Station::setType(const std::string &type) {
+    _Type = type;
 }
 
 //---------------------------------//

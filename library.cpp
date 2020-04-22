@@ -22,6 +22,14 @@ bool is_Integer(const std::string& s){
     return !s.empty() && it == s.end();
 }
 
+bool is_valid_station_type(const std::string &s) {
+    return (s=="Metrostation" || s == "Halte");
+}
+
+bool is_valid_tram_type(const std::string &s) {
+    return (s=="PCC" || s=="Albatros");
+}
+
 // tests function is_valid_String()
 TEST (validstring, ValidString) {
     EXPECT_TRUE(is_valid_String("a"));
