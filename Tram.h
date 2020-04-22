@@ -127,11 +127,6 @@ public:
      * @pre the object must be properly initialized
      *      --> REQUIRE(properlyInitialized(), "Tram was not properly or no initialized before calling drive")
      *
-     * @pre the given string can't be NULL
-     *      --> REQUIRE(is_valid_String(_station), "The given station wasn't a valid name of a station")
-     *
-     * @post _CurrentStation should be the next Station from variable station if the output is true
-     *      --> ENSURE(getCurrentStation() == station->getVolgende() || !result, "drive was unsuccessful")
      *
      * @post _CurrentStation should not be NULL
      *      --> ENSURE(getCurrentStation() != NULL, "drive was unsuccessful")
@@ -140,22 +135,21 @@ public:
      *
      * @return this method returns a boolean that indicates if the move is successfully executed
      */
-    bool drive(const Station* station);
+    bool drive();
+
+    int getVoertuigNr() const;
+
+    void setVoertuigNr(int voertuigNr);
 
 private:
     int _Lijn;
     int _Seats;
     int _Speed;
     int _VoertuigNr;
-public:
-    int getVoertuigNr() const;
-
-    void setVoertuigNr(int voertuigNr);
-
-private:
     Station* _StartStation;
     Station* _CurrentStation;
     std::string _Type;
+    bool _Onderweg;
 
 
     Tram* _propInit;

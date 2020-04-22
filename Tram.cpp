@@ -12,7 +12,7 @@ Tram::Tram() {
     _Speed = -1;
     _StartStation = NULL;
     _CurrentStation = NULL;
-
+    _Onderweg = false;
     Tram::_propInit = this;
 }
 
@@ -27,6 +27,7 @@ _Type(type) {
         _Seats = 16;
         _Speed = 40;
     }
+    _Onderweg = false;
     Tram::_propInit = this;
     // We make sure that the object is properly initialized by using the ENSURE function
     ENSURE(properlyInitialized(), "A constructor must end in a properlyInitialized state");
@@ -79,29 +80,26 @@ void Tram::setCurrentStation(Station* currentStation) {
     ENSURE(getCurrentStation()==currentStation, "the _CurrentStation should be currentStation");
 }
 
-bool Tram::drive(const Station *station) {
+bool Tram::drive() {
     REQUIRE(properlyInitialized(), "Tram was not properly or no initialized before calling drive");
-    REQUIRE(station != NULL, "The given station-pointer was NULL");
+
     bool result;
 
-    // we check if the needed tram its station is indeed the needed station
-    if (getCurrentStation() == station){                // if so, we move it
-        _CurrentStation = station->getVolgende();      // we move the Tram
+   if(!_Onderweg){
+       if(!_CurrentStation->isInStation(this)) return false;
+       _CurrentStation->moveTramFrom(this);
+       _Onderweg = true;
+       std::cout << "Tram " << _Lijn << " vertrekt uit station " << _CurrentStation->getNaam() << " richting station " << _CurrentStation->getVolgende()->getNaam() << "."<< std::endl;
+   }else{
+       _CurrentStation = _CurrentStation->getVolgende();
+       if(_CurrentStation == NULL) return false;
+       _CurrentStation->moveTramTo(this);
+       _Onderweg = false;
+       std::cout << "Tram " << _Lijn << " komt aan in station " << _CurrentStation->getNaam() << "." << std::endl;
+   }
 
-        // the message of movement is given by printing the track (also tram name), the start and finish station
-        std::cout << "Tram " << _Lijn << " drove from station " << station << " to station " << _CurrentStation << std::endl;
-        result = true;
-    }
-
-        // the given station and the current station do not aling, it is not possible to move a Tram that is not there
-    else {                                                      // if not we give an error message
-        std::cerr << "There is no Tram present on track " << _Lijn << " in station " << station << ". Give another instruction." << std::endl;
-        result =false;
-    }
-
-    ENSURE(getCurrentStation() == station->getVolgende() || !result, "drive was unsuccessful");
     ENSURE(getCurrentStation() != NULL, "drive was unsuccessful");
-    return result;
+    return true;
 }
 
 int Tram::getVoertuigNr() const {
@@ -156,6 +154,7 @@ TEST_F(ValidTramTest, getters){
     Tram* tram2 = new Tram(11,stationA,"Albatros");
     EXPECT_EQ(70,tram2->getSpeed());
     EXPECT_EQ(72,tram2->getSeats());
+    delete tram2;
 }
 
 // tests properlyInitialized in metronet

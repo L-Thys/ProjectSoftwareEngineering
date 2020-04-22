@@ -6,6 +6,7 @@
 #define PSE_STATION_H
 
 #include "library.h"
+#include "Tram.h"
 
 // TODO : all ENSURE bij getters, de operators ook
 
@@ -165,6 +166,12 @@ public:
 
     void setType(const std::string &type);
 
+    bool moveTramFrom(Tram* tram);
+
+    void moveTramTo(Tram* tram);
+
+    bool isInStation(Tram* tram);
+
 protected:
     /**
      * @brief this method ensures that all members but one, _Sporen, are valid according the given specifications
@@ -182,6 +189,7 @@ private:
     Station * _Vorige;
     std::vector<int> _Sporen;
     std::string _Type;
+    std::vector<Tram*> _Trams;
 
 private:
 

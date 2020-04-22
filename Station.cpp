@@ -106,6 +106,29 @@ void Station::setType(const std::string &type) {
     _Type = type;
 }
 
+bool Station::moveTramFrom(Tram *tram) {
+    for(std::vector<Tram *>::iterator it = _Trams.begin(); it != _Trams.end(); it++){
+        if(*it == tram){
+            _Trams.erase(it);
+            return true;
+        }
+    }
+    return false;
+}
+
+void Station::moveTramTo(Tram *tram) {
+    _Trams.push_back(tram);
+}
+
+bool Station::isInStation(Tram *tram) {
+    for(std::vector<Tram *>::iterator it = _Trams.begin(); it != _Trams.end(); it++){
+        if(*it == tram){
+            return true;
+        }
+    }
+    return false;
+}
+
 //---------------------------------//
 //// Tests
 

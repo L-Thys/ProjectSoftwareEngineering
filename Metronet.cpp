@@ -196,7 +196,7 @@ void Metronet::driveAutomaticaly(int n) {
     REQUIRE(mapsAreNotEmpty() && isConsistent(), "This object should contain a consistent metronet");
     for (int i = 0; i < n; ++i) {
         for (int j = 0; i < _trams.size() ; ++i) {
-            _trams[j]->drive(_trams[j]->getCurrentStation());
+            _trams[j]->drive();
         }
     }
 }
@@ -346,6 +346,9 @@ Metronet* readFromXml(const char* file){
     doc.Clear();
     if(!metronet->isConsistent()){
         std::cerr << "The metronet from the xml-file isn't consistent"<<std::endl;
+    }
+    for (__gnu_cxx::__normal_iterator<Tram *const *, std::vector<Tram *> > tram = metronet->getTrams().begin(); tram != metronet->getTrams().end(); tram++) {
+        (*tram)->getStartStation()->moveTramTo(*tram);
     }
     return metronet;
 }
