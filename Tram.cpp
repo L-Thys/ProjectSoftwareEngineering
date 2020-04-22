@@ -127,10 +127,10 @@ TEST_F(ValidTramTest, getters){
     EXPECT_EQ(12,tram->getLijn());
     EXPECT_EQ(32,tram->getSeats());
     EXPECT_EQ(60,tram->getSpeed());
-    EXPECT_EQ("A",tram->getStartStation());
-    EXPECT_EQ("A",tram->getCurrentStation());
+    EXPECT_EQ("A",tram->getStartStation()->getNaam());
+    EXPECT_EQ("A",tram->getCurrentStation()->getNaam());
     tram->setCurrentStation("B");
-    EXPECT_EQ("B",tram->getCurrentStation());
+    EXPECT_EQ("B",tram->getCurrentStation()->getNaam());
 }
 
 // tests properlyInitialized in metronet

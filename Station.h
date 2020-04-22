@@ -170,8 +170,8 @@ protected:
 
 private:
     std::string _Naam;
-    Station* _Volgende;
-    Station* _Vorige;
+    Station * _Volgende;
+    Station * _Vorige;
     std::vector<int> _Sporen;
 
     Station * _propInit;

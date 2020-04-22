@@ -36,13 +36,13 @@ const std::string & Station::getNaam() const{
 
 const Station* Station::getVolgende() {
     REQUIRE(properlyInitialized(), "The station was not properly or not initialized before calling getVolgende");
-    ENSURE(is_valid_String(_Volgende), "getVolgende must return a valid string");
+    ENSURE(is_valid_String(_Volgende->getNaam()), "getVolgende must return a valid Station");
     return _Volgende;
 }
 
 Station* Station::getVorige() const {
     REQUIRE(properlyInitialized(), "The station was not properly or not initialized before calling getVorige");
-    ENSURE(is_valid_String(_Vorige), "getVorige must return a valid string");
+    ENSURE(is_valid_String(_Vorige->getNaam()), "getVorige must return a valid Station");
     return _Vorige;
 }
 
@@ -94,7 +94,7 @@ void Station::setVorige(Station *vorige) {
 void Station::setSporen(const std::vector<int> &sporen) {
     REQUIRE (properlyInitialized(), "The Station was not properly or not initialized before calling setSporen");
     _Sporen = sporen;
-    ENSURE(getSporen()==sporen, "_Sporen should be equal to param sporen")
+    ENSURE(getSporen()==sporen, "_Sporen should be equal to param sporen");
 }
 
 //---------------------------------//
