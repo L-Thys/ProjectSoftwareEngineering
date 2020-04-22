@@ -12,6 +12,9 @@
 
 
 class Metronet {
+protected:
+    void followingStations (std::vector<Station*>& visited, Station* cStation) const;
+
 public:
     /**
      * @brief : the constructor of an object of type Metronet, this constructor takes no parameters to initialise the object
@@ -30,6 +33,14 @@ public:
      * @post : the destructor will make sure the object is properly deleted
      */
     virtual ~Metronet();
+
+    /**
+     * @brief this method makes an ascii file which will contain a very basic graphical interpretation of the network
+     *
+     * @pre the system must be properly initialized
+     *
+     */
+    void makeGraphicalASCII (std::string bestandsnaam) const;
 
     /**
      * @brief : this method gives the full set of stations back

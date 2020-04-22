@@ -49,7 +49,7 @@ const int Tram::getSpeed() const{
     return _Speed;
 }
 
-const Station* Tram::getStartStation() const{
+Station* Tram::getStartStation() const{
     REQUIRE (properlyInitialized(), "The Tram was not properly or not initialized before calling getStartStation");
     return _StartStation;
 }

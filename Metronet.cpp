@@ -97,6 +97,34 @@ bool Metronet::isConsistent() {
     return true;
 }
 
+void Metronet::followingStations(std::vector<Station *> &visited, Station *cStation) const{
+    visited.push_back(cStation);
+    for (std::vector<Station*>::iterator it = visited.begin(); it != visited.end(); ++it){
+        if (cStation->getVolgende() == *it) return;
+    }
+    followingStations(visited, cStation->getVolgende());
+}
+
+void Metronet::makeGraphicalASCII(std::string bestandsnaam) const {
+    std::ofstream outputFile;                   // we have our file
+    outputFile.open(bestandsnaam.c_str());      // we open it
+
+    if (outputFile) {
+        std::vector<Station *> visited;         // visited will contain
+        for (std::vector<Tram *>::const_iterator it = _trams.begin(); it != _trams.end(); ++it) {
+            visited.clear();
+            Station *current = (*it)->getStartStation();
+
+            followingStations(visited, current);
+
+//            for (std::vector<){}
+        }
+    }
+    else {
+        std::cout << "The file couldn't be opened" << std::endl;
+    }
+}
+
 
 
 // if name isn't in the list, NULL is returned, so it's best to check if you get NULL from this function before using the returned value

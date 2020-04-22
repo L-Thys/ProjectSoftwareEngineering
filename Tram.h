@@ -90,7 +90,7 @@ public:
      * @post the return value must be a valid StartStation (string)
      *       --> ENSURE(is_valid_String(_Naam), "getNaam must return a valid string")
      */
-    const Station* getStartStation() const;
+    Station* getStartStation() const;
 
     bool operator==(const Tram &rhs) const;
 

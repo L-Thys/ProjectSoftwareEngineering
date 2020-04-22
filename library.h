@@ -14,6 +14,7 @@
 #include "gtest/include/gtest/gtest.h"
 #include "DesignByContract.h"
 #include "gtest/include/gtest/gtest.h"
+#include <fstream>
 
 // TODO : desing by contract
 
