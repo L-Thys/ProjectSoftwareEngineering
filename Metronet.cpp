@@ -57,9 +57,6 @@ bool Metronet::isConsistent() {
         {
             return false;       // idem
         }
-
-        /* The input of a station is standard given with only 1 track for now, we thus have always no duplicates*/
-        if (station->second->getSporen().empty()) return false;
     }
     // ------------------------------------------- //
 
@@ -76,7 +73,7 @@ bool Metronet::isConsistent() {
         }
 
         // ~ We also check if the Spoor of the tram is equal to the Spoor that runs through its Start Station ~ //
-        if ((*tram)->getLijn() != Metronet::findStation((*tram)->getStartStation()->getNaam())->getSpoor()) {
+        if ((*tram)->getLijn() != (*tram)->getStartStation()->getSpoor()) {
             return false;
         }
 
@@ -115,8 +112,8 @@ Station * Metronet::findStation(const std::string& name) {
 }
 
 Metronet::~Metronet() {
-    for(std::map<int,Tram*>::iterator it=_trams.begin(); it!=_trams.end(); ++it){
-        delete it->second;
+    for(std::vector<Tram*>::iterator it=_trams.begin(); it!=_trams.end(); ++it){
+        delete *it;
     }
     for(std::map<std::string, Station*>::iterator it=_stations.begin(); it!=_stations.end(); ++it){
         delete it->second;
@@ -446,7 +443,7 @@ TEST(Consistence, stationPreviousNotConsistent){
 }
 
 // the test with a wrong previous station
-TEST(Consistence, stationPreviousNotConsistent){
+TEST(Consistence, stationPreviousNotNull){
     Metronet* net = new Metronet();
     Station* st1 = new Station("A");
     Station* st2 = new Station("B");
@@ -535,7 +532,10 @@ TEST(Consistence, stationStartTrackNotConsistent){
     Station* st2 = new Station("B", st1, st1, 1);
     Tram* tr1 = new Tram(2, 20, 40, st1);
 
-
+    st1->setVolgende(st2);
+    st1->setVorige(st2);
+    std::vector<int> vec; vec.push_back(1);
+    st1->setSporen(vec);
 
     net->addStation(st1);
     net->addStation(st2);
