@@ -83,8 +83,6 @@ void Tram::setCurrentStation(Station* currentStation) {
 bool Tram::drive() {
     REQUIRE(properlyInitialized(), "Tram was not properly or no initialized before calling drive");
 
-    bool result;
-
    if(!_Onderweg){
        if(!_CurrentStation->isInStation(this)) return false;
        _CurrentStation->moveTramFrom(this);
@@ -93,9 +91,14 @@ bool Tram::drive() {
    }else{
        _CurrentStation = _CurrentStation->getVolgende();
        if(_CurrentStation == NULL) return false;
-       _CurrentStation->moveTramTo(this);
-       _Onderweg = false;
-       std::cout << "Tram " << _Lijn << " komt aan in station " << _CurrentStation->getNaam() << "." << std::endl;
+       if(_Type == "Albatros" && _CurrentStation->getType() == "Halte"){
+           _Onderweg = true;
+           std::cout << "Tram " << _Lijn << " stopt niet in halte " << _CurrentStation->getNaam() << " aangezien het een Albatros is, de tram rijdt door naar station"<< _CurrentStation->getVolgende()->getNaam() << std::endl;
+       }else {
+           _CurrentStation->moveTramTo(this);
+           _Onderweg = false;
+           std::cout << "Tram " << _Lijn << " komt aan in station " << _CurrentStation->getNaam() << "." << std::endl;
+       }
    }
 
     ENSURE(getCurrentStation() != NULL, "drive was unsuccessful");
