@@ -23,19 +23,20 @@ public:
     Tram();
 
     /**
-     * @brief : the constructor of an object of type Tram, this constructor takes 4 parameters to initialise the object
+     * @brief : the constructor of an object of type Tram, this constructor takes 3 parameters to initialise the object
      *          all members will be initialised by at least one of these parameters
+     *          _Seats and _Speed will be initialised according to the type of tram
      *
-     * @param _Lijn : an integer which indicates on which line this Tram rides
-     * @param _Seats : an integer that represents the amount of people that could use this tram
-     * @param _Speed : an integer that indicates the maximum speed of the Tram
-     * @param _StartStation : a string which is the name of the station where the Tram begins its trajectory
+     * @param lijn : an integer which indicates on which line this Tram rides
+     * @param startStation : a pointer to the station where the Tram begins its trajectory
+     * @param type : a string that denotes the type of tram (must be a valid tram type)
+     *
+     * @pre : this constructor requires that type is a valid tram type
+     *      --> REQUIRE(is_valid_tram_type(type),"the variable \"type\" has to be a valid tram type")
      *
      * @post This constructor will make sure the object is properly initialized
-     *       --> ENSURE (properlyInitialized(), "A constructor must end in a properlyInitialized state");
+     *       --> ENSURE (properlyInitialized(), "A constructor must end in a properlyInitialized state")
      * */
-    Tram(int _Lijn, int _Seats, int _Speed, Station* _StartStation);
-
     Tram(int lijn, Station *startStation, const std::string &type);
 
     /**
@@ -49,7 +50,7 @@ public:
      * @post this method must return a valid integer,
      *       but it is unnecessary to make an ENSURE because the compiler already made sure this was the case
      */
-    const int getLijn();
+    const int getLijn() const;
 
     /**
      * @brief : this method is a getter of the Seats
@@ -63,7 +64,7 @@ public:
      * @post this method must return a valid integer,
      *       but it is unnecessary to make an ENSURE because the compiler already made sure this was the case
      */
-    const int getSeats();
+    const int getSeats() const;
 
     /**
      * @brief : this method is the getter to retrieve the speed of this vehicle, this is always constant
@@ -76,7 +77,7 @@ public:
      * @post this method must return a valid integer,
      *       but it is unnecessary to make an ENSURE because the compiler already made sure this was the case
      */
-    const int getSpeed();
+    const int getSpeed() const;
 
     /**
      * @brief : this method is the getter of the Start Station which is the input to use in the findStation method
@@ -89,7 +90,7 @@ public:
      * @post the return value must be a valid StartStation (string)
      *       --> ENSURE(is_valid_String(_Naam), "getNaam must return a valid string")
      */
-    const Station* getStartStation();
+    const Station* getStartStation() const;
 
     bool operator==(const Tram &rhs) const;
 
@@ -101,7 +102,7 @@ public:
      *
      * @return this method returns a boolean that indicates if the object is still properly initialized
      */
-    bool properlyInitialized();
+    bool properlyInitialized() const;
 
 
     const Station* getCurrentStation() const;

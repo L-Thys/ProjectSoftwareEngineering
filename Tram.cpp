@@ -16,21 +16,9 @@ Tram::Tram() {
     Tram::_propInit = this;
 }
 
-Tram::Tram(const int _Lijn, const int _Seats, const int _Speed, Station* _StartStation) {
-    Tram::_Lijn = _Lijn;
-    Tram::_Seats = _Seats;
-    Tram::_Speed = _Speed;
-    Tram::_StartStation = _StartStation;
-    Tram::_CurrentStation = _StartStation;
-
-    Tram::_propInit = this;
-    // We make sure that the object is properly initialized by using the ENSURE function
-    ENSURE(properlyInitialized(), "A constructor must end in a properlyInitialized state");
-
-}
-
 Tram::Tram(int lijn, Station *startStation, const std::string &type) : _Lijn(lijn), _StartStation(startStation),
 _Type(type) {
+    REQUIRE(is_valid_tram_type(type),"the variable \"type\" has to be a valid tram type");
     Tram::_CurrentStation = _StartStation;
     if(type=="Albatros"){
         _Seats = 72;
@@ -46,22 +34,22 @@ _Type(type) {
 }
 
 
-const int Tram::getLijn(){
+const int Tram::getLijn() const{
     REQUIRE (properlyInitialized(), "The Tram was not properly or not initialized before calling getLijn");
     return _Lijn;
 }
 
-const int Tram::getSeats(){
+const int Tram::getSeats() const{
     REQUIRE (properlyInitialized(), "The Tram was not properly or not initialized before calling getSeats");
     return _Seats;
 }
 
-const int Tram::getSpeed(){
+const int Tram::getSpeed() const{
     REQUIRE (properlyInitialized(), "The Tram was not properly or not initialized before calling getSpeed");
     return _Speed;
 }
 
-const Station* Tram::getStartStation() {
+const Station* Tram::getStartStation() const{
     REQUIRE (properlyInitialized(), "The Tram was not properly or not initialized before calling getStartStation");
     return _StartStation;
 }
@@ -77,7 +65,7 @@ bool Tram::operator!=(const Tram &rhs) const {
     return !(rhs == *this);
 }
 
-bool Tram::properlyInitialized() {
+bool Tram::properlyInitialized() const{
     return _propInit == this;
 }
 
@@ -127,6 +115,7 @@ void Tram::setVoertuigNr(int voertuigNr) {
 
 
 
+
 //---------------------------------//
 //// Tests
 
@@ -134,9 +123,9 @@ class ValidTramTest: public ::testing::Test {
 public:
     ValidTramTest() {
 
-        tram = new Tram(12,32,60,stationA);
-        stationA = new Station("A",stationB,stationB,12);
-        stationB = new Station("B",stationA,stationA,12);
+        tram = new Tram(12,stationA,"PCC");
+        stationA = new Station("A",stationB,stationB,12,"Halte");
+        stationB = new Station("B",stationA,stationA,12,"Halte");
     }
 
     void SetUp() {
@@ -155,20 +144,24 @@ public:
 
 };
 
-// tests getter and setter functions from Tram
+// tests getter and setter functions from Tram and whether the constructor deals with the types correctly
 TEST_F(ValidTramTest, getters){
     EXPECT_EQ(12,tram->getLijn());
-    EXPECT_EQ(32,tram->getSeats());
-    EXPECT_EQ(60,tram->getSpeed());
+    EXPECT_EQ(16,tram->getSeats());
+    EXPECT_EQ(40,tram->getSpeed());
     EXPECT_EQ("A",tram->getStartStation()->getNaam());
     EXPECT_EQ("A",tram->getCurrentStation()->getNaam());
     tram->setCurrentStation(stationB);
     EXPECT_EQ("B",tram->getCurrentStation()->getNaam());
+    Tram* tram2 = new Tram(11,stationA,"Albatros");
+    EXPECT_EQ(70,tram2->getSpeed());
+    EXPECT_EQ(72,tram2->getSeats());
 }
 
 // tests properlyInitialized in metronet
 TEST_F(ValidTramTest, properlyInitialized){
     EXPECT_TRUE(tram->properlyInitialized());
 }
+
 
 

@@ -221,7 +221,7 @@ Metronet* readFromXml(const char* file){
                         if (!is_valid_String(text->Value())) throw ongeldige_informatie();
                         volgende = metronet->findStation(text->Value());
                         if(volgende == NULL){
-                            volgende = new Station(text->Value(),NULL,NULL,-1);
+                            volgende = new Station(text->Value(),NULL,NULL,-1,"");
                             metronet->addStation(volgende);
                         }
                     }
@@ -229,7 +229,7 @@ Metronet* readFromXml(const char* file){
                         if (!is_valid_String(text->Value())) throw ongeldige_informatie();
                         vorige = metronet->findStation(text->Value());
                         if(vorige == NULL) {
-                            vorige = new Station(text->Value(),NULL,NULL,-1);
+                            vorige = new Station(text->Value(),NULL,NULL,-1,"");
                             metronet->addStation(vorige);
                         }
                     }
@@ -282,7 +282,7 @@ Metronet* readFromXml(const char* file){
                         if (!is_valid_String(text->Value()) ) throw ongeldige_informatie();
                         beginstation = metronet->findStation(text->Value());
                         if(beginstation == NULL) {
-                            beginstation = new Station(text->Value(),NULL,NULL,-1);
+                            beginstation = new Station(text->Value(),NULL,NULL,-1,"");
                             metronet->addStation(beginstation);
                         }
                     }
@@ -331,16 +331,16 @@ public:
         metronet = new Metronet();
         Station* stationB = NULL;
         Station* stationC = NULL;
-        Station* stationA = new Station("A", stationB,stationC,12);
-        stationB = new Station("B",stationC,stationA,12);
-        stationC = new Station("C",stationA,stationB,12);
+        Station* stationA = new Station("A", stationB,stationC,12,"Halte");
+        stationB = new Station("B",stationC,stationA,12,"Halte");
+        stationC = new Station("C",stationA,stationB,12,"Halte");
         metronet->addStation(stationA);
         metronet->addStation(stationB);
         metronet->addStation(stationC);
         stations["A"]=stationA;
         stations["B"]=stationB;
         stations["C"]=stationB;
-        Tram* tram = new Tram(12,32,60,stationA);
+        Tram* tram = new Tram(12,stationA,"PCC");
         metronet->addTram(tram);
         trams[12]=tram;
     }
@@ -380,10 +380,10 @@ TEST_F(ValidMetronetTest, gettersAndFinds){
 
 // tests adder functions of Metronet
 TEST_F(ValidMetronetTest, adders){
-    Tram* tram = new Tram(1,2,3,metronet->findStation("A"));
+    Tram* tram = new Tram(1,metronet->findStation("A"),"PCC");
     metronet->addTram(tram);
 
-    Station* station = new Station("Q",NULL,NULL,1);
+    Station* station = new Station("Q",NULL,NULL,1,"Halte");
     metronet->addStation(station);
     EXPECT_EQ(*metronet->findStation("Q"),*station);
 
@@ -410,7 +410,7 @@ TEST(Consistence, stationNextNotConsistent){
     st2->setVolgende(st3);
     st2->setVorige(st1);
     st2->setSporen(vec);
-    Tram* tr1 = new Tram(1, 20, 40, st1);
+    Tram* tr1 = new Tram(1, st1,"PCC");
     net->addStation(st1);
     net->addStation(st2);
     net->addTram(tr1);
@@ -432,7 +432,7 @@ TEST(Consistence, stationNextNull){
     st2->setVorige(st1);
     st2->setSporen(vec);
 
-    Tram* tr1 = new Tram(1, 20, 40, st1);
+    Tram* tr1 = new Tram(1, st1,"PCC");
     net->addStation(st1);
     net->addStation(st2);
     net->addTram(tr1);
@@ -455,7 +455,7 @@ TEST(Consistence, stationPreviousNotConsistent){
     st2->setVorige(st3);
     st2->setSporen(vec);
 
-    Tram* tr1 = new Tram(1, 20, 40, st1);
+    Tram* tr1 = new Tram(1, st1, "PCC");
     net->addStation(st1);
     net->addStation(st2);
     net->addTram(tr1);
@@ -477,7 +477,7 @@ TEST(Consistence, stationPreviousNotNull){
     st2->setVorige(NULL);
     st2->setSporen(vec);
 
-    Tram* tr1 = new Tram(1, 20, 40, st1);
+    Tram* tr1 = new Tram(1, st1, "PCC");
     net->addStation(st1);
     net->addStation(st2);
     net->addTram(tr1);
@@ -500,7 +500,7 @@ TEST(Consistence, stationTrackNotConsistent){
     st1->setSporen(vec);
     st2->setSporen(vec2);
 
-    Tram* tr1 = new Tram(1, 20, 40, st1);
+    Tram* tr1 = new Tram(1, st1,"PCC");
     net->addStation(st1);
     net->addStation(st2);
     net->addTram(tr1);
@@ -512,8 +512,8 @@ TEST(Consistence, stationTrackNotConsistent){
 TEST(Consistence, stationNextTrackNotConsistent){
     Metronet* net = new Metronet();
     Station* st1 = new Station("A");
-    Station* st2 = new Station("B", st1, st1, 2);
-    Tram* tr1 = new Tram(1, 20, 40, st1);
+    Station* st2 = new Station("B", st1, st1, 2, "Halte");
+    Tram* tr1 = new Tram(1, st1, "PCC");
 
     st1->setVolgende(st2);
     st1->setVorige(st2);
@@ -530,9 +530,9 @@ TEST(Consistence, stationNextTrackNotConsistent){
 TEST(Consistence, tramStartNotConsistent){
     Metronet* net = new Metronet();
     Station* st1 = new Station("A");
-    Station* st2 = new Station("B", st1, st1, 1);
-    Station* st3 = new Station("C", st1, st1, 1);
-    Tram* tr1 = new Tram(1, 20, 40, st3);
+    Station* st2 = new Station("B", st1, st1, 1,"Halte");
+    Station* st3 = new Station("C", st1, st1, 1,"Halte");
+    Tram* tr1 = new Tram(1, st3, "PCC");
 
     st1->setVolgende(st2);
     st1->setVorige(st2);
@@ -550,8 +550,8 @@ TEST(Consistence, tramStartNotConsistent){
 TEST(Consistence, stationStartTrackNotConsistent){
     Metronet* net = new Metronet();
     Station* st1 = new Station("A");
-    Station* st2 = new Station("B", st1, st1, 1);
-    Tram* tr1 = new Tram(2, 20, 40, st1);
+    Station* st2 = new Station("B", st1, st1, 1, "Halte");
+    Tram* tr1 = new Tram(2, st1, "PCC");
 
     st1->setVolgende(st2);
     st1->setVorige(st2);

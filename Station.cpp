@@ -15,18 +15,10 @@ Station::Station(const std::string name){
     ENSURE(properlyInitialized(), "A constructor must end in a properlyInitialized state");
 }
 
-Station::Station(const std::string &_Naam, Station* _Volgende, Station* _Vorige, int _Spoor)
-        : _Naam(_Naam), _Volgende(_Volgende), _Vorige(_Vorige) {
-    Station::_Sporen.push_back(_Spoor);             // because we are not sure what happens if we write _Sporen(_Spoor)
-    Station::_propInit = this;
-
-    // We make sure that the object is properly initialized by using the ENSURE function
-    ENSURE(properlyInitialized(), "A constructor must end in a properlyInitialized state");
-    validStationMembers();
-}
 
 Station::Station(const std::string &_Naam, Station* _Volgende, Station* _Vorige, int _Spoor, std::string _Type)
         : _Naam(_Naam), _Volgende(_Volgende), _Vorige(_Vorige), _Type(_Type) {
+    REQUIRE(is_valid_station_type(_Type),"the variable \"_Type\" has to be a valid station type");
     Station::_Sporen.push_back(_Spoor);             // because we are not sure what happens if we write _Sporen(_Spoor)
     Station::_propInit = this;
 
@@ -120,9 +112,9 @@ void Station::setType(const std::string &type) {
 class ValidStationTest: public ::testing::Test {
 public:
     ValidStationTest() {
-        station = new Station("A",stationB,stationC,12);
-        stationB = new Station("B",stationC,station,12);
-        stationC = new Station("C",station, stationB,12);
+        station = new Station("A",stationB,stationC,12,"Halte");
+        stationB = new Station("B",stationC,station,12,"Halte");
+        stationC = new Station("C",station, stationB,12,"Halte");
     }
 
     void SetUp() {

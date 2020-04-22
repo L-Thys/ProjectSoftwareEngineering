@@ -24,7 +24,7 @@ public:
     Station(std::string name);
 
     /**
-     * @brief constructor of a station, this constructor takes 4 parameters and initialises the whole object at once
+     * @brief constructor of a station, this constructor takes 5 parameters and initialises the whole object at once
      *        all the members that are initialised are strings, those are given in the constructor, only the track
      *        that is given as member _Spoor is an integer
      *
@@ -34,12 +34,14 @@ public:
      * @param _Vorige a string, which is the name of the previous station, that will be useful in the findStation
      *                method of Metronet
      * @param _Spoor this is an integer that represents the track (Spoor) that runs through
+     * @param _Type is a string that denotes the type of station
+     *
+     * @pre _Type should be a valid Station type
+     *      --> REQUIRE(is_valid_station_type(_Type),"the variable \"_Type\" has to be a valid station type");
      *
      * @post This constructor will make sure the object is properly initialized
      *       --> ENSURE (properlyInitialized(), "A constructor must end in a properlyInitialized state")
      * */
-    Station(const std::string &_Naam, Station* _Volgende, Station* _Vorige, int _Spoor);
-
     Station(const std::string &_Naam, Station* _Volgende, Station* _Vorige, int _Spoor, std::string _Type);
 
     /**
@@ -159,6 +161,10 @@ public:
      */
     void setSporen(const std::vector<int> &sporen);
 
+    const std::string &getType() const;
+
+    void setType(const std::string &type);
+
 protected:
     /**
      * @brief this method ensures that all members but one, _Sporen, are valid according the given specifications
@@ -176,10 +182,6 @@ private:
     Station * _Vorige;
     std::vector<int> _Sporen;
     std::string _Type;
-public:
-    const std::string &getType() const;
-
-    void setType(const std::string &type);
 
 private:
 
