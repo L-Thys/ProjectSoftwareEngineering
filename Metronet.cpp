@@ -92,7 +92,7 @@ bool Metronet::isConsistent() {
         }
 
         // we push it in so we ensure that duplicates are noticed
-        as_tracks.push_back(tram->second->getLijn());
+        as_tracks.push_back((*tram)->getLijn());
 
     }
     // --------------------------------------------------------------------------- //
