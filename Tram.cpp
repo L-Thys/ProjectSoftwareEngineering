@@ -142,3 +142,4 @@ TEST_F(ValidTramTest, properlyInitialized){
 TEST_F(ValidTramTest, validTramMembers){
     EXPECT_TRUE(tram->validTramMembers());
 }
+
