@@ -201,11 +201,11 @@ Metronet* readFromXml(const char* file){
         // als het element STATION is
         try {
             if (type == "STATION"){
-                std::string stationnaam;
+                std::string stationnaam = "";
                 Station* volgende = NULL;
                 Station* vorige = NULL;
                 int spoor=-1;
-                std::string typenaam;
+                std::string typenaam = "";
 
                 // lees verdere informatie voor het element
                 for(TiXmlNode* attribuut = element->FirstChild(); attribuut != NULL; attribuut = attribuut->NextSibling()){
@@ -243,6 +243,8 @@ Metronet* readFromXml(const char* file){
                     }
                     else throw ongeldige_informatie();
                 }
+                if(stationnaam == ""|| typenaam == "" || volgende == NULL || vorige == NULL || spoor == -1) throw onvoldoende_informatie();
+
                 // voeg een Station met deze informatie toe aan stations in metronet of pas een bestaande pointer aan
                 Station* station= metronet->findStation(stationnaam);
                 if(station != NULL){
@@ -256,6 +258,8 @@ Metronet* readFromXml(const char* file){
                     station = new Station(stationnaam,volgende,vorige,spoor,typenaam);
                     metronet->addStation(station);
                 }
+                vorige->setVolgende(station);
+                volgende->setVorige(station);
 
             }
 
@@ -263,7 +267,7 @@ Metronet* readFromXml(const char* file){
             else if (type == "TRAM"){
                 int lijn=-1;
                 Station* beginstation = NULL;
-                std::string typenaam;
+                std::string typenaam = "";
                 // lees verdere informatie voor het element
                 for(TiXmlNode* attribuut = element->FirstChild(); attribuut != NULL; attribuut = attribuut->NextSibling()){
                     std::string naam = attribuut->Value();
@@ -287,6 +291,7 @@ Metronet* readFromXml(const char* file){
                     }
                     else throw ongeldige_informatie();
                 }
+                if(lijn==-1||beginstation==NULL||typenaam == "") throw onvoldoende_informatie();
                 // voeg een Tram met deze informatie toe aan trammen
                 Tram* tram = new Tram(lijn,beginstation,typenaam);
                 metronet->addTram(tram);
@@ -295,6 +300,9 @@ Metronet* readFromXml(const char* file){
                 std::cerr << "onherkenbaar element" << std::endl;
             }
         } catch (ongeldige_informatie& e){
+            std::cerr << e.what() << std::endl;
+            continue;
+        } catch (onvoldoende_informatie& e) {
             std::cerr << e.what() << std::endl;
             continue;
         }

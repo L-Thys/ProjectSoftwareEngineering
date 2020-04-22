@@ -15,6 +15,13 @@ public:
     }
 };
 
+class onvoldoende_informatie: public std::exception{
+public:
+    virtual const char* what() const throw(){
+        return "onvoldoende informatie";
+    }
+};
+
 
 class AnExeption: public std::exception{
 
