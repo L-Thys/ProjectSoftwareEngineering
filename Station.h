@@ -64,7 +64,7 @@ public:
      * @post the method must return a valid name (string)
      *       --> ENSURE(is_valid_String(_Volgende), "getVolgende must return a valid string")
      */
-    const Station* getVolgende();
+    Station* getVolgende() const;
 
     /**
      * @brief returning a string, which is the name of the next station, to be used as input for the findStation in Metronet
