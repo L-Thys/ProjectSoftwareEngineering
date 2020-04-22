@@ -107,7 +107,12 @@ bool Tram::drive(const Station *station) {
 class ValidTramTest: public ::testing::Test {
 public:
     ValidTramTest() {
+
         tram = new Tram(12,32,60,NULL);
+        stationA = new Station("A",NULL,NULL,12);
+        stationB = new Station("B",stationA,stationA,12);
+        stationA->setVolgende(stationB);
+        stationA->setVorige(stationB);
     }
 
     void SetUp() {
@@ -116,7 +121,11 @@ public:
 
     void TearDown() {
         delete tram;
+        delete stationA;
+        delete stationB;
     }
+    Station* stationA;
+    Station* stationB;
 
     Tram* tram;
 
@@ -129,7 +138,7 @@ TEST_F(ValidTramTest, getters){
     EXPECT_EQ(60,tram->getSpeed());
     EXPECT_EQ("A",tram->getStartStation()->getNaam());
     EXPECT_EQ("A",tram->getCurrentStation()->getNaam());
-    tram->setCurrentStation("B");
+    tram->setCurrentStation(stationB);
     EXPECT_EQ("B",tram->getCurrentStation()->getNaam());
 }
 
@@ -138,8 +147,4 @@ TEST_F(ValidTramTest, properlyInitialized){
     EXPECT_TRUE(tram->properlyInitialized());
 }
 
-// tests properlyInitialized in metronet
-TEST_F(ValidTramTest, validTramMembers){
-    EXPECT_TRUE(tram->validTramMembers());
-}
 
