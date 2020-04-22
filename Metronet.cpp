@@ -106,23 +106,7 @@ void Metronet::followingStations(std::vector<Station *> &visited, Station *cStat
 }
 
 void Metronet::makeGraphicalASCII(std::string bestandsnaam) const {
-    std::ofstream outputFile;                   // we have our file
-    outputFile.open(bestandsnaam.c_str());      // we open it
 
-    if (outputFile) {
-        std::vector<Station *> visited;         // visited will contain
-        for (std::vector<Tram *>::const_iterator it = _trams.begin(); it != _trams.end(); ++it) {
-            visited.clear();
-            Station *current = (*it)->getStartStation();
-
-            followingStations(visited, current);
-
-//            for (std::vector<){}
-        }
-    }
-    else {
-        std::cout << "The file couldn't be opened" << std::endl;
-    }
 }
 
 
