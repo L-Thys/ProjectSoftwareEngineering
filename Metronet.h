@@ -9,6 +9,7 @@
 #include "Tram.h"
 #include "Station.h"
 #include "Spoor.h"
+#include "Utilities.h"
 
 
 class Metronet {

@@ -106,7 +106,19 @@ void Metronet::followingStations(std::vector<Station *> &visited, Station *cStat
 }
 
 void Metronet::makeGraphicalASCII(std::string bestandsnaam) const {
+    std::vector<int> vec;       // the set of tracks
 
+    // search for every track
+    for (std::vector<Tram*>::const_iterator it = _trams.begin(); it != _trams.end(); ++it){
+        if (!findInVector((*it)->getLijn(), vec)){
+            vec.push_back((*it)->getLijn());
+        }
+    }
+
+    for (int x = 0; x < vec.size(); ++x){
+        int a = vec[x];
+
+    }
 }
 
 
