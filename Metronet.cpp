@@ -119,6 +119,7 @@ void Metronet::makeGraphicalASCII(std::string bestandsnaam) const {
         int a = vec[x];
 
     }
+
 }
 
 
