@@ -185,6 +185,9 @@ void Metronet::driveAutomaticaly(int n) {
     }
 }
 
+void Metronet::addSignaal(Signaal *signaal) {
+    Metronet::_signalen.push_back(signaal);
+}
 
 
 Metronet* readFromXml(const char* file){
@@ -315,6 +318,56 @@ Metronet* readFromXml(const char* file){
                 if(voertuigNr!=-1){
                     tram->setVoertuigNr(voertuigNr);
                 }
+            }
+            else if (type == "SIGNAAL"){
+                std::string typenaam = "";
+                Station* volgende = NULL;
+                Station* vorige = NULL;
+                int spoor=-1;
+                int limiet = -1;
+
+                // lees verdere informatie voor het element
+                for(TiXmlNode* attribuut = element->FirstChild(); attribuut != NULL; attribuut = attribuut->NextSibling()){
+
+                    std::string naam = attribuut->Value();
+                    if (attribuut->FirstChild() == NULL) throw ongeldige_informatie();
+                    TiXmlText *text = attribuut->FirstChild()->ToText();
+                    if(naam == "limiet"){
+                        if (!is_Integer(text->Value())) throw ongeldige_informatie();
+                        spoor = std::atol(text->Value());
+                    }
+                    else if(naam == "volgende"){
+                        if (!is_valid_String(text->Value())) throw ongeldige_informatie();
+                        volgende = metronet->findStation(text->Value());
+                        if(volgende == NULL){
+                            volgende = new Station(text->Value(),NULL,NULL,-1,"");
+                            metronet->addStation(volgende);
+                        }
+                    }
+                    else if(naam == "vorige"){
+                        if (!is_valid_String(text->Value())) throw ongeldige_informatie();
+                        vorige = metronet->findStation(text->Value());
+                        if(vorige == NULL) {
+                            vorige = new Station(text->Value(),NULL,NULL,-1,"");
+                            metronet->addStation(vorige);
+                        }
+                    }
+                    else if(naam == "spoor"){
+                        if (!is_Integer(text->Value())) throw ongeldige_informatie();
+                        spoor = std::atol(text->Value());
+                    }
+                    else if(naam == "type"){
+                        if (!is_valid_String(text->Value())) throw ongeldige_informatie();
+                        typenaam = text->Value();
+                    }
+                    else throw ongeldige_informatie();
+                }
+                if(typenaam == "" || volgende == NULL || vorige == NULL || spoor == -1) throw onvoldoende_informatie();
+
+                // voeg een Signaal met deze informatie toe aan signalen in metronet
+                Signaal* signaal = new Signaal(spoor,limiet,typenaam,vorige,volgende);
+                metronet->addSignaal(signaal);
+
             }
             else{
                 std::cerr << "onherkenbaar element" << std::endl;

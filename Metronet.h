@@ -9,6 +9,7 @@
 #include "Tram.h"
 #include "Station.h"
 #include "Spoor.h"
+#include "Signaal.h"
 
 
 class Metronet {
@@ -89,6 +90,8 @@ public:
      *
      * */
     void addTram (Tram* tram);
+
+    void addSignaal (Signaal* signaal);
 
     /**
      * @brief : given a name, this method searches the corresponding station in the collection
@@ -172,6 +175,7 @@ public:
 private:
     std::map<std::string, Station*> _stations;
     std::vector<Tram*> _trams;
+    std::vector<Signaal*> _signalen;
 
     Metronet* _propInit;
 };
