@@ -106,6 +106,10 @@ void Metronet::followingStations(std::vector<Station *> &visited, Station *cStat
 }
 
 void Metronet::makeGraphicalASCII(std::string bestandsnaam) const {
+
+    std::ofstream file;
+    file.open(bestandsnaam.c_str());
+
     std::vector<int> vec;       // the set of tracks
 
     // search for every track
@@ -116,13 +120,70 @@ void Metronet::makeGraphicalASCII(std::string bestandsnaam) const {
     }
 
     for (int x = 0; x < vec.size(); ++x){
-        int a = vec[x];
+        int a = vec[x];                         // take the line
 
+        std::vector<Station*> cycleOfStations;
+
+        Station* st = getStationOnTrack(a);     // this is the station to start with
+        cycleOfStations.push_back(st);          // add it to the vector
+
+        Station* nst = st->getVolgende();       // save the next
+
+        while (nst != st) {                     // the condition that a track must be like a circle shape
+            cycleOfStations.push_back(nst);     // as long the next is not the first we add
+            nst = nst->getVolgende();
+        }
+
+        for (int s = 0; s < cycleOfStations.size(); ++s) {                      // write every station
+            file << "=" + cycleOfStations[s]->getNaam() + "==";
+        }
+        file << "(spoor " << a << ")" << std::endl;                             // write the track and a endLine
+
+        for (int s = 0; s < cycleOfStations.size(); ++s) {                      // write every tram
+            Tram* t = getStationedTram(cycleOfStations[s]);
+            if (t != NULL) {
+                file << " T ";
+            }
+            else {
+                file << "   ";
+            }
+
+            Tram* t2 = getMovingTram(cycleOfStations[s]);
+            if (t2 != NULL){
+                file << "T";
+            }
+            else {
+                file << " ";
+            }
+        }
+        file << std::endl;
     }
-
+    file.close();
 }
 
+Station * Metronet::getStationOnTrack(int track) const {
+    for (std::map<std::string, Station*>::const_iterator it = _stations.begin(); it != _stations.end(); ++it) {
+        std::vector<int> sporen = it->second->getSporen();                  // all the tracks we have in the station
+        if (findInVector(track, sporen)){                                // if the given track is present
+            return it->second;
+        }
+    }
+    return NULL;
+}
 
+Tram * Metronet::getMovingTram(Station *station) const {
+    for (std::vector<Tram*>::const_iterator it = _trams.begin(); it != _trams.end(); ++it) {
+        if ((*it)->getCurrentStation() == station and (*it)->isOnderweg()) return (*it);
+    }
+    return NULL;
+}
+
+Tram * Metronet::getStationedTram(Station *station) const {
+    for (std::vector<Tram*>::const_iterator it = _trams.begin(); it != _trams.end(); ++it) {
+        if ((*it)->getCurrentStation() == station and !(*it)->isOnderweg()) return (*it);
+    }
+    return NULL;
+}
 
 // if name isn't in the list, NULL is returned, so it's best to check if you get NULL from this function before using the returned value
 Station * Metronet::findStation(const std::string& name) {

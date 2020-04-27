@@ -113,6 +113,10 @@ void Tram::setVoertuigNr(int voertuigNr) {
     _VoertuigNr = voertuigNr;
 }
 
+bool Tram::isOnderweg() const {
+    return _Onderweg;
+}
+
 
 
 

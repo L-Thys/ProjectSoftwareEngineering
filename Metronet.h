@@ -17,6 +17,12 @@ class Metronet {
 protected:
     void followingStations (std::vector<Station*>& visited, Station* cStation) const;
 
+    Tram* getMovingTram (Station* station) const ;
+
+    Tram* getStationedTram (Station* station) const ;
+
+    Station* getStationOnTrack (int track) const;
+
 public:
     /**
      * @brief : the constructor of an object of type Metronet, this constructor takes no parameters to initialise the object

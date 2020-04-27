@@ -141,6 +141,8 @@ public:
 
     void setVoertuigNr(int voertuigNr);
 
+    bool isOnderweg() const;
+
 private:
     int _Lijn;
     int _Seats;
