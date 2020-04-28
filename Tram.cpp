@@ -55,16 +55,6 @@ Station* Tram::getStartStation() const{
     return _StartStation;
 }
 
-bool Tram::operator==(const Tram &rhs) const {
-    return _Lijn == rhs._Lijn &&
-           _Seats == rhs._Seats &&
-           _Speed == rhs._Speed &&
-           _StartStation == rhs._StartStation;
-}
-
-bool Tram::operator!=(const Tram &rhs) const {
-    return !(rhs == *this);
-}
 
 bool Tram::properlyInitialized() const{
     return _propInit == this;
@@ -96,17 +86,21 @@ bool Tram::drive() {
    }else{
        _TijdTotVerandering --;
        if(_TijdTotVerandering == 0){
-           _Onderweg = false;
-           _CurrentStation = _CurrentStation->getVolgende();
-           if(_CurrentStation == NULL) return false;
-           if(_Type == "Albatros" && _CurrentStation->getType() == "Halte"){
-               _TijdTotVerandering = 1;
-               std::cout << "Tram " << _Lijn << " stopt niet in halte " << _CurrentStation->getNaam() << " aangezien het een Albatros is, de tram rijdt door naar station"<< _CurrentStation->getVolgende()->getNaam() << std::endl;
-           }else {
-               _CurrentStation->moveTramTo(this);
-               _TijdTotVerandering = 60;
-               std::cout << "Tram " << _Lijn << " komt aan in station " << _CurrentStation->getNaam() << "." << std::endl;
-           }
+            if(_CurrentStation->getVolgende(_Lijn)->isInStation(_Lijn)){
+                _TijdTotVerandering ++;
+            }else{
+                _Onderweg = false;
+                _CurrentStation = _CurrentStation->getVolgende(_Lijn);
+                if(_CurrentStation == NULL) return false;
+                if(_Type == "Albatros" && _CurrentStation->getType() == "Halte"){
+                    _TijdTotVerandering = 1;
+                    std::cout << "Tram " << _Lijn << " stopt niet in halte " << _CurrentStation->getNaam() << " aangezien het een Albatros is, de tram rijdt door naar station"<< _CurrentStation->getVolgende()->getNaam() << std::endl;
+                }else {
+                    _CurrentStation->moveTramTo(this);
+                    _TijdTotVerandering = 60;
+                    std::cout << "Tram " << _Lijn << " komt aan in station " << _CurrentStation->getNaam() << "." << std::endl;
+                }
+            }
        }
 
    }

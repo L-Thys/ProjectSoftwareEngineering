@@ -58,16 +58,6 @@ std::vector<int> Station::getSporen() {
     return Station::_Sporen;
 }
 
-bool Station::operator==(const Station &rhs) const {
-    return _Naam == rhs._Naam &&
-           _Volgende == rhs._Volgende &&
-           _Vorige == rhs._Vorige &&
-           _Sporen == rhs._Sporen;
-}
-
-bool Station::operator!=(const Station &rhs) const {
-    return !(rhs == *this);
-}
 
 bool Station::properlyInitialized() const{
     return _propInit == this;
@@ -130,6 +120,15 @@ bool Station::isInStation(Tram *tram) {
     return false;
 }
 
+bool Station::isInStation(int a) {
+    for(std::vector<Tram *>::iterator it = _Trams.begin(); it != _Trams.end(); it++){
+        if((*it)->getLijn() == a){
+            return true;
+        }
+    }
+    return false;
+}
+
 Station * Station::findStationInNext(int x) const {
     for (std::map<int,Station*>::const_iterator it = _Volgende.begin(); it != _Volgende.end(); ++it){
         if (it->first == x) return it->second;
@@ -142,6 +141,10 @@ Station * Station::findStationInPrev(int x) const {
         if (it->first == x) return it->second;
     }
     return NULL;
+}
+
+void Station::addSpoor(int spoor) {
+    _Sporen.push_back(spoor);
 }
 
 //---------------------------------//

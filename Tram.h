@@ -92,9 +92,7 @@ public:
      */
     Station* getStartStation() const;
 
-    bool operator==(const Tram &rhs) const;
 
-    bool operator!=(const Tram &rhs) const;
 
     /**
      * @brief this method needs no ENSURE or REQUIRE, it checks if the object is properly initialized by checking if the

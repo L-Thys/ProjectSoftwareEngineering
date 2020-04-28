@@ -208,9 +208,13 @@ void Metronet::writeToFile(const char *filename) {
     for (std::map<std::string,Station*>::iterator it = _stations.begin(); it != _stations.end(); ++it) {
         // Schrijf station-gegevens ui
         file << "Station " << it->second->getNaam() << std::endl;
-        file << "<- Station " << it->second->getVorige() << std::endl;
-        file << "-> Station " << it->second->getVolgende() << std::endl;
-        file << "Spoor " << it->second->getSpoor() << std::endl;
+        std::vector<int> sporen = (*it).second->getSporen();
+        for(std::vector<int>::iterator i = sporen.begin(); i != sporen.end(); i++){
+            file << "<- Station " << it->second->getVorige(*i) << std::endl;
+            file << "-> Station " << it->second->getVolgende(*i) << std::endl;
+            file << "Spoor " << *i << std::endl;
+        }
+
     }
 
     file << std::endl;
@@ -292,7 +296,7 @@ Metronet* readFromXml(const char* file){
                         if (!is_valid_String(text->Value())) throw ongeldige_informatie();
                         volgende = metronet->findStation(text->Value());
                         if(volgende == NULL){
-                            volgende = new Station(text->Value(),NULL,NULL,-1,"");
+                            volgende = new Station(text->Value());
                             metronet->addStation(volgende);
                         }
                     }
@@ -300,7 +304,7 @@ Metronet* readFromXml(const char* file){
                         if (!is_valid_String(text->Value())) throw ongeldige_informatie();
                         vorige = metronet->findStation(text->Value());
                         if(vorige == NULL) {
-                            vorige = new Station(text->Value(),NULL,NULL,-1,"");
+                            vorige = new Station(text->Value());
                             metronet->addStation(vorige);
                         }
                     }
@@ -319,18 +323,20 @@ Metronet* readFromXml(const char* file){
                 // voeg een Station met deze informatie toe aan stations in metronet of pas een bestaande pointer aan
                 Station* station= metronet->findStation(stationnaam);
                 if(station != NULL){
-                    station->setVolgende(volgende);
-                    station->setVorige(vorige);
-                    std::vector<int> sporen;
-                    sporen.push_back(spoor);
-                    station->setSporen(sporen);
+                    station->setVolgende(spoor,volgende);
+                    station->setVorige(spoor,vorige);
+                    station->addSpoor(spoor);
                     station->setType(type);
                 }else{
-                    station = new Station(stationnaam,volgende,vorige,spoor,typenaam);
+                    std::map<int,Station*>vorigemap;
+                    vorigemap[spoor]=vorige;
+                    std::map<int,Station*>volgendemap;
+                    volgendemap[spoor]=volgende;
+                    station = new Station(stationnaam,volgendemap,vorigemap,spoor,typenaam);
                     metronet->addStation(station);
                 }
-                vorige->setVolgende(station);
-                volgende->setVorige(station);
+                vorige->setVolgende(spoor,station);
+                volgende->setVorige(spoor,station);
 
             }
 
@@ -353,7 +359,7 @@ Metronet* readFromXml(const char* file){
                         if (!is_valid_String(text->Value()) ) throw ongeldige_informatie();
                         beginstation = metronet->findStation(text->Value());
                         if(beginstation == NULL) {
-                            beginstation = new Station(text->Value(),NULL,NULL,-1,"");
+                            beginstation = new Station(text->Value());
                             metronet->addStation(beginstation);
                         }
                     }
@@ -396,7 +402,7 @@ Metronet* readFromXml(const char* file){
                         if (!is_valid_String(text->Value())) throw ongeldige_informatie();
                         volgende = metronet->findStation(text->Value());
                         if(volgende == NULL){
-                            volgende = new Station(text->Value(),NULL,NULL,-1,"");
+                            volgende = new Station(text->Value());
                             metronet->addStation(volgende);
                         }
                     }
@@ -404,7 +410,7 @@ Metronet* readFromXml(const char* file){
                         if (!is_valid_String(text->Value())) throw ongeldige_informatie();
                         vorige = metronet->findStation(text->Value());
                         if(vorige == NULL) {
-                            vorige = new Station(text->Value(),NULL,NULL,-1,"");
+                            vorige = new Station(text->Value());
                             metronet->addStation(vorige);
                         }
                     }

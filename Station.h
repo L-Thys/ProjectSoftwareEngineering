@@ -97,9 +97,6 @@ public:
      */
     int getSpoor() const;
 
-    bool operator==(const Station &rhs) const;
-
-    bool operator!=(const Station &rhs) const;
 
     /**
      * @brief this method gives the full vector of tracks of the station, this is at the moment from a maximum length of 1
@@ -161,6 +158,8 @@ public:
      */
     void setSporen(const std::vector<int> &sporen);
 
+    void addSpoor(int spoor);
+
     const std::string &getType() const;
 
     void setType(const std::string &type);
@@ -170,6 +169,8 @@ public:
     void moveTramTo(Tram* tram);
 
     bool isInStation(Tram* tram);
+
+    bool isInStation(int a);
 
 protected:
     /**
