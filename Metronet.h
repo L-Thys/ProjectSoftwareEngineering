@@ -15,12 +15,36 @@
 
 class Metronet {
 protected:
-    void followingStations (std::vector<Station*>& visited, Station* cStation) const;
 
-    Tram* getMovingTram (Station* station) const ;
+    /**
+     * @brief This method takes a station and checks if the station has had a tram leave, this means that there could be
+     *        a Tram on his way to the next but isn't there yet
+     * @param station a pointer to a Station
+     * @param a is an integer
+     * @return a pointer to a Tram, is NULL if there is no on that part of the track
+     * @pre The Metronet must be properly initialized
+     *      --> REQUIRE(properlyInitialized(), "The Metronet was not properly or not initialized before calling findStation");
 
-    Tram* getStationedTram (Station* station) const ;
+     */
+    Tram* getMovingTram (Station* station, int a) const ;
 
+    /**
+     * @brief This method takes a station and checks if the station has currently a waiting train
+     * @param station a pointer to a Station
+     * @param a is an integer
+     * @return a pointer to a Tram, is NULL if there is no Tram in this station
+     * @pre The Metronet must be properly initialized
+     *      --> REQUIRE(properlyInitialized(), "The Metronet was not properly or not initialized before calling findStation");
+     */
+    Tram* getStationedTram (Station* station, int a) const ;
+
+    /**
+     * @brief This method searches a station that lies on the given track, it gives the first found
+     * @param track an integer
+     * @return a pointer to a station
+     * @pre The Metronet must be properly initialized
+     *      --> REQUIRE(properlyInitialized(), "The Metronet was not properly or not initialized before calling findStation");
+     */
     Station* getStationOnTrack (int track) const;
 
 public:
@@ -44,8 +68,9 @@ public:
 
     /**
      * @brief this method makes an ascii file which will contain a very basic graphical interpretation of the network
-     *
-     * @pre the system must be properly initialized
+     * @param bestandsnaam is a string, this name is from the file that will be opened
+     * @pre The Metronet must be properly initialized
+     *      --> REQUIRE(properlyInitialized(), "The Metronet was not properly or not initialized before calling findStation");
      *
      */
     void makeGraphicalASCII (std::string bestandsnaam) const;
@@ -136,7 +161,7 @@ public:
      *
      * @return this method returns a boolean that indicates if the object is still properly initialized
      */
-    bool properlyInitialized();
+    bool properlyInitialized() const;
 
     /**
      * @brief this method check whether there are stations and trams in the network or not

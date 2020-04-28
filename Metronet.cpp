@@ -97,16 +97,10 @@ bool Metronet::isConsistent() {
     return true;
 }
 
-void Metronet::followingStations(std::vector<Station *> &visited, Station *cStation) const{
-    visited.push_back(cStation);
-    for (std::vector<Station*>::iterator it = visited.begin(); it != visited.end(); ++it){
-        if (cStation->getVolgende() == *it) return;
-    }
-    followingStations(visited, cStation->getVolgende());
-}
+
 
 void Metronet::makeGraphicalASCII(std::string bestandsnaam) const {
-
+    REQUIRE(properlyInitialized(), "The Metronet was not properly or not initialized before calling findStation");
     std::ofstream file;
     file.open(bestandsnaam.c_str());
 
@@ -140,7 +134,7 @@ void Metronet::makeGraphicalASCII(std::string bestandsnaam) const {
         file << "(spoor " << a << ")" << std::endl;                             // write the track and a endLine
 
         for (int s = 0; s < cycleOfStations.size(); ++s) {                      // write every tram
-            Tram* t = getStationedTram(cycleOfStations[s]);
+            Tram* t = getStationedTram(cycleOfStations[s], a);
             if (t != NULL) {
                 file << " T ";
             }
@@ -148,7 +142,7 @@ void Metronet::makeGraphicalASCII(std::string bestandsnaam) const {
                 file << "   ";
             }
 
-            Tram* t2 = getMovingTram(cycleOfStations[s]);
+            Tram* t2 = getMovingTram(cycleOfStations[s], a);
             if (t2 != NULL){
                 file << "T";
             }
@@ -162,27 +156,32 @@ void Metronet::makeGraphicalASCII(std::string bestandsnaam) const {
 }
 
 Station * Metronet::getStationOnTrack(int track) const {
+    REQUIRE(properlyInitialized(), "The Metronet was not properly or not initialized before calling findStation");
     for (std::map<std::string, Station*>::const_iterator it = _stations.begin(); it != _stations.end(); ++it) {
         std::vector<int> sporen = it->second->getSporen();                  // all the tracks we have in the station
         if (findInVector(track, sporen)){                                // if the given track is present
             return it->second;
         }
     }
-    return NULL;
+    return NULL;                                                            // return NULL if no station is found
 }
 
-Tram * Metronet::getMovingTram(Station *station) const {
+Tram * Metronet::getMovingTram(Station *station, int a) const {
+    REQUIRE(properlyInitialized(), "The Metronet was not properly or not initialized before calling findStation");
+    // check for a tram from which its current station equals the given, the tracks must be the same and it needs to be moving
     for (std::vector<Tram*>::const_iterator it = _trams.begin(); it != _trams.end(); ++it) {
-        if ((*it)->getCurrentStation() == station and (*it)->isOnderweg()) return (*it);
+        if ((*it)->getCurrentStation() == station and (*it)->getLijn() and (*it)->isOnderweg()) return (*it);
     }
-    return NULL;
+    return NULL;                // return NULL if no tram is found
 }
 
-Tram * Metronet::getStationedTram(Station *station) const {
+Tram * Metronet::getStationedTram(Station *station, int a) const {
+    REQUIRE(properlyInitialized(), "The Metronet was not properly or not initialized before calling findStation");
+    // check for a tram from which its current station equals the given, the tracks must be the same, it may not be moving
     for (std::vector<Tram*>::const_iterator it = _trams.begin(); it != _trams.end(); ++it) {
-        if ((*it)->getCurrentStation() == station and !(*it)->isOnderweg()) return (*it);
+        if ((*it)->getCurrentStation() == station and (*it)->getLijn() == a and !(*it)->isOnderweg()) return (*it);
     }
-    return NULL;
+    return NULL;                // return NULL if no tram is found
 }
 
 // if name isn't in the list, NULL is returned, so it's best to check if you get NULL from this function before using the returned value
@@ -211,7 +210,7 @@ Metronet::Metronet() {
     ENSURE(properlyInitialized(), "A constructor must end in a properlyInitialized state");
 }
 
-bool Metronet::properlyInitialized() {
+bool Metronet::properlyInitialized() const {
     return _propInit == this;
 }
 
