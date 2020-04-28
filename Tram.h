@@ -152,6 +152,7 @@ private:
     Station* _CurrentStation;
     std::string _Type;
     bool _Onderweg;
+    int _TijdTotVerandering;
 
 
     Tram* _propInit;

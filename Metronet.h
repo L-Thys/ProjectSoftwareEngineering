@@ -175,7 +175,7 @@ public:
      *      --> REQUIRE(mapsAreNotEmpty() && isConsistent(), "this object should contain a consistent metronet")
      *
      *
-     * @param n: the amount of time cycles
+     * @param n: the amount of seconds the metronet should simulate
      */
     void driveAutomaticaly(int n);
 
