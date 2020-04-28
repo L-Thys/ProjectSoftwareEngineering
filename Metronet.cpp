@@ -43,19 +43,20 @@ bool Metronet::isConsistent() {
             return false;
         }
 
-        // ~ If the station has a valid Spoor, we check if the following and the previous Station also have this Spoor ~ //
-        if(station->second->getVolgende()==NULL
-        or findStation(station->second->getVolgende()->getNaam())==NULL
-        or station->second->getSpoor() != station->second->getVolgende()->getSpoor())
-        {
-            return false;       // we return false if the equality of the integers in the Spoor member is false
-        }
+        for (int pcs = 0; pcs < station->second->getSporen().size(); ++pcs) {
+            int cs = station->second->getSporen()[pcs];
+            // ~ If the station has a valid Spoor, we check if the following and the previous Station also have this Spoor ~ //
+            if (station->second->getVolgende(cs) == NULL
+                or findStation(station->second->getVolgende(cs)->getNaam()) == NULL
+                or station->second->getSpoor() != station->second->getVolgende(cs)->getSpoor()) {
+                return false;       // we return false if the equality of the integers in the Spoor member is false
+            }
 
-        if(station->second->getVorige()==NULL
-        or findStation(station->second->getVorige()->getNaam())==NULL
-        or station->second->getSpoor() !=station->second->getVorige()->getSpoor())
-        {
-            return false;       // idem
+            if (station->second->getVorige(cs) == NULL
+                or findStation(station->second->getVorige(cs)->getNaam()) == NULL
+                or station->second->getSpoor() != station->second->getVorige(cs)->getSpoor()) {
+                return false;       // idem
+            }
         }
     }
     // ------------------------------------------- //
@@ -104,11 +105,11 @@ void Metronet::makeGraphicalASCII(std::string bestandsnaam) const {
         Station* st = getStationOnTrack(a);     // this is the station to start with
         cycleOfStations.push_back(st);          // add it to the vector
 
-        Station* nst = st->getVolgende();       // save the next
+        Station* nst = st->getVolgende(a);       // save the next
 
         while (nst != st) {                     // the condition that a track must be like a circle shape
             cycleOfStations.push_back(nst);     // as long the next is not the first we add
-            nst = nst->getVolgende();
+            nst = nst->getVolgende(a);
         }
 
         for (int s = 0; s < cycleOfStations.size(); ++s) {                      // write every station
