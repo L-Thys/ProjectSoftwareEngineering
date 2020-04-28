@@ -14,3 +14,11 @@ Signaal::Signaal(int spoor, int limiet, const std::string &type, Station *vorige
 Signaal::Signaal(int spoor, const std::string &type, Station *vorige, Station *volgende) : spoor(spoor), type(type),
                                                                                            vorige(vorige),
                                                                                            volgende(volgende) {}
+
+int Signaal::getLimiet() const {
+    return limiet;
+}
+
+const std::string &Signaal::getType() const {
+    return type;
+}

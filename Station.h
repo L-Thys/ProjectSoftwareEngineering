@@ -8,6 +8,7 @@
 #include "library.h"
 #include "Tram.h"
 #include "Utilities.h"
+#include "Signaal.h"
 
 // TODO : all ENSURE bij getters, de operators ook
 
@@ -172,6 +173,10 @@ public:
 
     bool isInStation(int a);
 
+    void addSignaal(int spoor, Signaal* signaal);
+
+    Signaal* getSignaal(int spoor) const;
+
 protected:
     /**
      * @brief this method ensures that all members but one, _Sporen, are valid according the given specifications
@@ -187,6 +192,8 @@ protected:
 
     Station* findStationInPrev (int x) const ;
 
+
+
 private:
     std::string _Naam;
     std::map<int,Station *> _Volgende;
@@ -194,6 +201,7 @@ private:
     std::vector<int> _Sporen;
     std::string _Type;
     std::vector<Tram*> _Trams;
+    std::map<int, Signaal*> _Signalen;
 
 private:
 

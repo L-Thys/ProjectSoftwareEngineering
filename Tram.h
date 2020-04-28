@@ -150,6 +150,7 @@ private:
     Station* _CurrentStation;
     std::string _Type;
     bool _Onderweg;
+    bool _AtStop;
     int _TijdTotVerandering;
 
 

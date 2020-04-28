@@ -15,6 +15,10 @@ public:
 
     Signaal(int spoor, const std::string &type, Station *vorige, Station *volgende);
 
+    int getLimiet() const;
+
+    const std::string &getType() const;
+
 private:
     int spoor;
     int limiet;

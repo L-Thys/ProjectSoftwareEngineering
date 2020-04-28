@@ -147,6 +147,19 @@ void Station::addSpoor(int spoor) {
     _Sporen.push_back(spoor);
 }
 
+void Station::addSignaal(int spoor, Signaal *signaal) {
+    _Signalen[spoor]=signaal;
+}
+
+Signaal *Station::getSignaal(int spoor) const {
+    for(std::map<int, Signaal*>::const_iterator it = _Signalen.begin(); it != _Signalen.end(); it++){
+        if(it->first == spoor){
+            return it->second;
+        }
+    }
+    return NULL;
+}
+
 //---------------------------------//
 //// Tests
 

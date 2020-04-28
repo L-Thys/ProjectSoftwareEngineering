@@ -30,6 +30,10 @@ bool is_valid_tram_type(const std::string &s) {
     return (s=="PCC" || s=="Albatros");
 }
 
+bool is_valid_signaal_type(const std::string &s) {
+    return (s=="STOP" || s=="SNELHEID");
+}
+
 // tests function is_valid_String()
 TEST (validstring, ValidString) {
     EXPECT_TRUE(is_valid_String("a"));

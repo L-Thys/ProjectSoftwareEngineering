@@ -43,4 +43,6 @@ bool is_valid_station_type(const std::string& s);
 
 bool is_valid_tram_type(const std::string& s);
 
+bool is_valid_signaal_type(const std::string & s);
+
 #endif //PSE_LIBRARY_H

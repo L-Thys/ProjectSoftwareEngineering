@@ -420,7 +420,7 @@ Metronet* readFromXml(const char* file){
                         spoor = std::atol(text->Value());
                     }
                     else if(naam == "type"){
-                        if (!is_valid_String(text->Value())) throw ongeldige_informatie();
+                        if (!is_valid_signaal_type(text->Value())) throw ongeldige_informatie();
                         typenaam = text->Value();
                     }
                     else throw ongeldige_informatie();
@@ -430,7 +430,7 @@ Metronet* readFromXml(const char* file){
                 // voeg een Signaal met deze informatie toe aan signalen in metronet
                 Signaal* signaal = new Signaal(spoor,limiet,typenaam,vorige,volgende);
                 metronet->addSignaal(signaal);
-
+                volgende->addSignaal(spoor,signaal);
             }
             else{
                 std::cerr << "onherkenbaar element" << std::endl;

@@ -13,7 +13,9 @@ Tram::Tram() {
     _StartStation = NULL;
     _CurrentStation = NULL;
     _Onderweg = false;
+    _AtStop = false;
     Tram::_propInit = this;
+
 }
 
 Tram::Tram(int lijn, Station *startStation, const std::string &type) : _Lijn(lijn), _StartStation(startStation),
@@ -72,37 +74,62 @@ void Tram::setCurrentStation(Station* currentStation) {
 
 bool Tram::drive() {
     REQUIRE(properlyInitialized(), "Tram was not properly or no initialized before calling drive");
-
+    _TijdTotVerandering --;
    if(!_Onderweg){
-       if(!_CurrentStation->isInStation(this)) return false;
-       _TijdTotVerandering --;
        if(_TijdTotVerandering == 0){
-           _CurrentStation->moveTramFrom(this);
-           _Onderweg = true;
-           _TijdTotVerandering = 7200/_Speed;
-           std::cout << "Tram " << _Lijn << " vertrekt uit station " << _CurrentStation->getNaam() << " richting station " << _CurrentStation->getVolgende()->getNaam() << "."<< std::endl;
+           if(_CurrentStation->getVolgende(_Lijn)->isInStation(_Lijn)){
+               _TijdTotVerandering ++;
+               Signaal* signaal =_CurrentStation->getVolgende(_Lijn)->getSignaal(_Lijn);
+               if (!_AtStop && signaal != NULL && signaal->getType()=="STOP"){
+                    _AtStop = true;
+                   _CurrentStation->moveTramFrom(this);
+               }
+           }else{
+               if(! _AtStop){
+                   _CurrentStation->moveTramFrom(this);
+               }
+               _Onderweg = true;
+               _TijdTotVerandering = 7200/_Speed;
+               Signaal* signaal =_CurrentStation->getVolgende(_Lijn)->getSignaal(_Lijn);
+               if(signaal != NULL && signaal->getType()=="SNELHEID"){
+                    _TijdTotVerandering = 7200/signaal->getLimiet();
+               }
+               std::cout << "Tram " << _Lijn << " vertrekt uit station " << _CurrentStation->getNaam() << " richting station " << _CurrentStation->getVolgende(_Lijn)->getNaam() << "."<< std::endl;
+           }
+
        }
 
-   }else{
-       _TijdTotVerandering --;
+   }else if(_AtStop){
        if(_TijdTotVerandering == 0){
-            if(_CurrentStation->getVolgende(_Lijn)->isInStation(_Lijn)){
-                _TijdTotVerandering ++;
-            }else{
-                _Onderweg = false;
-                _CurrentStation = _CurrentStation->getVolgende(_Lijn);
-                if(_CurrentStation == NULL) return false;
-                if(_Type == "Albatros" && _CurrentStation->getType() == "Halte"){
-                    _TijdTotVerandering = 1;
-                    std::cout << "Tram " << _Lijn << " stopt niet in halte " << _CurrentStation->getNaam() << " aangezien het een Albatros is, de tram rijdt door naar station"<< _CurrentStation->getVolgende()->getNaam() << std::endl;
-                }else {
-                    _CurrentStation->moveTramTo(this);
-                    _TijdTotVerandering = 60;
-                    std::cout << "Tram " << _Lijn << " komt aan in station " << _CurrentStation->getNaam() << "." << std::endl;
-                }
+           if(_CurrentStation->getVolgende(_Lijn)->isInStation(_Lijn)){
+               _TijdTotVerandering ++;
+           }else{
+               _CurrentStation->moveTramFrom(this);
+               _Onderweg = true;
+               _TijdTotVerandering = 7200/_Speed;
+               Signaal* signaal =_CurrentStation->getVolgende(_Lijn)->getSignaal(_Lijn);
+               if(signaal != NULL && signaal->getType()=="SNELHEID"){
+                   _TijdTotVerandering = 7200/signaal->getLimiet();
+               }
+               std::cout << "Tram " << _Lijn << " vertrekt uit station " << _CurrentStation->getNaam() << " richting station " << _CurrentStation->getVolgende(_Lijn)->getNaam() << "."<< std::endl;
+           }
+
+       }
+   }
+   else{
+       if(_TijdTotVerandering == 0){
+            _Onderweg = false;
+            _CurrentStation = _CurrentStation->getVolgende(_Lijn);
+            if(_CurrentStation == NULL) return false;
+            if(_Type == "Albatros" && _CurrentStation->getType() == "Halte"){
+                _TijdTotVerandering = 1;
+                std::cout << "Tram " << _Lijn << " stopt niet in halte " << _CurrentStation->getNaam() << " aangezien het een Albatros is, de tram rijdt door naar station"<< _CurrentStation->getVolgende(_Lijn)->getNaam() << std::endl;
+            }else {
+                _CurrentStation->moveTramTo(this);
+                _TijdTotVerandering = 60;
+                std::cout << "Tram " << _Lijn << " komt aan in station " << _CurrentStation->getNaam() << "." << std::endl;
             }
        }
-
    }
 
     ENSURE(getCurrentStation() != NULL, "drive was unsuccessful");
