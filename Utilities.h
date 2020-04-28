@@ -12,7 +12,7 @@ class Station;
 
 bool findInVector (std::string s, std::vector<std::string>& gos);
 
-bool findInVector (int i, std::vector<int>& goi);
+bool findInVector (int i, const std::vector<int>& goi);
 
 
 #endif //PSE_UTILITIES_H

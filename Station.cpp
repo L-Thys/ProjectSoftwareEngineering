@@ -6,8 +6,6 @@
 
 Station::Station(const std::string name){
     Station::_Naam = name;                // the name is set on the empty string
-    Station::_Volgende = NULL;          // the next and previous station are seen as null_pointers
-    Station::_Vorige = NULL;
     std::vector<int> null;              // a empty vector is made
     Station::_Sporen = null;            // we associate the empty vector with the tracks of the station
     Station::_propInit = this;
@@ -16,7 +14,8 @@ Station::Station(const std::string name){
 }
 
 
-Station::Station(const std::string &_Naam, Station* _Volgende, Station* _Vorige, int _Spoor, std::string _Type)
+Station::Station(const std::string &_Naam, std::map<int,Station*> &_Volgende, std::map<int,Station*> &_Vorige,
+        int _Spoor, std::string _Type)
         : _Naam(_Naam), _Volgende(_Volgende), _Vorige(_Vorige), _Type(_Type) {
     REQUIRE(is_valid_station_type(_Type),"the variable \"_Type\" has to be a valid station type");
     Station::_Sporen.push_back(_Spoor);             // because we are not sure what happens if we write _Sporen(_Spoor)
@@ -35,16 +34,18 @@ const std::string & Station::getNaam() const{
     ENSURE(is_valid_String(_Naam), "getNaam must return a valid string");
     return _Naam;
 }
-Station* Station::getVolgende() const {
+Station* Station::getVolgende(int x) const {
     REQUIRE(properlyInitialized(), "The station was not properly or not initialized before calling getVolgende");
-    ENSURE(is_valid_String(_Volgende->getNaam()), "getVolgende must return a valid Station");
-    return _Volgende;
+    Station* vld = findStationInNext(x);
+    ENSURE(is_valid_String(vld->getNaam()), "getVolgende must return a valid Station");
+    return vld;
 }
 
-Station* Station::getVorige() const {
+Station* Station::getVorige(int x) const {
     REQUIRE(properlyInitialized(), "The station was not properly or not initialized before calling getVorige");
-    ENSURE(is_valid_String(_Vorige->getNaam()), "getVorige must return a valid Station");
-    return _Vorige;
+    Station* vrg = findStationInNext(x);
+    ENSURE(is_valid_String(vrg->getNaam()), "getVorige must return a valid Station");
+    return vrg;
 }
 
 int Station::getSpoor() const{
@@ -80,16 +81,16 @@ void Station::validStationMembers() {
     // the tracks in _Sporen are always valid integers, otherwise the compiler will give an error
 }
 
-void Station::setVolgende(Station *volgende) {
+void Station::setVolgende(int x, Station *volgende) {
     REQUIRE (properlyInitialized(), "The Station was not properly or not initialized before calling Station");
-    _Volgende = volgende;
-    ENSURE(getVolgende()==volgende, "_Volgende should be equal to param volgende");
+    _Volgende[x] = volgende;
+    ENSURE(getVolgende(x)==volgende, "_Volgende should be equal to param volgende");
 }
 
-void Station::setVorige(Station *vorige) {
+void Station::setVorige(int x, Station *vorige) {
     REQUIRE (properlyInitialized(), "The Station was not properly or not initialized before calling setVorige");
-    _Vorige = vorige;
-    ENSURE(getVorige()==vorige, "_Vorige should be equal to param vorige");
+    _Vorige[x] = vorige;
+    ENSURE(getVorige(x)==vorige, "_Vorige should be equal to param vorige");
 }
 
 void Station::setSporen(const std::vector<int> &sporen) {
@@ -127,6 +128,20 @@ bool Station::isInStation(Tram *tram) {
         }
     }
     return false;
+}
+
+Station * Station::findStationInNext(int x) const {
+    for (std::map<int,Station*>::const_iterator it = _Volgende.begin(); it != _Volgende.end(); ++it){
+        if (it->first == x) return it->second;
+    }
+    return NULL;
+}
+
+Station * Station::findStationInPrev(int x) const {
+    for (std::map<int,Station*>::const_iterator it = _Vorige.begin(); it != _Vorige.end(); ++it){
+        if (it->first == x) return it->second;
+    }
+    return NULL;
 }
 
 //---------------------------------//

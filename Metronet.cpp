@@ -39,7 +39,7 @@ bool Metronet::isConsistent() {
         station != _stations.end(); station++) {
 
         // ~ Spoor is automatically set on -1 to easily check if Spoor is changed or not ~ //
-        if (station->second->getSporen().size()==0 or station->second->getSpoor() == -1) {
+        if (station->second->getSporen().size()==0) {
             return false;
         }
 
@@ -61,8 +61,6 @@ bool Metronet::isConsistent() {
     // ------------------------------------------- //
 
     // -- We now check every tram inside _trams if they are initiated correctly -- //
-    std::vector<int> as_tracks;             // to be used later on
-
     // tram is a pair <int Tram*>, we need to take tram.second to get the tram itself
     for (std::vector<Tram *>::iterator tram = _trams.begin(); tram != _trams.end(); tram++) {
 
@@ -76,21 +74,6 @@ bool Metronet::isConsistent() {
         if ((*tram)->getLijn() != (*tram)->getStartStation()->getSpoor()) {
             return false;
         }
-
-        // ~ This part checks if each Spoor occurs exactly 1 time ~ //
-            // we use the already initialised vector of int 'as_tracks' which stands for "already seen tracks"
-        for (std::vector<int>::iterator it = as_tracks.begin(); it != as_tracks.end(); it++){
-
-            // if the line is already is the as_tracks, it has been used so we can't use it again, we return false
-            if (*it == (*tram)->getLijn()){
-                return false;
-            }
-
-        }
-
-        // we push it in so we ensure that duplicates are noticed
-        as_tracks.push_back((*tram)->getLijn());
-
     }
     // --------------------------------------------------------------------------- //
 

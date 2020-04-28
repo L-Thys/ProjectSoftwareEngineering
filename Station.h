@@ -7,6 +7,7 @@
 
 #include "library.h"
 #include "Tram.h"
+#include "Utilities.h"
 
 // TODO : all ENSURE bij getters, de operators ook
 
@@ -30,10 +31,8 @@ public:
      *        that is given as member _Spoor is an integer
      *
      * @param _Naam a string that will be the name of our Station
-     * @param _Volgende a string that is going to be the next station when a tram passes through, this string can be
-     *                  used in the findStation method of Metronet to find the corresponding station
-     * @param _Vorige a string, which is the name of the previous station, that will be useful in the findStation
-     *                method of Metronet
+     * @param _Volgende a map that contains the next station when a tram passes through, the key is the track
+     * @param _Vorige a map that cointains the previous station, the track is the key
      * @param _Spoor this is an integer that represents the track (Spoor) that runs through
      * @param _Type is a string that denotes the type of station
      *
@@ -43,7 +42,7 @@ public:
      * @post This constructor will make sure the object is properly initialized
      *       --> ENSURE (properlyInitialized(), "A constructor must end in a properlyInitialized state")
      * */
-    Station(const std::string &_Naam, Station* _Volgende, Station* _Vorige, int _Spoor, std::string _Type);
+    Station(const std::string &_Naam, std::map<int,Station*> &_Volgende, std::map<int,Station*> &_Vorige, int _Spoor, std::string _Type);
 
     /**
      * @brief this method returns the Name of the station for purposes like finding the station inside Metronet
@@ -69,7 +68,7 @@ public:
      * @post the method must return a valid name (string)
      *       --> ENSURE(is_valid_String(_Volgende), "getVolgende must return a valid string")
      */
-    Station* getVolgende() const;
+    Station* getVolgende(int x) const;
 
     /**
      * @brief returning a string, which is the name of the next station, to be used as input for the findStation in Metronet
@@ -82,7 +81,7 @@ public:
      * @post this method must return a valid name (string)
      *       --> ENSURE(is_valid_String(_Vorige), "getVorige must return a valid string")
      */
-    Station* getVorige() const;
+    Station* getVorige(int x) const;
 
     /**
      * @brief this method returns Spoor from this station, the member _Spoor consists momentarily only of 1 Spoor
@@ -134,7 +133,7 @@ public:
      * @post : _Volgende should be volgende
      *      ENSURE(getVolgende()==volgende, "_Volgende should be equal to param volgende")
      */
-    void setVolgende(Station *volgende);
+    void setVolgende(int x, Station *volgende);
 
     /**
      * @brief : this method sets _Vorige to the param vorige
@@ -147,7 +146,7 @@ public:
      * @post : _Volgende should be volgende
      *      ENSURE(getVorige()==vorige, "_Vorige should be equal to param vorige")
      */
-    void setVorige(Station *vorige);
+    void setVorige(int x, Station *vorige);
 
     /**
      * @brief : this method sets _Sporen to the param sporen
@@ -183,10 +182,14 @@ protected:
      */
     void validStationMembers();
 
+    Station* findStationInNext (int x) const ;
+
+    Station* findStationInPrev (int x) const ;
+
 private:
     std::string _Naam;
-    Station * _Volgende;
-    Station * _Vorige;
+    std::map<int,Station *> _Volgende;
+    std::map<int,Station *> _Vorige;
     std::vector<int> _Sporen;
     std::string _Type;
     std::vector<Tram*> _Trams;
