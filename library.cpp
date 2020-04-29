@@ -76,3 +76,37 @@ TEST(validInteger, NonValidString){
     EXPECT_FALSE(is_Integer(""));
 }
 
+TEST(findInVector, IntgersValid){
+    std::vector<int> vec;
+    vec.push_back(1);
+    vec.push_back(2);
+    vec.push_back(4);
+    vec.push_back(6);
+    vec.push_back(78);
+    vec.push_back(99);
+
+    EXPECT_TRUE(findInVector(1, vec));
+    EXPECT_TRUE(findInVector(2, vec));
+    EXPECT_TRUE(findInVector(4, vec));
+    EXPECT_TRUE(findInVector(6, vec));
+    EXPECT_TRUE(findInVector(78, vec));
+    EXPECT_TRUE(findInVector(99, vec));
+}
+
+TEST(findInVector, IntgersNotValid){
+    std::vector<int> vec;
+    vec.push_back(1);
+    vec.push_back(2);
+    vec.push_back(4);
+    vec.push_back(6);
+    vec.push_back(78);
+    vec.push_back(99);
+
+    EXPECT_FALSE(findInVector(3, vec));
+    EXPECT_FALSE(findInVector(5, vec));
+    EXPECT_FALSE(findInVector(7, vec));
+    EXPECT_FALSE(findInVector(8, vec));
+    EXPECT_FALSE(findInVector(33, vec));
+    EXPECT_FALSE(findInVector(47, vec));
+    EXPECT_FALSE(findInVector(69, vec));
+}
