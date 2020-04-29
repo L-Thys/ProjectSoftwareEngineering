@@ -106,20 +106,6 @@ public:
      */
     Station* getVorige(int x) const;
 
-    /**
-     * @brief this method returns Spoor from this station, the member _Spoor consists momentarily only of 1 Spoor
-     *          the return is thus the first, and only, Spoor in the vector of integers
-     *
-     * @return this returns the integer that indicates which Spoor we use in this station
-     *
-     * @pre the object must be properly initialized
-     *      --> REQUIRE(properlyInitialized(), "Station was not properly or not initialized before calling getSpoor")
-     *
-     * @post this method must return a valid integer,
-     *       but it is unnecessary to make an ENSURE because the compiler already made sure this was the case
-     */
-    int getSpoor() const;
-
 
     /**
      * @brief this method gives the full vector of tracks of the station, this is at the moment from a maximum length of 1

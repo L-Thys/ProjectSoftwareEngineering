@@ -34,6 +34,7 @@ const std::string & Station::getNaam() const{
     ENSURE(is_valid_String(_Naam), "getNaam must return a valid string");
     return _Naam;
 }
+
 Station* Station::getVolgende(int x) const {
     REQUIRE(properlyInitialized(), "The station was not properly or not initialized before calling getVolgende");
     Station* result = NULL;
@@ -52,11 +53,6 @@ Station* Station::getVorige(int x) const {
     }
 
     return result;
-}
-
-int Station::getSpoor() const{
-    REQUIRE(properlyInitialized(), "The station was not properly or not initialized before calling getSpoor");
-    return _Sporen[0];      // momentarily this vector only consists of 1, so we return only 1
 }
 
 std::vector<int> Station::getSporen() {
@@ -112,7 +108,7 @@ void Station::setType(const std::string &type) {
 bool Station::removeTram(Tram *tram) {
     REQUIRE (properlyInitialized(), "The Tram was not properly or not initialized before calling removeTram");
     bool result = false;
-    for(std::vector<Tram *>::iterator it = _Trams.begin(); it != _Trams.end(); it++){
+    for(std::vector<Tram *>::iterator it = _Trams.begin(); it < _Trams.end(); it++){
         if(*it == tram){
             _Trams.erase(it);
             result = true;
@@ -204,10 +200,15 @@ public:
     ValidStationTest() {
         stationC = new Station("C");
         stationB = new Station("B");
-        stationA = new Station("A");
         stationA = new Station("A",std::pair<int,Station*>(12,stationB),std::pair<int,Station*>(12,stationC),12,"Halte");
-        stationB = new Station("B",std::pair<int,Station*>(12,stationC),std::pair<int,Station*>(12,stationA),12,"Halte");
-        stationC = new Station("C",std::pair<int,Station*>(12,stationA), std::pair<int,Station*>(12,stationB),12,"Halte");
+        stationB->setVorige(12, stationA);
+        stationB->setVolgende(12,stationC);
+        stationB->setType("Halte");
+        stationB->addSpoor(12);
+        stationC->setVorige(12,stationB);
+        stationC->setVolgende(12,stationA);
+        stationC->setType("Halte");
+        stationC->addSpoor(12);
     }
 
     void SetUp() {
@@ -228,15 +229,26 @@ public:
 
 
 // tests getter functions from Station
-TEST_F(ValidStationTest, getters){
+TEST_F(ValidStationTest, gettersAndSetters){
     EXPECT_EQ("A",stationA->getNaam());
-    EXPECT_EQ("B",stationA->getVolgende(12)->getNaam());
-    EXPECT_EQ("C",stationA->getVorige(12)->getNaam());
-    EXPECT_EQ(12,stationA->getSpoor());
+    EXPECT_EQ(stationB,stationA->getVolgende(12));
+    EXPECT_EQ(stationC,stationA->getVorige(12));
     std::vector<int> testsporen;
     testsporen.push_back(12);
     EXPECT_EQ(testsporen, stationA->getSporen());
+    Station* stationD = new Station("D",std::pair<int,Station*>(13,stationC),std::pair<int,Station*>(13,stationC),13,"Metrostation");
+    stationC->addSpoor(13);
+    stationC->setVolgende(13,stationD);
+    stationC->setVorige(13,stationD);
+    testsporen.push_back(13);
+    EXPECT_EQ(testsporen, stationC->getSporen());
+    EXPECT_EQ(stationD,stationC->getVolgende(13));
+    EXPECT_EQ(stationD,stationC->getVorige(13));
+    stationD->setSporen(testsporen);
+    EXPECT_EQ(testsporen, stationD->getSporen());
 
+
+    delete stationD;
 }
 
 // tests properlyInitialized in metronet

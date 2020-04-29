@@ -72,7 +72,7 @@ bool Metronet::isConsistent() {
         }
 
         // ~ We also check if the Spoor of the tram is equal to the Spoor that runs through its Start Station ~ //
-        if (findInVector((*tram)->getLijn(), (*tram)->getStartStation()->getSporen())) {
+        if (!findInVector((*tram)->getLijn(), (*tram)->getStartStation()->getSporen())) {
             return false;
         }
     }
@@ -237,6 +237,7 @@ bool Metronet::mapsAreNotEmpty() {
 
 
 void Metronet::driveAutomaticaly(int n) {
+    // alle stations staan in het begin 60 seconden in hun startstation
     REQUIRE (properlyInitialized(), "The Metronet was not properly or not initialized before calling writeToFile");
     REQUIRE(mapsAreNotEmpty() && isConsistent(), "This object should contain a consistent metronet");
     for (int i = 0; i < n; ++i) {
@@ -328,7 +329,7 @@ Metronet* readFromXml(const char* file){
                     station->setVolgende(spoor,volgende);
                     station->setVorige(spoor,vorige);
                     station->addSpoor(spoor);
-                    station->setType(type);
+                    station->setType(typenaam);
                 }else{
                     std::map<int,Station*>vorigemap;
                     vorigemap[spoor]=vorige;
@@ -471,7 +472,7 @@ public:
 
         Station* stationA = new Station("A", b, c, 12, "Halte");
         std::map<int,Station*> a;
-        a[12] = stationB;
+        a[12] = stationA;
 
         stationB->setVorige(12,stationA);
         stationB->setVolgende(12,stationC);
@@ -487,8 +488,9 @@ public:
         metronet->addStation(stationC);
         stations["A"]=stationA;
         stations["B"]=stationB;
-        stations["C"]=stationB;
+        stations["C"]=stationC;
         Tram* tram = new Tram(12,stationA,"PCC");
+        stationA->addTram(tram);
         metronet->addTram(tram);
         trams[12]=tram;
     }
@@ -545,7 +547,6 @@ TEST_F(ValidMetronetTest, Consistence){
     EXPECT_TRUE(metronet->isConsistent());
 }
 
-// TODO : de testen voor als er meerdere tracks zijn en als een track meerdere keren in een station voorkomt
 
 // the test with a wrong next station
 TEST(Consistence, stationNextNotConsistent){
@@ -742,8 +743,13 @@ TEST_F(ValidMetronetTest, writeToFile){
 
 // tests driveAutomaticaly
 TEST_F(ValidMetronetTest, driveAutomaticaly){
-    metronet->driveAutomaticaly(5);
-    EXPECT_EQ("C",metronet->getTrams()[0]->getCurrentStation()->getNaam());
+    metronet->driveAutomaticaly(60);
+    EXPECT_TRUE(metronet->getTrams()[0]->isOnderweg());
+    EXPECT_FALSE(stations["A"]->findTram(12));
+    metronet->driveAutomaticaly(180);
+    EXPECT_FALSE(metronet->getTrams()[0]->isOnderweg());
+    EXPECT_EQ(stations["B"],trams[12]->getCurrentStation());
+    EXPECT_TRUE(stations["B"]->findTram(12));
 }
 
 
@@ -773,8 +779,10 @@ TEST_F(ValidMetronetTest, ASCIIoneTrack){
     metronet->driveAutomaticaly(320);
 
     metronet->makeGraphicalASCII("testASCIIresult12.txt");
-    std::ifstream result2 ("testASCIIresult12.txt");
-    std::ifstream secondCompare ("testASCIIcomp12");
+    std::ifstream result2;
+    std::ifstream secondCompare;
+    result2.open("testASCIIresult12.txt");
+    secondCompare.open("testASCIIcomp12.txt");
     std::string resultstr2;
     std::string comparestr2;
     while(std::getline(secondCompare,comparestr2) ){
@@ -850,7 +858,7 @@ TEST_F(ValidMetronetTest, ASCIImultipleTrack) {
 
     metronet->makeGraphicalASCII("testASCIIresult22.txt");
     std::ifstream result2 ("testASCIIresult22.txt");
-    std::ifstream secondCompare ("testASCIIcomp22");
+    std::ifstream secondCompare ("testASCIIcomp22.txt");
     std::string resultstr2;
     std::string comparestr2;
     while(std::getline(secondCompare,comparestr2) ){

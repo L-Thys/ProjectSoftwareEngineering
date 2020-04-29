@@ -33,6 +33,7 @@ _Type(type) {
     }
     _Onderweg = false;
     _TijdTotVerandering=60;
+    _AtStop = false;
     Tram::_propInit = this;
     // We make sure that the object is properly initialized by using the ENSURE function
     ENSURE(properlyInitialized(), "A constructor must end in a properlyInitialized state");
@@ -59,7 +60,6 @@ Station* Tram::getStartStation() const{
     REQUIRE (properlyInitialized(), "The Tram was not properly or not initialized before calling getStartStation");
     return _StartStation;
 }
-
 
 bool Tram::properlyInitialized() const{
     return _propInit == this;
@@ -126,6 +126,7 @@ bool Tram::drive() {
             _Onderweg = false;
             _CurrentStation = _CurrentStation->getVolgende(_Lijn);
             if(_CurrentStation == NULL) return false;
+
             if(_Type == "Albatros" && _CurrentStation->getType() == "Halte"){
                 _TijdTotVerandering = 1;
                 std::cout << "Tram " << _Lijn << " stopt niet in halte " << _CurrentStation->getNaam() << " aangezien het een Albatros is, de tram rijdt door naar station"<< _CurrentStation->getVolgende(_Lijn)->getNaam() << std::endl;
@@ -168,9 +169,13 @@ class ValidTramTest: public ::testing::Test {
 public:
     ValidTramTest() {
         std::string a= "A";
-
+        std::string b= "B";
+        stationB = new Station("B");
         stationA = new Station(a,std::pair<int,Station*>(12,stationB),std::pair<int,Station*>(12,stationB),12,"Halte");
-        stationB = new Station("B",std::pair<int,Station*>(12,stationA),std::pair<int,Station*>(12,stationA),12,"Halte");
+        stationB->setVolgende(12,stationA);
+        stationB->setVorige(12,stationA);
+        stationB->addSpoor(12);
+        stationB->setType("Metrostation");
         tram = new Tram(12,stationA,"PCC");
     }
 
@@ -198,16 +203,35 @@ TEST_F(ValidTramTest, getters){
     EXPECT_EQ("A",tram->getStartStation()->getNaam());
     EXPECT_EQ("A",tram->getCurrentStation()->getNaam());
     tram->setCurrentStation(stationB);
+    tram->setVoertuigNr(5);
+    EXPECT_EQ(5,tram->getVoertuigNr());
     EXPECT_EQ("B",tram->getCurrentStation()->getNaam());
     Tram* tram2 = new Tram(11,stationA,"Albatros");
     EXPECT_EQ(70,tram2->getSpeed());
     EXPECT_EQ(72,tram2->getSeats());
+    EXPECT_FALSE(tram->isOnderweg());
     delete tram2;
 }
 
 // tests properlyInitialized in metronet
 TEST_F(ValidTramTest, properlyInitialized){
     EXPECT_TRUE(tram->properlyInitialized());
+}
+
+TEST_F(ValidTramTest, driveCPP){
+    tram->drive();
+    EXPECT_FALSE(tram->isOnderweg());
+    for(int i=1;i<60;i++){
+        tram->drive();
+    }
+    EXPECT_TRUE(tram->isOnderweg());
+    EXPECT_FALSE(stationA->findTram(tram));
+    EXPECT_EQ(stationA,tram->getCurrentStation());
+    for(int i=0;i<180;i++){
+        tram->drive();
+    }
+    EXPECT_TRUE(stationB->findTram(tram));
+    EXPECT_EQ(stationB,tram->getCurrentStation());
 }
 
 
