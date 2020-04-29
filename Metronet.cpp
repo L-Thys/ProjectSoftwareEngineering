@@ -154,7 +154,7 @@ Tram * Metronet::getMovingTram(Station *station, int a) const {
     REQUIRE(properlyInitialized(), "The Metronet was not properly or not initialized before calling findStation");
     // check for a tram from which its current station equals the given, the tracks must be the same and it needs to be moving
     for (std::vector<Tram*>::const_iterator it = _trams.begin(); it != _trams.end(); ++it) {
-        if ((*it)->getCurrentStation() == station and (*it)->getLijn() and (*it)->isOnderweg()) return (*it);
+        if ((*it)->getCurrentStation() == station and (*it)->getLijn() == a and (*it)->isOnderweg()) return (*it);
     }
     return NULL;                // return NULL if no tram is found
 }
