@@ -26,8 +26,6 @@
  *
  * @return true if s is valid, false if not
  */
-
-
 bool is_valid_String(const std::string& s);
 
 /**
@@ -39,10 +37,31 @@ bool is_valid_String(const std::string& s);
  */
 bool is_Integer(const std::string& s);
 
+/**
+ * @brief checks if string s represents a valid stationType ("Halte" or "Metrostation")
+ *
+ * @param s is a string
+ *
+ * @return true if s represents an valid stationType, false if not
+ */
 bool is_valid_station_type(const std::string& s);
 
+/**
+ * @brief checks if string s represents a valid tramType ("PCC" or "Albatros")
+ *
+ * @param s is a string
+ *
+ * @return true if s represents an valid tramType, false if not
+ */
 bool is_valid_tram_type(const std::string& s);
 
+/**
+ * @brief checks if string s represents a valid signaalType ("STOP" or "SNELHEID")
+ *
+ * @param s is a string
+ *
+ * @return true if s represents an valid signaalType, false if not
+ */
 bool is_valid_signaal_type(const std::string & s);
 
 #endif //PSE_LIBRARY_H
