@@ -79,16 +79,16 @@ bool Tram::drive() {
     _TijdTotVerandering --;
    if(!_Onderweg){
        if(_TijdTotVerandering == 0){
-           if(_CurrentStation->getVolgende(_Lijn)->isInStation(_Lijn)){
+           if(_CurrentStation->getVolgende(_Lijn)->findTram(_Lijn)){
                _TijdTotVerandering ++;
                Signaal* signaal =_CurrentStation->getVolgende(_Lijn)->getSignaal(_Lijn);
                if (!_AtStop && signaal != NULL && signaal->getType()=="STOP"){
                     _AtStop = true;
-                   _CurrentStation->moveTramFrom(this);
+                   _CurrentStation->removeTram(this);
                }
            }else{
                if(! _AtStop){
-                   _CurrentStation->moveTramFrom(this);
+                   _CurrentStation->removeTram(this);
                }
                _Onderweg = true;
                _TijdTotVerandering = 7200/_Speed;
@@ -103,10 +103,10 @@ bool Tram::drive() {
 
    }else if(_AtStop){
        if(_TijdTotVerandering == 0){
-           if(_CurrentStation->getVolgende(_Lijn)->isInStation(_Lijn)){
+           if(_CurrentStation->getVolgende(_Lijn)->findTram(_Lijn)){
                _TijdTotVerandering ++;
            }else{
-               _CurrentStation->moveTramFrom(this);
+               _CurrentStation->removeTram(this);
                _Onderweg = true;
                _TijdTotVerandering = 7200/_Speed;
                Signaal* signaal =_CurrentStation->getVolgende(_Lijn)->getSignaal(_Lijn);
@@ -127,7 +127,7 @@ bool Tram::drive() {
                 _TijdTotVerandering = 1;
                 std::cout << "Tram " << _Lijn << " stopt niet in halte " << _CurrentStation->getNaam() << " aangezien het een Albatros is, de tram rijdt door naar station"<< _CurrentStation->getVolgende(_Lijn)->getNaam() << std::endl;
             }else {
-                _CurrentStation->moveTramTo(this);
+                _CurrentStation->addTram(this);
                 _TijdTotVerandering = 60;
                 std::cout << "Tram " << _Lijn << " komt aan in station " << _CurrentStation->getNaam() << "." << std::endl;
             }

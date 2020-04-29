@@ -36,16 +36,22 @@ const std::string & Station::getNaam() const{
 }
 Station* Station::getVolgende(int x) const {
     REQUIRE(properlyInitialized(), "The station was not properly or not initialized before calling getVolgende");
-    Station* vld = findStationInNext(x);
-    ENSURE(is_valid_String(vld->getNaam()), "getVolgende must return a valid Station");
-    return vld;
+    Station* result = NULL;
+    for (std::map<int,Station*>::const_iterator it = _Volgende.begin(); it != _Volgende.end(); ++it){
+        if (it->first == x) result =it->second;
+    }
+    ENSURE(result!=NULL, "getVolgende should not return NULL");
+    return result;
 }
 
 Station* Station::getVorige(int x) const {
     REQUIRE(properlyInitialized(), "The station was not properly or not initialized before calling getVorige");
-    Station* vrg = findStationInNext(x);
-    ENSURE(is_valid_String(vrg->getNaam()), "getVorige must return a valid Station");
-    return vrg;
+    Station* result= NULL;
+    for (std::map<int,Station*>::const_iterator it = _Vorige.begin(); it != _Vorige.end(); ++it){
+        if (it->first == x) result= it->second;
+    }
+    ENSURE(result!=NULL, "getVorige should not return NULL");
+    return result;
 }
 
 int Station::getSpoor() const{
@@ -90,28 +96,40 @@ void Station::setSporen(const std::vector<int> &sporen) {
 }
 
 const std::string &Station::getType() const {
+    REQUIRE(properlyInitialized(), "Station was not properly or not initialized before calling getSpoor");
+    std::string output = _Type;
+    ENSURE(is_valid_station_type(output), "_Type must be a valid station type");
     return _Type;
 }
 
 void Station::setType(const std::string &type) {
+    REQUIRE (properlyInitialized(), "The Tram was not properly or not initialized before calling getStartStation");
+    REQUIRE(is_valid_station_type(type), "the param type should be a valid station type");
     _Type = type;
+    ENSURE(getType()==type, "member _Type should be equal to param type after calling setType");
 }
 
-bool Station::moveTramFrom(Tram *tram) {
+bool Station::removeTram(Tram *tram) {
+    REQUIRE (properlyInitialized(), "The Tram was not properly or not initialized before calling removeTram");
+    bool result = false;
     for(std::vector<Tram *>::iterator it = _Trams.begin(); it != _Trams.end(); it++){
         if(*it == tram){
             _Trams.erase(it);
-            return true;
+            result = true;
         }
     }
-    return false;
+    ENSURE(!findTram(tram), "param tram should not be in _Trams after calling removeTrams");
+    return result;
 }
 
-void Station::moveTramTo(Tram *tram) {
+void Station::addTram(Tram *tram) {
+    REQUIRE (properlyInitialized(), "The Station was not properly or not initialized before calling addTram");
     _Trams.push_back(tram);
+    ENSURE(findTram(tram), "param tram should be in _Trams after calling addTram");
 }
 
-bool Station::isInStation(Tram *tram) {
+bool Station::findTram(Tram *tram) {
+    REQUIRE (properlyInitialized(), "The Station was not properly or not initialized before calling findTram");
     for(std::vector<Tram *>::iterator it = _Trams.begin(); it != _Trams.end(); it++){
         if(*it == tram){
             return true;
@@ -120,7 +138,8 @@ bool Station::isInStation(Tram *tram) {
     return false;
 }
 
-bool Station::isInStation(int a) {
+bool Station::findTram(int a) {
+    REQUIRE (properlyInitialized(), "The Station was not properly or not initialized before calling findTram");
     for(std::vector<Tram *>::iterator it = _Trams.begin(); it != _Trams.end(); it++){
         if((*it)->getLijn() == a){
             return true;
@@ -129,29 +148,20 @@ bool Station::isInStation(int a) {
     return false;
 }
 
-Station * Station::findStationInNext(int x) const {
-    for (std::map<int,Station*>::const_iterator it = _Volgende.begin(); it != _Volgende.end(); ++it){
-        if (it->first == x) return it->second;
-    }
-    return NULL;
-}
-
-Station * Station::findStationInPrev(int x) const {
-    for (std::map<int,Station*>::const_iterator it = _Vorige.begin(); it != _Vorige.end(); ++it){
-        if (it->first == x) return it->second;
-    }
-    return NULL;
-}
-
 void Station::addSpoor(int spoor) {
+    REQUIRE (properlyInitialized(), "The Station was not properly or not initialized before calling setSporen");
     _Sporen.push_back(spoor);
+    ENSURE(findInVector(spoor,_Sporen), "param spoor should be in _Sporen after calling addSpoor");
 }
 
 void Station::addSignaal(int spoor, Signaal *signaal) {
+    REQUIRE (properlyInitialized(), "The Station was not properly or not initialized before calling addTram");
     _Signalen[spoor]=signaal;
+    ENSURE(getSignaal(spoor)==signaal, "param signaal should be in _Signalen on track spoor after calling addSignaal");
 }
 
 Signaal *Station::getSignaal(int spoor) const {
+    REQUIRE(properlyInitialized(), "Station was not properly or not initialized before calling getSignal");
     for(std::map<int, Signaal*>::const_iterator it = _Signalen.begin(); it != _Signalen.end(); it++){
         if(it->first == spoor){
             return it->second;

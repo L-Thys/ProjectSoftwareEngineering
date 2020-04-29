@@ -448,7 +448,7 @@ Metronet* readFromXml(const char* file){
         std::cerr << "The metronet from the xml-file isn't consistent"<<std::endl;
     }
     for (__gnu_cxx::__normal_iterator<Tram *const *, std::vector<Tram *> > tram = metronet->getTrams().begin(); tram != metronet->getTrams().end(); tram++) {
-        (*tram)->getStartStation()->moveTramTo(*tram);
+        (*tram)->getStartStation()->addTram(*tram);
     }
     return metronet;
 }

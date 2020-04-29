@@ -61,26 +61,30 @@ public:
     /**
      * @brief this method return the next station on the line
      *
-     * @return this returns a string, also to be used in the findStation method
+     * @return this returns a station pointer
+     *
+     * @param x: an int referring to the line on which to look for the next station
      *
      * @pre the object must be properly initialized
      *      --> REQUIRE(properlyInitialized(), "Station was not properly or not initialized before calling getVolgende")
      *
-     * @post the method must return a valid name (string)
-     *       --> ENSURE(is_valid_String(_Volgende), "getVolgende must return a valid string")
+     * @post getVolgende should not return NULL
+     *       --> ENSURE(result!=NULL, "getVolgende should not return NULL")
      */
     Station* getVolgende(int x) const;
 
     /**
-     * @brief returning a string, which is the name of the next station, to be used as input for the findStation in Metronet
+     * @brief this method return the previous station on the line
      *
-     * @return a string probably used as input
+     * @return this returns a station pointer
+     *
+     * @param x: an int referring to the line on which to look for the previous station
      *
      * @pre the object must be properly initialized
      *      --> REQUIRE(properlyInitialized(), "Station was not properly or not initialized before calling getVorige")
      *
-     * @post this method must return a valid name (string)
-     *       --> ENSURE(is_valid_String(_Vorige), "getVorige must return a valid string")
+     * @post this method must should not return NULL
+     *       --> ENSURE(result!=NULL, "getVorige should not return NULL")
      */
     Station* getVorige(int x) const;
 
@@ -159,22 +163,124 @@ public:
      */
     void setSporen(const std::vector<int> &sporen);
 
+    /**
+     * @brief : this method adds param spoor to the _Sporen vector
+     *
+     * @param spoor: int representing a spoor
+     *
+     * @pre : the object must be properly initialized
+     *      --> REQUIRE (properlyInitialized(), "The Station was not properly or not initialized before calling setSporen")
+     *
+     * @post : param spoor should be in _Sporen
+     *      --> ENSURE(findInVector(spoor,_Sporen), "param spoor should be in _Sporen after calling addSpoor")
+     */
     void addSpoor(int spoor);
 
+    /**
+     * @brief this method returns type from this station
+     *
+     * @return a string indicates the type of station
+     *
+     * @pre the object must be properly initialized
+     *      --> REQUIRE(properlyInitialized(), "Station was not properly or not initialized before calling getSpoor")
+     *
+     * @post this method must return a valid station type
+     *      --> ENSURE(is_valid_station_type(output), "_Type must be a valid station type")
+     */
     const std::string &getType() const;
 
+    /**
+     * @brief : this method sets the member _Type
+     *
+     * @param type: the string which is to be the type
+     *
+     * @pre : the object must be properly initialized
+     *      --> REQUIRE (properlyInitialized(), "The Tram was not properly or not initialized before calling getStartStation")
+     *
+     * @pre : param type should be a valid station type
+     *      --> REQUIRE(is_valid_station_type(type), "the param type should be a valid station type")
+     *
+     * @post member _Type should be equal to param type
+     *      --> ENSURE(getType()==type, "member _Type should be equal to param type after calling setType")
+     */
     void setType(const std::string &type);
 
-    bool moveTramFrom(Tram* tram);
+    /**
+     * brief: this method removes the param tram out of the vector of trampointers _Trams
+     *
+     * @param tram: a trampointer
+     *
+     * @return bool: if this tram wasn't in the station this bool will be false
+     *
+     * @pre : the object must be properly initialized
+     *      --> REQUIRE (properlyInitialized(), "The Tram was not properly or not initialized before calling getStartStation")
+     *
+     * @post: the param tram should not be in _Trams
+     *  --> ENSURE(!findTram(tram), "param tram should not be in _Trams after calling removeTrams")
+     */
+    bool removeTram(Tram* tram);
 
-    void moveTramTo(Tram* tram);
+    /**
+     * @brief : this method adds param tram to the _Trams vector
+     *
+     * @param tram: trampointer
+     *
+     * @pre : the object must be properly initialized
+     *      --> REQUIRE (properlyInitialized(), "The Station was not properly or not initialized before calling addTram")
+     *
+     * @post : param tram should be in _Trams
+     *      --> ENSURE(findTram(tram), "param tram should be in _Trams after calling addTram")
+     */
+    void addTram(Tram* tram);
 
-    bool isInStation(Tram* tram);
+    /**
+     * @brief: this method will check whether the param tram is in _Trams, meaning that the tram is in the station
+     *
+     * @param tram : trampointer
+     *
+     * @return : true if tram is in _Trams, false if else
+     *
+     *  @pre : the object must be properly initialized
+     *      --> REQUIRE (properlyInitialized(), "The Station was not properly or not initialized before calling addTram")
+     */
+    bool findTram(Tram* tram);
 
-    bool isInStation(int a);
+    /**
+     * @brief: this method will check whether the a tram on track a is in the station
+     *
+     * @param tram : int representing a track
+     *
+     * @return : true if a tram on track a is in _Trams, false if else
+     *
+     *  @pre : the object must be properly initialized
+     *      --> REQUIRE (properlyInitialized(), "The Station was not properly or not initialized before calling addTram")
+     */
+    bool findTram(int a);
 
+    /**
+     * @brief : this method adds a signaal on a track to the station
+     *
+     * @param spoor: the track on which the signal should be added
+     *
+     * @param signaal: a pointer to the signal that should be added
+     *
+     * @pre : the object must be properly initialized
+     *      --> REQUIRE (properlyInitialized(), "The Station was not properly or not initialized before calling addTram")
+     *
+     * @post : param signaal should be in _Signalen on track spoor
+     *      --> ENSURE(getSignaal(spoor)==signaal, "param signaal should be in _Signalen on track spoor after calling addSignaal")
+     */
     void addSignaal(int spoor, Signaal* signaal);
 
+    /**
+     * @brief returning a signaalpointer, which points to the signal on track spoor
+     *
+     * @return a signaalpointer
+     *
+     * @pre the object must be properly initialized
+     *      --> REQUIRE(properlyInitialized(), "Station was not properly or not initialized before calling getSignal")
+     *
+     */
     Signaal* getSignaal(int spoor) const;
 
 protected:
@@ -187,11 +293,6 @@ protected:
      *       --> ENSURE(is_valid_String(_Naam), "A station has to have a name consisting of a-z, A-Z")
      */
     void validStationMembers();
-
-    Station* findStationInNext (int x) const ;
-
-    Station* findStationInPrev (int x) const ;
-
 
 
 private:
