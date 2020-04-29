@@ -7,7 +7,6 @@
 
 #include "library.h"
 #include "Tram.h"
-#include "Utilities.h"
 #include "Signaal.h"
 
 // TODO : all ENSURE bij getters, de operators ook

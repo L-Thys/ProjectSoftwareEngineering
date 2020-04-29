@@ -48,13 +48,13 @@ bool Metronet::isConsistent() {
             // ~ If the station has a valid Spoor, we check if the following and the previous Station also have this Spoor ~ //
             if (station->second->getVolgende(cs) == NULL
                 or findStation(station->second->getVolgende(cs)->getNaam()) == NULL
-                or station->second->getSpoor() != station->second->getVolgende(cs)->getSpoor()) {
+                or !findInVector(cs, station->second->getVolgende(cs)->getSporen())) {
                 return false;       // we return false if the equality of the integers in the Spoor member is false
             }
 
             if (station->second->getVorige(cs) == NULL
                 or findStation(station->second->getVorige(cs)->getNaam()) == NULL
-                or station->second->getSpoor() != station->second->getVorige(cs)->getSpoor()) {
+                or !findInVector(cs, station->second->getVorige(cs)->getSporen())) {
                 return false;       // idem
             }
         }
@@ -461,10 +461,19 @@ public:
     ValidMetronetTest() {
         metronet = new Metronet();
         Station* stationB = NULL;
+        std::map<int,Station*> b;
+        b[12] = stationB;
+
         Station* stationC = NULL;
-        Station* stationA = new Station("A", stationB,stationC,12,"Halte");
-        stationB = new Station("B",stationC,stationA,12,"Halte");
-        stationC = new Station("C",stationA,stationB,12,"Halte");
+        std::map<int,Station*> c;
+        c[12] = stationB;
+
+        Station* stationA = new Station("A", b, c, 12, "Halte");
+        std::map<int,Station*> a;
+        a[12] = stationB;
+
+        stationB = new Station("B", c,a, 12, "Halte");
+        stationC = new Station("C", a, b, 12, "Halte");
         metronet->addStation(stationA);
         metronet->addStation(stationB);
         metronet->addStation(stationC);
@@ -514,7 +523,9 @@ TEST_F(ValidMetronetTest, adders){
     Tram* tram = new Tram(1,metronet->findStation("A"),"PCC");
     metronet->addTram(tram);
 
-    Station* station = new Station("Q",NULL,NULL,1,"Halte");
+    std::map<int,Station*> map;
+
+    Station* station = new Station("Q", map, map,1,"Halte");
     metronet->addStation(station);
     EXPECT_EQ(*metronet->findStation("Q"),*station);
 
@@ -534,12 +545,12 @@ TEST(Consistence, stationNextNotConsistent){
     Station* st1 = new Station("A");
     Station* st2 = new Station("B");
     Station* st3 = new Station("C");
-    st1->setVorige(st2);
-    st1->setVolgende(st2);
+    st1->setVorige(1, st2);
+    st1->setVolgende(1, st2);
     std::vector<int> vec; vec.push_back(1);
     st1->setSporen(vec);
-    st2->setVolgende(st3);
-    st2->setVorige(st1);
+    st2->setVolgende(1, st3);
+    st2->setVorige(1, st1);
     st2->setSporen(vec);
     Tram* tr1 = new Tram(1, st1,"PCC");
     net->addStation(st1);
@@ -556,11 +567,11 @@ TEST(Consistence, stationNextNull){
     Station* st2 = new Station("B");
 
     std::vector<int> vec; vec.push_back(1);
-    st1->setVorige(st2);
-    st1->setVolgende(st2);
+    st1->setVorige(1, st2);
+    st1->setVolgende(1, st2);
     st1->setSporen(vec);
-    st2->setVolgende(NULL);
-    st2->setVorige(st1);
+    st2->setVolgende(1, NULL);
+    st2->setVorige(1, st1);
     st2->setSporen(vec);
 
     Tram* tr1 = new Tram(1, st1,"PCC");
@@ -579,11 +590,11 @@ TEST(Consistence, stationPreviousNotConsistent){
     Station* st3 = new Station("C");
 
     std::vector<int> vec; vec.push_back(1);
-    st1->setVorige(st2);
-    st1->setVolgende(st2);
+    st1->setVorige(1, st2);
+    st1->setVolgende(1, st2);
     st1->setSporen(vec);
-    st2->setVolgende(st1);
-    st2->setVorige(st3);
+    st2->setVolgende(1, st1);
+    st2->setVorige(1, st3);
     st2->setSporen(vec);
 
     Tram* tr1 = new Tram(1, st1, "PCC");
@@ -595,17 +606,17 @@ TEST(Consistence, stationPreviousNotConsistent){
 }
 
 // the test with a wrong previous station
-TEST(Consistence, stationPreviousNotNull){
+TEST(Consistence, stationPreviousNull){
     Metronet* net = new Metronet();
     Station* st1 = new Station("A");
     Station* st2 = new Station("B");
 
     std::vector<int> vec; vec.push_back(1);
-    st1->setVorige(st2);
-    st1->setVolgende(st2);
+    st1->setVorige(1, st2);
+    st1->setVolgende(1, st2);
     st1->setSporen(vec);
-    st2->setVolgende(st1);
-    st2->setVorige(NULL);
+    st2->setVolgende(1, st1);
+    st2->setVorige(1, NULL);
     st2->setSporen(vec);
 
     Tram* tr1 = new Tram(1, st1, "PCC");
@@ -623,10 +634,10 @@ TEST(Consistence, stationTrackNotConsistent){
     Station* st2 = new Station("B");
 
     std::vector<int> vec; vec.push_back(2);
-    st1->setVolgende(st2);
-    st1->setVorige(st2);
-    st2->setVolgende(st1);
-    st2->setVorige(st1);
+    st1->setVolgende(1, st2);
+    st1->setVorige(1, st2);
+    st2->setVolgende(2, st1);
+    st2->setVorige(2, st1);
     std::vector<int> vec2; vec2.push_back(1);
     st1->setSporen(vec);
     st2->setSporen(vec2);
@@ -643,11 +654,14 @@ TEST(Consistence, stationTrackNotConsistent){
 TEST(Consistence, stationNextTrackNotConsistent){
     Metronet* net = new Metronet();
     Station* st1 = new Station("A");
-    Station* st2 = new Station("B", st1, st1, 2, "Halte");
+    std::map<int, Station*> map;
+    map[2] = st1;
+
+    Station* st2 = new Station("B", map, map, 2, "Halte");
     Tram* tr1 = new Tram(1, st1, "PCC");
 
-    st1->setVolgende(st2);
-    st1->setVorige(st2);
+    st1->setVolgende(1,st2);
+    st1->setVorige(1,st2);
     std::vector<int> vec; vec.push_back(1);
     st1->setSporen(vec);
 
@@ -661,12 +675,14 @@ TEST(Consistence, stationNextTrackNotConsistent){
 TEST(Consistence, tramStartNotConsistent){
     Metronet* net = new Metronet();
     Station* st1 = new Station("A");
-    Station* st2 = new Station("B", st1, st1, 1,"Halte");
-    Station* st3 = new Station("C", st1, st1, 1,"Halte");
+    std::map<int,Station*> map;
+    map[1] = st1;
+    Station* st2 = new Station("B", map, map, 1,"Halte");
+    Station* st3 = new Station("C", map, map, 1,"Halte");
     Tram* tr1 = new Tram(1, st3, "PCC");
 
-    st1->setVolgende(st2);
-    st1->setVorige(st2);
+    st1->setVolgende(1, st2);
+    st1->setVorige(1, st2);
     std::vector<int> vec; vec.push_back(1);
     st1->setSporen(vec);
 
@@ -681,11 +697,13 @@ TEST(Consistence, tramStartNotConsistent){
 TEST(Consistence, stationStartTrackNotConsistent){
     Metronet* net = new Metronet();
     Station* st1 = new Station("A");
-    Station* st2 = new Station("B", st1, st1, 1, "Halte");
+    std::map<int,Station*> map;
+    map[1] = st1;
+    Station* st2 = new Station("B", map, map, 1, "Halte");
     Tram* tr1 = new Tram(2, st1, "PCC");
 
-    st1->setVolgende(st2);
-    st1->setVorige(st2);
+    st1->setVolgende(1, st2);
+    st1->setVorige(1, st2);
     std::vector<int> vec; vec.push_back(1);
     st1->setSporen(vec);
 
@@ -728,3 +746,7 @@ TEST(readFromXml, input){
     EXPECT_EQ(1,size);
 }
 
+TEST_F(ValidMetronetTest, ASCIIoneTrack){
+
+
+}

@@ -34,6 +34,20 @@ bool is_valid_signaal_type(const std::string &s) {
     return (s=="STOP" || s=="SNELHEID");
 }
 
+bool findInVector (std::string s, std::vector<std::string>& gos) {
+    for (std::vector<std::string>::iterator it = gos.begin(); it != gos.end(); ++it){
+        if (s == *it) return true;              // return true if the string is found
+    }
+    return false;
+}
+
+bool findInVector (int i, const std::vector<int>& goi) {
+    for (std::vector<int>::const_iterator it = goi.begin(); it != goi.end(); ++it){
+        if (i == *it) return true;              // return true if the integer is found
+    }
+    return false;
+}
+
 // tests function is_valid_String()
 TEST (validstring, ValidString) {
     EXPECT_TRUE(is_valid_String("a"));

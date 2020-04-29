@@ -64,4 +64,20 @@ bool is_valid_tram_type(const std::string& s);
  */
 bool is_valid_signaal_type(const std::string & s);
 
+/**
+ * @brief Searches a string in a vector of strings
+ * @param s a string
+ * @param gos a set of strings
+ * @return a boolean, true if the string is found
+ */
+bool findInVector (std::string s, std::vector<std::string>& gos);
+
+/**
+ * @brief Searches a integer in a vector of integers
+ * @param i an integer
+ * @param goi a set of integers
+ * @return a boolean, true if the integer is present
+ */
+bool findInVector (int i, const std::vector<int>& goi);
+
 #endif //PSE_LIBRARY_H
