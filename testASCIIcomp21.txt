@@ -1,6 +1,6 @@
 =A===B===C== (spoor 12)
- T
+ T          .
 =U===V===W===X===Y===Z== (spoor 7)
- T       T       T
+ T       T       T      .
 =U===V===W===X===Y===Z== (spoor 6)
-     T
+     T                  .

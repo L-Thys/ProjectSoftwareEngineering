@@ -72,7 +72,7 @@ bool Metronet::isConsistent() {
         }
 
         // ~ We also check if the Spoor of the tram is equal to the Spoor that runs through its Start Station ~ //
-        if ((*tram)->getLijn() != (*tram)->getStartStation()->getSpoor()) {
+        if (findInVector((*tram)->getLijn(), (*tram)->getStartStation()->getSporen())) {
             return false;
         }
     }
@@ -134,7 +134,7 @@ void Metronet::makeGraphicalASCII(std::string bestandsnaam) const {
                 file << " ";
             }
         }
-        file << std::endl;
+        file << "."<<std::endl;
     }
     file.close();
 }
