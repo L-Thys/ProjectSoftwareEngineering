@@ -92,8 +92,6 @@ public:
      */
     Station* getStartStation() const;
 
-
-
     /**
      * @brief this method needs no ENSURE or REQUIRE, it checks if the object is properly initialized by checking if the
      *        'this' pointer still points to the same object as the _propInt member
@@ -103,6 +101,17 @@ public:
     bool properlyInitialized() const;
 
 
+    /**
+     * @brief : this method is the getter of the current station
+     *
+     * @return : Stationpointer to the current station
+     *
+     * @pre : the object must be properly initialized
+     *      --> REQUIRE (properlyInitialized(), "The Tram was not properly or not initialized before calling getStartStation")
+     *
+     * @post the return value cannot be a nullpointer
+     *      --> ENSURE(_CurrentStation!=NULL, "the current station of a tram cannot be NULL")
+     */
     const Station* getCurrentStation() const;
 
     /**
@@ -135,10 +144,38 @@ public:
      */
     bool drive();
 
+    /**
+     * @brief : this method is the getter of the member voertuignr
+     *
+     * @return : int: het voertuignr
+     *
+     * @pre : the object must be properly initialized
+     *      --> REQUIRE (properlyInitialized(), "The Tram was not properly or not initialized before calling getStartStation")
+     *
+     */
     int getVoertuigNr() const;
 
+    /**
+     * @brief : this method is the setter of the member voertuignr
+     *
+     * @param voertuigNr : an int which is to be the voertuignr
+     *
+     * @pre : the object must be properly initialized
+     *      --> REQUIRE (properlyInitialized(), "The Tram was not properly or not initialized before calling getStartStation")
+     *
+     * @post member _VoertuigNr should be equal to param voertuigNr
+     *       --> ENSURE(getVoertuigNr()==voertuigNr, "member _VoertuigNr should be equal to param voertuigNr after calling setVoertuigNr");
+     */
     void setVoertuigNr(int voertuigNr);
 
+    /**
+     * @brief this method check whether the tram is on its way/in-between Stations or not
+     *
+     * @pre this object must be properly initialized
+     *      --> REQUIRE (properlyInitialized(), "The Metronet was not properly or not initialized before calling isConsistent")
+     *
+     * @return whether the train is in-between stations (true), or at a station (false)
+     */
     bool isOnderweg() const;
 
 private:

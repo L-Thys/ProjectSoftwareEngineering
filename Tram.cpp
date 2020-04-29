@@ -63,6 +63,8 @@ bool Tram::properlyInitialized() const{
 }
 
 const Station* Tram::getCurrentStation() const {
+    REQUIRE (properlyInitialized(), "The Tram was not properly or not initialized before calling getStartStation");
+    ENSURE(_CurrentStation!=NULL, "the current station of a tram cannot be NULL");
     return _CurrentStation;
 }
 
@@ -137,14 +139,18 @@ bool Tram::drive() {
 }
 
 int Tram::getVoertuigNr() const {
+    REQUIRE (properlyInitialized(), "The Tram was not properly or not initialized before calling getStartStation");
     return _VoertuigNr;
 }
 
 void Tram::setVoertuigNr(int voertuigNr) {
+    REQUIRE (properlyInitialized(), "The Tram was not properly or not initialized before calling getStartStation");
     Tram::_VoertuigNr = voertuigNr;
+    ENSURE(getVoertuigNr()==voertuigNr, "member _VoertuigNr should be equal to param voertuigNr after calling setVoertuigNr");
 }
 
 bool Tram::isOnderweg() const {
+    REQUIRE (properlyInitialized(), "The Metronet was not properly or not initialized before calling isConsistent");
     return _Onderweg;
 }
 
