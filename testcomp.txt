@@ -11,4 +11,4 @@ Station C
 -> Station A
 Spoor 12
 
-Tram 12 in Station A, 32 zitplaatsen
+Tram 12 in Station A, 16 zitplaatsen

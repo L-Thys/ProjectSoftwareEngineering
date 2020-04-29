@@ -9,8 +9,9 @@
 #include "Tram.h"
 #include "Signaal.h"
 
-// TODO : all ENSURE bij getters, de operators ook
 
+// TODO : all ENSURE bij getters, de operators ook
+class Signaal;
 class Station {
 public:
 
@@ -67,8 +68,7 @@ public:
      * @pre the object must be properly initialized
      *      --> REQUIRE(properlyInitialized(), "Station was not properly or not initialized before calling getVolgende")
      *
-     * @post getVolgende should not return NULL
-     *       --> ENSURE(result!=NULL, "getVolgende should not return NULL")
+
      */
     Station* getVolgende(int x) const;
 
@@ -82,8 +82,7 @@ public:
      * @pre the object must be properly initialized
      *      --> REQUIRE(properlyInitialized(), "Station was not properly or not initialized before calling getVorige")
      *
-     * @post this method must should not return NULL
-     *       --> ENSURE(result!=NULL, "getVorige should not return NULL")
+
      */
     Station* getVorige(int x) const;
 
@@ -281,6 +280,20 @@ public:
      *
      */
     Signaal* getSignaal(int spoor) const;
+
+    /**
+     * @brief: compares this station to the station on the rhs
+     * @param rhs : the station on the right hand side of the equation
+     * @return true if every member (except propInit) is equal
+     */
+    bool operator==(const Station &rhs) const;
+
+    /**
+     * @brief: compares this station to the station on the rhs
+     * @param rhs : the station on the right hand side of the equation
+     * @return false if every member (except propInit) is equal
+     */
+    bool operator!=(const Station &rhs) const;
 
 protected:
     /**
