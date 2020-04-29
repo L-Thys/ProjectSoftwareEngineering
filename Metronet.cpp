@@ -247,6 +247,7 @@ void Metronet::driveAutomaticaly(int n) {
 }
 
 void Metronet::addSignaal(Signaal *signaal) {
+    REQUIRE (properlyInitialized(), "metronet was not properly or not initialized before calling addSignaal");
     Metronet::_signalen.push_back(signaal);
 }
 

@@ -122,6 +122,15 @@ public:
      * */
     void addTram (Tram* tram);
 
+    /**
+     * @brief : this method adds param signaal to the _Signalen vector
+     *
+     * @param signaal: signaalpointer
+     *
+     * @pre : the object must be properly initialized
+     *      --> REQUIRE (properlyInitialized(), "The Station was not properly or not initialized before calling setSporen")
+     *
+     */
     void addSignaal (Signaal* signaal);
 
     /**
