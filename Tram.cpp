@@ -5,6 +5,7 @@
 #include "Tram.h"
 #include "DesignByContract.h"
 #include "Station.h"
+#include "signal.h"
 
 Tram::Tram() {
     _Lijn = -1;
@@ -14,6 +15,7 @@ Tram::Tram() {
     _CurrentStation = NULL;
     _Onderweg = false;
     _AtStop = false;
+    _TijdTotVerandering = 60;
     Tram::_propInit = this;
 
 }
@@ -30,6 +32,7 @@ _Type(type) {
         _Speed = 40;
     }
     _Onderweg = false;
+    _TijdTotVerandering=60;
     Tram::_propInit = this;
     // We make sure that the object is properly initialized by using the ENSURE function
     ENSURE(properlyInitialized(), "A constructor must end in a properlyInitialized state");
@@ -164,10 +167,11 @@ bool Tram::isOnderweg() const {
 class ValidTramTest: public ::testing::Test {
 public:
     ValidTramTest() {
+        std::string a= "A";
 
+        stationA = new Station(a,std::pair<int,Station*>(12,stationB),std::pair<int,Station*>(12,stationB),12,"Halte");
+        stationB = new Station("B",std::pair<int,Station*>(12,stationA),std::pair<int,Station*>(12,stationA),12,"Halte");
         tram = new Tram(12,stationA,"PCC");
-        stationA = new Station("A",stationB,stationB,12,"Halte");
-        stationB = new Station("B",stationA,stationA,12,"Halte");
     }
 
     void SetUp() {

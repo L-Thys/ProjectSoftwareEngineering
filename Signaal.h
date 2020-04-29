@@ -19,6 +19,8 @@ public:
 
     const std::string &getType() const;
 
+    virtual ~Signaal();
+
 private:
     int spoor;
     int limiet;

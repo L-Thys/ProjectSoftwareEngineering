@@ -46,6 +46,26 @@ public:
     Station(const std::string &_Naam, std::map<int,Station*> &_Volgende, std::map<int,Station*> &_Vorige, int _Spoor, std::string _Type);
 
     /**
+     * @brief constructor of a station, this constructor takes 5 parameters and initialises the whole object at once
+     *        all the members that are initialised are strings, those are given in the constructor, only the track
+     *        that is given as member _Spoor is an integer
+     *
+     * @param _Naam a string that will be the name of our Station
+     * @param _Volgende a pair that contains the next station when a tram passes through, the key is the track
+     * @param _Vorige a pair that cointains the previous station, the track is the key
+     * @param _Spoor this is an integer that represents a track (Spoor) that runs through
+     * @param _Type is a string that denotes the type of station
+     *
+     * @pre _Type should be a valid Station type
+     *      --> REQUIRE(is_valid_station_type(_Type),"the variable \"_Type\" has to be a valid station type");
+     *
+     * @post This constructor will make sure the object is properly initialized
+     *       --> ENSURE (properlyInitialized(), "A constructor must end in a properlyInitialized state")
+     * */
+    Station(const std::string &naam, const std::pair<int, Station *> &volgende, const std::pair<int, Station *> &vorige,
+            int spoor, const std::string &type);
+
+    /**
      * @brief this method returns the Name of the station for purposes like finding the station inside Metronet
      *
      * @return this returns a constant string in reference, this string is the name and may not be changed

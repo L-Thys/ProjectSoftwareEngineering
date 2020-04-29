@@ -40,7 +40,7 @@ Station* Station::getVolgende(int x) const {
     for (std::map<int,Station*>::const_iterator it = _Volgende.begin(); it != _Volgende.end(); ++it){
         if (it->first == x) result =it->second;
     }
-    ENSURE(result!=NULL, "getVolgende should not return NULL");
+
     return result;
 }
 
@@ -50,7 +50,7 @@ Station* Station::getVorige(int x) const {
     for (std::map<int,Station*>::const_iterator it = _Vorige.begin(); it != _Vorige.end(); ++it){
         if (it->first == x) result= it->second;
     }
-    ENSURE(result!=NULL, "getVorige should not return NULL");
+
     return result;
 }
 
@@ -170,15 +170,44 @@ Signaal *Station::getSignaal(int spoor) const {
     return NULL;
 }
 
+bool Station::operator==(const Station &rhs) const {
+    return _Naam == rhs._Naam &&
+           _Volgende == rhs._Volgende &&
+           _Vorige == rhs._Vorige &&
+           _Sporen == rhs._Sporen &&
+           _Type == rhs._Type &&
+           _Trams == rhs._Trams &&
+           _Signalen == rhs._Signalen;
+}
+
+bool Station::operator!=(const Station &rhs) const {
+    return !(rhs == *this);
+}
+
+Station::Station(const std::string &naam, const std::pair<int, Station *> &volgende,
+                 const std::pair<int, Station *> &vorige, int spoor, const std::string &type)
+        : _Naam(naam), _Type(type) {
+    REQUIRE(is_valid_station_type(_Type),"the variable \"_Type\" has to be a valid station type");
+    _Volgende[volgende.first]=volgende.second;
+    _Vorige[vorige.first]=vorige.second;
+    _Sporen.push_back(spoor);
+    Station::_propInit = this;
+    ENSURE(properlyInitialized(), "A constructor must end in a properlyInitialized state");
+
+}
+
 //---------------------------------//
 //// Tests
 
 class ValidStationTest: public ::testing::Test {
 public:
     ValidStationTest() {
-        station = new Station("A",stationB,stationC,12,"Halte");
-        stationB = new Station("B",stationC,station,12,"Halte");
-        stationC = new Station("C",station, stationB,12,"Halte");
+        stationC = new Station("C");
+        stationB = new Station("B");
+        stationA = new Station("A");
+        stationA = new Station("A",std::pair<int,Station*>(12,stationB),std::pair<int,Station*>(12,stationC),12,"Halte");
+        stationB = new Station("B",std::pair<int,Station*>(12,stationC),std::pair<int,Station*>(12,stationA),12,"Halte");
+        stationC = new Station("C",std::pair<int,Station*>(12,stationA), std::pair<int,Station*>(12,stationB),12,"Halte");
     }
 
     void SetUp() {
@@ -186,10 +215,12 @@ public:
     }
 
     void TearDown() {
-        delete station;
+        delete stationA;
+        delete stationB;
+        delete stationC;
     }
 
-    Station* station;
+    Station* stationA;
     Station* stationB;
     Station* stationC;
 
@@ -198,17 +229,17 @@ public:
 
 // tests getter functions from Station
 TEST_F(ValidStationTest, getters){
-    EXPECT_EQ("A",station->getNaam());
-    EXPECT_EQ("B",station->getVolgende());
-    EXPECT_EQ("C",station->getVorige());
-    EXPECT_EQ(12,station->getSpoor());
+    EXPECT_EQ("A",stationA->getNaam());
+    EXPECT_EQ("B",stationA->getVolgende(12)->getNaam());
+    EXPECT_EQ("C",stationA->getVorige(12)->getNaam());
+    EXPECT_EQ(12,stationA->getSpoor());
     std::vector<int> testsporen;
     testsporen.push_back(12);
-    EXPECT_EQ(testsporen, station->getSporen());
+    EXPECT_EQ(testsporen, stationA->getSporen());
 
 }
 
 // tests properlyInitialized in metronet
 TEST_F(ValidStationTest, properlyInitialized){
-    EXPECT_TRUE(station->properlyInitialized());
+    EXPECT_TRUE(stationA->properlyInitialized());
 }

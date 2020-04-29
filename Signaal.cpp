@@ -22,3 +22,7 @@ int Signaal::getLimiet() const {
 const std::string &Signaal::getType() const {
     return type;
 }
+
+Signaal::~Signaal() {
+
+}
