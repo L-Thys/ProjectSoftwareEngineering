@@ -785,3 +785,79 @@ TEST_F(ValidMetronetTest, ASCIIoneTrack){
     result2.close();
     secondCompare.close();
 }
+
+TEST_F(ValidMetronetTest, ASCIImultipleTrack) {
+    Station* u = new Station("U");    u->setType("Halte");          // not stoppable for albatros
+    Station* v = new Station("V");    v->setType("Metrostation");
+    Station* w = new Station("W");    w->setType("Halte");          // not stoppable for albatros
+    Station* x = new Station("X");    x->setType("Metrostation");
+    Station* y = new Station("Y");    y->setType("Halte");          // not stoppable for albatros
+    Station* z = new Station("Z");    z->setType("Metrostation");
+
+    std::vector<int> spoortjes; spoortjes.push_back(6); spoortjes.push_back(7);
+    u->setSporen(spoortjes);
+    v->setSporen(spoortjes);
+    w->setSporen(spoortjes);
+    x->setSporen(spoortjes);
+    y->setSporen(spoortjes);
+    z->setSporen(spoortjes);
+
+    // set the next stations
+    u->setVolgende(6,v);            u->setVolgende(7,z);
+    v->setVolgende(6,w);            v->setVolgende(7,u);
+    w->setVolgende(6,x);            w->setVolgende(7,v);
+    x->setVolgende(6,y);            x->setVolgende(7,w);
+    y->setVolgende(6,z);            y->setVolgende(7,x);
+    z->setVolgende(6,u);            z->setVolgende(7,y);
+
+    // set the previous stations
+    u->setVorige(7,v);              u->setVorige(6,z);
+    v->setVorige(7,w);              v->setVorige(6,u);
+    w->setVorige(7,x);              w->setVorige(6,v);
+    x->setVorige(7,y);              x->setVorige(6,w);
+    y->setVorige(7,z);              y->setVorige(6,x);
+    z->setVorige(7,u);              z->setVorige(6,y);
+
+    metronet->addStation(u);
+    metronet->addStation(v);
+    metronet->addStation(w);
+    metronet->addStation(x);
+    metronet->addStation(y);
+    metronet->addStation(z);
+
+    // make 3 trams for track 7, type PCC
+    Tram* a = new Tram(7, u, "PCC");    metronet->addTram(a);
+    Tram* b = new Tram(7, w, "PCC");    metronet->addTram(b);
+    Tram* c = new Tram(7, y, "PCC");    metronet->addTram(c);
+
+    // make 1 albatros for track 6
+    Tram* g = new Tram(6, v, "Albatros");    metronet->addTram(g);
+
+    metronet->makeGraphicalASCII("testASCIIresult21.txt");
+    std::ifstream result ("testASCIIresult21.txt");
+    std::ifstream compare ("testASCIIcomp21.txt");
+    std::string resultstr;
+    std::string comparestr;
+    while(std::getline(compare,comparestr) ){
+        std::getline(result,resultstr);
+        EXPECT_EQ(resultstr,comparestr);
+    }
+    EXPECT_FALSE(std::getline(result,resultstr));
+    result.close();
+    compare.close();
+
+    metronet->driveAutomaticaly(320);
+
+    metronet->makeGraphicalASCII("testASCIIresult22.txt");
+    std::ifstream result2 ("testASCIIresult22.txt");
+    std::ifstream secondCompare ("testASCIIcomp22");
+    std::string resultstr2;
+    std::string comparestr2;
+    while(std::getline(secondCompare,comparestr2) ){
+        std::getline(result2,resultstr2);
+        EXPECT_EQ(resultstr2,comparestr2);
+    }
+    EXPECT_FALSE(std::getline(result2,resultstr2));
+    result2.close();
+    secondCompare.close();
+}
