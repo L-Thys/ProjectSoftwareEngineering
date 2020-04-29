@@ -141,7 +141,7 @@ int Tram::getVoertuigNr() const {
 }
 
 void Tram::setVoertuigNr(int voertuigNr) {
-    _VoertuigNr = voertuigNr;
+    Tram::_VoertuigNr = voertuigNr;
 }
 
 bool Tram::isOnderweg() const {

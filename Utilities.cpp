@@ -12,7 +12,7 @@ bool findInVector (std::string s, std::vector<std::string>& gos) {
 }
 
 bool findInVector (int i, const std::vector<int>& goi) {
-    for (std::vector<int>::iterator it = goi.begin(); it != goi.end(); ++it){
+    for (std::vector<int>::const_iterator it = goi.begin(); it != goi.end(); ++it){
         if (i == *it) return true;
     }
     return false;
