@@ -115,7 +115,7 @@ void Metronet::makeGraphicalASCII(std::string bestandsnaam) const {
         for (unsigned int s = 0; s < cycleOfStations.size(); ++s) {                      // write every station
             file << "=" + cycleOfStations[s]->getNaam() + "==";
         }
-        file << "(spoor " << a << ")" << std::endl;                             // write the track and a endLine
+        file << " (spoor " << a << ")" << std::endl;                             // write the track and a endLine
 
         for (unsigned int s = 0; s < cycleOfStations.size(); ++s) {                      // write every tram
             Tram* t = getStationedTram(cycleOfStations[s], a);
@@ -757,6 +757,31 @@ TEST(readFromXml, input){
 }
 
 TEST_F(ValidMetronetTest, ASCIIoneTrack){
+    metronet->makeGraphicalASCII("testASCIIresult11.txt");
+    std::ifstream result ("testASCIIresult11.txt");
+    std::ifstream compare ("testASCIIcomp11.txt");
+    std::string resultstr;
+    std::string comparestr;
+    while(std::getline(compare,comparestr) ){
+        std::getline(result,resultstr);
+        EXPECT_EQ(resultstr,comparestr);
+    }
+    EXPECT_FALSE(std::getline(result,resultstr));
+    result.close();
+    compare.close();
 
+    metronet->driveAutomaticaly(320);
 
+    metronet->makeGraphicalASCII("testASCIIresult12.txt");
+    std::ifstream result2 ("testASCIIresult12.txt");
+    std::ifstream secondCompare ("testASCIIcomp12");
+    std::string resultstr2;
+    std::string comparestr2;
+    while(std::getline(secondCompare,comparestr2) ){
+        std::getline(result2,resultstr2);
+        EXPECT_EQ(resultstr2,comparestr2);
+    }
+    EXPECT_FALSE(std::getline(result2,resultstr2));
+    result2.close();
+    secondCompare.close();
 }
