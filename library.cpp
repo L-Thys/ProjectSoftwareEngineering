@@ -13,7 +13,6 @@ bool is_valid_String(const std::string& s){
     return !s.empty() && it == s.end();
 }
 
-
 bool is_Integer(const std::string& s){
     std::string::const_iterator it = s.begin();
 
@@ -74,6 +73,36 @@ TEST(validInteger, NonValidString){
     EXPECT_FALSE(is_Integer("2A"));
     EXPECT_FALSE(is_Integer(" "));
     EXPECT_FALSE(is_Integer(""));
+}
+
+TEST(validStationType,valid){
+    EXPECT_TRUE(is_valid_station_type("Halte"));
+    EXPECT_TRUE(is_valid_station_type("Metrostation"));
+}
+TEST(validStationType,notValid){
+    EXPECT_FALSE(is_valid_station_type("halte"));
+    EXPECT_FALSE(is_valid_station_type("Halte3"));
+    EXPECT_FALSE(is_valid_station_type("Metro"));
+}
+
+TEST(validTramType,valid){
+    EXPECT_TRUE(is_valid_tram_type("PCC"));
+    EXPECT_TRUE(is_valid_tram_type("Albatros"));
+}
+TEST(validTramType,notValid){
+    EXPECT_FALSE(is_valid_tram_type("Alatros"));
+    EXPECT_FALSE(is_valid_tram_type("\"PCC\""));
+    EXPECT_FALSE(is_valid_tram_type("Metro"));
+}
+
+TEST(validSignalType,valid){
+    EXPECT_TRUE(is_valid_signaal_type("STOP"));
+    EXPECT_TRUE(is_valid_signaal_type("SNELHEID"));
+}
+TEST(validSignalType,notValid){
+    EXPECT_FALSE(is_valid_signaal_type("stop"));
+    EXPECT_FALSE(is_valid_signaal_type("STOP3"));
+    EXPECT_FALSE(is_valid_signaal_type("\"stop\""));
 }
 
 TEST(findInVector, IntgersValid){
