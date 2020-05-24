@@ -7,6 +7,7 @@
 #include "library.h"
 
 class Station;
+enum TramType  {_Albatros,_PCC };
 
 class Tram {
 public:
@@ -37,7 +38,9 @@ public:
      * @post This constructor will make sure the object is properly initialized
      *       --> ENSURE (properlyInitialized(), "A constructor must end in a properlyInitialized state")
      * */
-    Tram(int lijn, Station *startStation, const std::string &type);
+    Tram(int lijn, Station *startStation);
+
+    virtual ~Tram();
 
     /**
      * @brief : this method is used to see on which trajectory this Tram is used
@@ -142,7 +145,7 @@ public:
      *
      * @return this method returns a boolean that indicates if the move is successfully executed
      */
-    bool drive();
+    virtual bool drive() = 0;
 
     /**
      * @brief : this method is the getter of the member voertuignr
@@ -178,14 +181,14 @@ public:
      */
     bool isOnderweg() const;
 
-private:
+protected:
     int _Lijn;
     int _Seats;
     int _Speed;
     int _VoertuigNr;
     Station* _StartStation;
     Station* _CurrentStation;
-    std::string _Type;
+    TramType _Type;
     bool _Onderweg;
     bool _AtStop;
     int _TijdTotVerandering;
@@ -194,5 +197,22 @@ private:
     Tram* _propInit;
 };
 
+class Albatros: public Tram{
+public:
+    Albatros(int lijn, Station *startStation);
+
+    virtual ~Albatros();
+
+    virtual bool drive();
+};
+
+class PCC: public Tram{
+public:
+    PCC(int lijn, Station *startStation);
+
+    virtual ~PCC();
+
+    virtual bool drive();
+};
 
 #endif //PSE_TRAM_H

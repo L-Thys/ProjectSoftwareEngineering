@@ -9,6 +9,7 @@
 #include "Tram.h"
 #include "Signaal.h"
 
+enum StationType {Halte,Metrostation};
 
 // TODO : all ENSURE bij getters, de operators ook
 class Signaal;
@@ -43,7 +44,7 @@ public:
      * @post This constructor will make sure the object is properly initialized
      *       --> ENSURE (properlyInitialized(), "A constructor must end in a properlyInitialized state")
      * */
-    Station(const std::string &_Naam, std::map<int,Station*> &_Volgende, std::map<int,Station*> &_Vorige, int _Spoor, std::string _Type);
+    Station(const std::string &_Naam, std::map<int,Station*> &_Volgende, std::map<int,Station*> &_Vorige, int _Spoor, StationType _Type);
 
     /**
      * @brief constructor of a station, this constructor takes 5 parameters and initialises the whole object at once
@@ -63,7 +64,7 @@ public:
      *       --> ENSURE (properlyInitialized(), "A constructor must end in a properlyInitialized state")
      * */
     Station(const std::string &naam, const std::pair<int, Station *> &volgende, const std::pair<int, Station *> &vorige,
-            int spoor, const std::string &type);
+            int spoor, const StationType &type);
 
     /**
      * @brief this method returns the Name of the station for purposes like finding the station inside Metronet
@@ -137,7 +138,7 @@ public:
      *      --> REQUIRE (properlyInitialized(), "The Station was not properly or not initialized before calling setVolgende")
      *
      * @post : _Volgende should be volgende
-     *      ENSURE(getVolgende()==volgende, "_Volgende should be equal to param volgende")
+     *      ENSURE(getVolgende(x)==volgende, "_Volgende should be equal to param volgende")
      */
     void setVolgende(int x, Station *volgende);
 
@@ -191,7 +192,7 @@ public:
      * @post this method must return a valid station type
      *      --> ENSURE(is_valid_station_type(output), "_Type must be a valid station type")
      */
-    const std::string &getType() const;
+    const StationType &getType() const;
 
     /**
      * @brief : this method sets the member _Type
@@ -207,7 +208,7 @@ public:
      * @post member _Type should be equal to param type
      *      --> ENSURE(getType()==type, "member _Type should be equal to param type after calling setType")
      */
-    void setType(const std::string &type);
+    void setType(const StationType &type);
 
     /**
      * brief: this method removes the param tram out of the vector of trampointers _Trams
@@ -318,7 +319,7 @@ private:
     std::map<int,Station *> _Volgende;
     std::map<int,Station *> _Vorige;
     std::vector<int> _Sporen;
-    std::string _Type;
+    StationType _Type;
     std::vector<Tram*> _Trams;
     std::map<int, Signaal*> _Signalen;
 

@@ -15,9 +15,9 @@ Station::Station(const std::string name){
 
 
 Station::Station(const std::string &_Naam, std::map<int,Station*> &_Volgende, std::map<int,Station*> &_Vorige,
-        int _Spoor, std::string _Type)
+        int _Spoor, StationType _Type)
         : _Naam(_Naam), _Volgende(_Volgende), _Vorige(_Vorige), _Type(_Type) {
-    REQUIRE(is_valid_station_type(_Type),"the variable \"_Type\" has to be a valid station type");
+    //REQUIRE(is_valid_station_type(_Type),"the variable \"_Type\" has to be a valid station type");
     Station::_Sporen.push_back(_Spoor);             // because we are not sure what happens if we write _Sporen(_Spoor)
     Station::_propInit = this;
 
@@ -91,16 +91,13 @@ void Station::setSporen(const std::vector<int> &sporen) {
     ENSURE(getSporen()==sporen, "_Sporen should be equal to param sporen");
 }
 
-const std::string &Station::getType() const {
+const StationType &Station::getType() const {
     REQUIRE(properlyInitialized(), "Station was not properly or not initialized before calling getSpoor");
-    std::string output = _Type;
-    ENSURE(is_valid_station_type(output), "_Type must be a valid station type");
     return _Type;
 }
 
-void Station::setType(const std::string &type) {
+void Station::setType(const StationType &type) {
     REQUIRE (properlyInitialized(), "The Tram was not properly or not initialized before calling getStartStation");
-    REQUIRE(is_valid_station_type(type), "the param type should be a valid station type");
     _Type = type;
     ENSURE(getType()==type, "member _Type should be equal to param type after calling setType");
 }
@@ -181,9 +178,8 @@ bool Station::operator!=(const Station &rhs) const {
 }
 
 Station::Station(const std::string &naam, const std::pair<int, Station *> &volgende,
-                 const std::pair<int, Station *> &vorige, int spoor, const std::string &type)
+                 const std::pair<int, Station *> &vorige, int spoor, const StationType &type)
         : _Naam(naam), _Type(type) {
-    REQUIRE(is_valid_station_type(_Type),"the variable \"_Type\" has to be a valid station type");
     _Volgende[volgende.first]=volgende.second;
     _Vorige[vorige.first]=vorige.second;
     _Sporen.push_back(spoor);
@@ -200,14 +196,14 @@ public:
     ValidStationTest() {
         stationC = new Station("C");
         stationB = new Station("B");
-        stationA = new Station("A",std::pair<int,Station*>(12,stationB),std::pair<int,Station*>(12,stationC),12,"Halte");
+        stationA = new Station("A",std::pair<int,Station*>(12,stationB),std::pair<int,Station*>(12,stationC),12,Halte);
         stationB->setVorige(12, stationA);
         stationB->setVolgende(12,stationC);
-        stationB->setType("Halte");
+        stationB->setType(Halte);
         stationB->addSpoor(12);
         stationC->setVorige(12,stationB);
         stationC->setVolgende(12,stationA);
-        stationC->setType("Halte");
+        stationC->setType(Halte);
         stationC->addSpoor(12);
     }
 
@@ -236,7 +232,7 @@ TEST_F(ValidStationTest, gettersAndSetters){
     std::vector<int> testsporen;
     testsporen.push_back(12);
     EXPECT_EQ(testsporen, stationA->getSporen());
-    Station* stationD = new Station("D",std::pair<int,Station*>(13,stationC),std::pair<int,Station*>(13,stationC),13,"Metrostation");
+    Station* stationD = new Station("D",std::pair<int,Station*>(13,stationC),std::pair<int,Station*>(13,stationC),13,Metrostation);
     stationC->addSpoor(13);
     stationC->setVolgende(13,stationD);
     stationC->setVorige(13,stationD);

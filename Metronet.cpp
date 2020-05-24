@@ -323,19 +323,23 @@ Metronet* readFromXml(const char* file){
                 }
                 if(stationnaam == ""|| typenaam == "" || volgende == NULL || vorige == NULL || spoor == -1) throw onvoldoende_informatie();
 
+                StationType enumtype;
+                if(typenaam == "Metrostation") enumtype=Metrostation;
+                else if(typenaam == "Halte") enumtype=Halte;
+                else throw ongeldige_informatie();
                 // voeg een Station met deze informatie toe aan stations in metronet of pas een bestaande pointer aan
                 Station* station= metronet->findStation(stationnaam);
                 if(station != NULL){
                     station->setVolgende(spoor,volgende);
                     station->setVorige(spoor,vorige);
                     station->addSpoor(spoor);
-                    station->setType(typenaam);
+                    station->setType(enumtype);
                 }else{
                     std::map<int,Station*>vorigemap;
                     vorigemap[spoor]=vorige;
                     std::map<int,Station*>volgendemap;
                     volgendemap[spoor]=volgende;
-                    station = new Station(stationnaam,volgendemap,vorigemap,spoor,typenaam);
+                    station = new Station(stationnaam,volgendemap,vorigemap,spoor,enumtype);
                     metronet->addStation(station);
                 }
                 vorige->setVolgende(spoor,station);
@@ -378,11 +382,22 @@ Metronet* readFromXml(const char* file){
                 }
                 if(lijn==-1||beginstation==NULL||typenaam == "") throw onvoldoende_informatie();
                 // voeg een Tram met deze informatie toe aan trammen
-                Tram* tram = new Tram(lijn,beginstation,typenaam);
-                metronet->addTram(tram);
-                if(voertuigNr!=-1){
-                    tram->setVoertuigNr(voertuigNr);
+                if(typenaam == "Albatros"){
+                    Albatros* tram = new Albatros(lijn,beginstation);
+                    if(voertuigNr!=-1){
+                        tram->setVoertuigNr(voertuigNr);
+                    }
+                    metronet->addTram(tram);
+                }else if(typenaam == "PCC"){
+                    PCC* tram = new PCC(lijn,beginstation);
+                    if(voertuigNr!=-1){
+                        tram->setVoertuigNr(voertuigNr);
+                    }
+                    metronet->addTram(tram);
+                }else{
+                    throw ongeldige_informatie();
                 }
+
             }
             else if (type == "SIGNAAL"){
                 std::string typenaam = "";
