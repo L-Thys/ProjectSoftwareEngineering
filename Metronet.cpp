@@ -485,26 +485,26 @@ public:
         std::map<int,Station*> c;
         c[12] = stationC;
 
-        Station* stationA = new Station("A", b, c, 12, "Halte");
+        Station* stationA = new Station("A", b, c, 12, Halte);
         std::map<int,Station*> a;
         a[12] = stationA;
 
         stationB->setVorige(12,stationA);
         stationB->setVolgende(12,stationC);
         stationB->addSpoor(12);
-        stationB->setType("Halte");
+        stationB->setType(Halte);
 
         stationC->setVorige(12,stationB);
         stationC->setVolgende(12,stationA);
         stationC->addSpoor(12);
-        stationC->setType("Halte");
+        stationC->setType(Halte);
         metronet->addStation(stationA);
         metronet->addStation(stationB);
         metronet->addStation(stationC);
         stations["A"]=stationA;
         stations["B"]=stationB;
         stations["C"]=stationC;
-        Tram* tram = new Tram(12,stationA,"PCC");
+        Tram* tram = new PCC(12,stationA);
         stationA->addTram(tram);
         metronet->addTram(tram);
         trams[12]=tram;
@@ -545,12 +545,12 @@ TEST_F(ValidMetronetTest, gettersAndFinds){
 
 // tests adder functions of Metronet
 TEST_F(ValidMetronetTest, adders){
-    Tram* tram = new Tram(1,metronet->findStation("A"),"PCC");
+    Tram* tram = new PCC(1,metronet->findStation("A"));
     metronet->addTram(tram);
 
     std::map<int,Station*> map;
 
-    Station* station = new Station("Q", map, map,1,"Halte");
+    Station* station = new Station("Q", map, map,1,Halte);
     metronet->addStation(station);
     EXPECT_EQ(*metronet->findStation("Q"),*station);
 
@@ -576,7 +576,7 @@ TEST(Consistence, stationNextNotConsistent){
     st2->setVolgende(1, st3);
     st2->setVorige(1, st1);
     st2->setSporen(vec);
-    Tram* tr1 = new Tram(1, st1,"PCC");
+    Tram* tr1 = new PCC(1, st1);
     net->addStation(st1);
     net->addStation(st2);
     net->addTram(tr1);
@@ -598,7 +598,7 @@ TEST(Consistence, stationNextNull){
     st2->setVorige(1, st1);
     st2->setSporen(vec);
 
-    Tram* tr1 = new Tram(1, st1,"PCC");
+    Tram* tr1 = new PCC(1, st1);
     net->addStation(st1);
     net->addStation(st2);
     net->addTram(tr1);
@@ -621,7 +621,7 @@ TEST(Consistence, stationPreviousNotConsistent){
     st2->setVorige(1, st3);
     st2->setSporen(vec);
 
-    Tram* tr1 = new Tram(1, st1, "PCC");
+    Tram* tr1 = new PCC(1, st1);
     net->addStation(st1);
     net->addStation(st2);
     net->addTram(tr1);
@@ -643,7 +643,7 @@ TEST(Consistence, stationPreviousNull){
     st2->setVorige(1, NULL);
     st2->setSporen(vec);
 
-    Tram* tr1 = new Tram(1, st1, "PCC");
+    Tram* tr1 = new PCC(1, st1);
     net->addStation(st1);
     net->addStation(st2);
     net->addTram(tr1);
@@ -666,7 +666,7 @@ TEST(Consistence, stationTrackNotConsistent){
     st1->setSporen(vec);
     st2->setSporen(vec2);
 
-    Tram* tr1 = new Tram(1, st1,"PCC");
+    Tram* tr1 = new PCC(1, st1);
     net->addStation(st1);
     net->addStation(st2);
     net->addTram(tr1);
@@ -681,8 +681,8 @@ TEST(Consistence, stationNextTrackNotConsistent){
     std::map<int, Station*> map;
     map[2] = st1;
 
-    Station* st2 = new Station("B", map, map, 2, "Halte");
-    Tram* tr1 = new Tram(1, st1, "PCC");
+    Station* st2 = new Station("B", map, map, 2, Halte);
+    Tram* tr1 = new PCC(1, st1);
 
     st1->setVolgende(1,st2);
     st1->setVorige(1,st2);
@@ -701,9 +701,9 @@ TEST(Consistence, tramStartNotConsistent){
     Station* st1 = new Station("A");
     std::map<int,Station*> map;
     map[1] = st1;
-    Station* st2 = new Station("B", map, map, 1,"Halte");
-    Station* st3 = new Station("C", map, map, 1,"Halte");
-    Tram* tr1 = new Tram(1, st3, "PCC");
+    Station* st2 = new Station("B", map, map, 1,Halte);
+    Station* st3 = new Station("C", map, map, 1,Halte);
+    Tram* tr1 = new PCC(1, st3);
 
     st1->setVolgende(1, st2);
     st1->setVorige(1, st2);
@@ -723,8 +723,8 @@ TEST(Consistence, stationStartTrackNotConsistent){
     Station* st1 = new Station("A");
     std::map<int,Station*> map;
     map[1] = st1;
-    Station* st2 = new Station("B", map, map, 1, "Halte");
-    Tram* tr1 = new Tram(2, st1, "PCC");
+    Station* st2 = new Station("B", map, map, 1, Halte);
+    Tram* tr1 = new PCC(2, st1);
 
     st1->setVolgende(1, st2);
     st1->setVorige(1, st2);
@@ -810,12 +810,12 @@ TEST_F(ValidMetronetTest, ASCIIoneTrack){
 }
 
 TEST_F(ValidMetronetTest, ASCIImultipleTrack) {
-    Station* u = new Station("U");    u->setType("Halte");          // not stoppable for albatros
-    Station* v = new Station("V");    v->setType("Metrostation");
-    Station* w = new Station("W");    w->setType("Halte");          // not stoppable for albatros
-    Station* x = new Station("X");    x->setType("Metrostation");
-    Station* y = new Station("Y");    y->setType("Halte");          // not stoppable for albatros
-    Station* z = new Station("Z");    z->setType("Metrostation");
+    Station* u = new Station("U");    u->setType(Halte);          // not stoppable for albatros
+    Station* v = new Station("V");    v->setType(Metrostation);
+    Station* w = new Station("W");    w->setType(Halte);          // not stoppable for albatros
+    Station* x = new Station("X");    x->setType(Metrostation);
+    Station* y = new Station("Y");    y->setType(Halte);          // not stoppable for albatros
+    Station* z = new Station("Z");    z->setType(Metrostation);
 
     std::vector<int> spoortjes; spoortjes.push_back(6); spoortjes.push_back(7);
     u->setSporen(spoortjes);
@@ -849,12 +849,12 @@ TEST_F(ValidMetronetTest, ASCIImultipleTrack) {
     metronet->addStation(z);
 
     // make 3 trams for track 7, type PCC
-    Tram* a = new Tram(7, u, "PCC");    metronet->addTram(a);
-    Tram* b = new Tram(7, w, "PCC");    metronet->addTram(b);
-    Tram* c = new Tram(7, y, "PCC");    metronet->addTram(c);
+    Tram* a = new PCC(7, u);    metronet->addTram(a);
+    Tram* b = new PCC(7, w);    metronet->addTram(b);
+    Tram* c = new PCC(7, y);    metronet->addTram(c);
 
     // make 1 albatros for track 6
-    Tram* g = new Tram(6, v, "Albatros");    metronet->addTram(g);
+    Tram* g = new Albatros(6, v);    metronet->addTram(g);
 
     metronet->makeGraphicalASCII("testASCIIresult21.txt");
     std::ifstream result ("testASCIIresult21.txt");
