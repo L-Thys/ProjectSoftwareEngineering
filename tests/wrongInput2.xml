@@ -1,9 +1,10 @@
 <root>
     <STATION>
-        <naam>A</naam>
+        <naam></naam>
         <volgende>B</volgende>
         <vorige>C</vorige>
         <spoor>12</spoor>
+        <type>Halte</type>
     </STATION>
     <STATION>
         <naam>B</naam>

@@ -4,9 +4,10 @@
         <volgende>B</volgende>
         <vorige>C</vorige>
         <spoor>12</spoor>
+        <type>Halte</type>
     </STATION>
     <STATION>
-        <naam>B</naam>
+        <naa>B</naa>
         <volgende>C</volgende>
         <vorige>A</vorige>
         <spoor>12</spoor>

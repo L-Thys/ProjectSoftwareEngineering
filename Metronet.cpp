@@ -769,12 +769,128 @@ TEST_F(ValidMetronetTest, driveAutomaticaly){
 
 
 // tests readFromXml()
-TEST(readFromXml, input){
-    Metronet* metronet = readFromXml("test.xml");
-    int size = metronet->getStations().size();
-    EXPECT_EQ(3,size);
-    size = metronet->getTrams().size();
-    EXPECT_EQ(1,size);
+// todo: add signalisatie to correct input & add wronginput tests for signaal
+TEST(readFromXml, CorrectInput){
+    std::fstream file;
+    file.open("correctinputcerr1.txt", std::ios::out);
+    std::streambuf* cout_buf = std::cerr.rdbuf(file.rdbuf());
+    Metronet* metronet = readFromXml("./tests/test.xml");
+    std::map<std::string, Station *> stations = metronet->getStations();
+    std::map<std::string, Station *>::iterator it = stations.begin();
+    EXPECT_EQ("A",(it->second)->getNaam());
+    EXPECT_EQ("B",(it->second)->getVolgende(12)->getNaam());
+    EXPECT_EQ("C",(it->second)->getVorige(12)->getNaam());
+    EXPECT_EQ(Halte,(it->second)->getType());
+    it ++;
+    EXPECT_EQ("B",(it->second)->getNaam());
+
+    EXPECT_EQ(12,(metronet->getTrams()[0])->getLijn());
+    EXPECT_EQ("A",(metronet->getTrams()[0])->getStartStation()->getNaam());
+    file.open("correctinputcerr1.txt",std::ios::in);
+    std::string string;
+    file >> string;
+    EXPECT_EQ("",string);
+    std::cerr.rdbuf(cout_buf);
+    file.close();
+}
+
+// wrong input: missing station type
+TEST(readFromXml, WrongInput1){
+    std::fstream file;
+    file.open("wronginputcerr.txt", std::ios::out);
+    std::streambuf* cout_buf = std::cerr.rdbuf(file.rdbuf());
+    readFromXml("./tests/wrongInput1.xml");
+    file.close();
+    std::ifstream readfile ("wronginputcerr.txt");
+    std::string string;
+    std::getline(readfile, string);
+    EXPECT_EQ("onvoldoende informatie",string);
+    std::getline(readfile, string);
+    EXPECT_EQ("The metronet from the xml-file isn't consistent",string);
+    std::getline(readfile, string);
+    EXPECT_EQ("",string);
+    std::cerr.rdbuf(cout_buf);
+    readfile.close();
+}
+
+// wrong input: name of first station is empty
+TEST(readFromXml, WrongInput2){
+    std::fstream file;
+    file.open("wronginputcerr.txt", std::ios::out);
+    std::streambuf* cout_buf = std::cerr.rdbuf(file.rdbuf());
+    readFromXml("./tests/wrongInput2.xml");
+    file.close();
+    std::ifstream readfile ("wronginputcerr.txt");
+    std::string string;
+    std::getline(readfile, string);
+    EXPECT_EQ("ongeldige informatie",string);
+    std::getline(readfile, string);
+    EXPECT_EQ("The metronet from the xml-file isn't consistent",string);
+    std::getline(readfile, string);
+    EXPECT_EQ("",string);
+    std::cerr.rdbuf(cout_buf);
+    readfile.close();
+}
+
+// wrong input: typo in name tag, resulting in ongeldige informatie
+TEST(readFromXml, WrongInput3){
+    std::fstream file;
+    file.open("wronginputcerr.txt", std::ios::out);
+    std::streambuf* cout_buf = std::cerr.rdbuf(file.rdbuf());
+    readFromXml("./tests/wrongInput3.xml");
+    file.close();
+    std::ifstream readfile ("wronginputcerr.txt");
+    std::string string;
+    std::getline(readfile, string);
+    EXPECT_EQ("ongeldige informatie",string);
+    std::getline(readfile, string);
+    EXPECT_EQ("The metronet from the xml-file isn't consistent",string);
+    std::getline(readfile, string);
+    EXPECT_EQ("",string);
+    std::cerr.rdbuf(cout_buf);
+    readfile.close();
+}
+
+// wrong input: invalid name ("A2") and invalid spoor ("A12")
+TEST(readFromXml, WrongInput4){
+    std::fstream file;
+    file.open("wronginputcerr.txt", std::ios::out);
+    std::streambuf* cout_buf = std::cerr.rdbuf(file.rdbuf());
+    readFromXml("./tests/wrongInput4.xml");
+    file.close();
+    std::ifstream readfile ("wronginputcerr.txt");
+    std::string string;
+    std::getline(readfile, string);
+    EXPECT_EQ("ongeldige informatie",string);
+    std::getline(readfile, string);
+    EXPECT_EQ("ongeldige informatie",string);
+    std::getline(readfile, string);
+    EXPECT_EQ("The metronet from the xml-file isn't consistent",string);
+    std::getline(readfile, string);
+    EXPECT_EQ("",string);
+    std::cerr.rdbuf(cout_buf);
+    readfile.close();
+}
+
+// wrong input: invalid halte type and invalid spoor type
+TEST(readFromXml, WrongInput5){
+    std::fstream file;
+    file.open("wronginputcerr.txt", std::ios::out);
+    std::streambuf* cout_buf = std::cerr.rdbuf(file.rdbuf());
+    readFromXml("./tests/wrongInput5.xml");
+    file.close();
+    std::ifstream readfile ("wronginputcerr.txt");
+    std::string string;
+    std::getline(readfile, string);
+    EXPECT_EQ("ongeldige informatie",string);
+    std::getline(readfile, string);
+    EXPECT_EQ("ongeldige informatie",string);
+    std::getline(readfile, string);
+    EXPECT_EQ("The metronet from the xml-file isn't consistent",string);
+    std::getline(readfile, string);
+    EXPECT_EQ("",string);
+    std::cerr.rdbuf(cout_buf);
+    readfile.close();
 }
 
 TEST_F(ValidMetronetTest, ASCIIoneTrack){

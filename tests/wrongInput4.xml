@@ -1,15 +1,16 @@
 <root>
     <STATION>
-        <naam>A</naam>
+        <naam>A2</naam>
         <volgende>B</volgende>
         <vorige>C</vorige>
         <spoor>12</spoor>
+        <type>Halte</type>
     </STATION>
     <STATION>
         <naam>B</naam>
         <volgende>C</volgende>
         <vorige>A</vorige>
-        <spoor>12</spoor>
+        <spoor>A12</spoor>
         <type>Halte</type>
     </STATION>
     <STATION>
