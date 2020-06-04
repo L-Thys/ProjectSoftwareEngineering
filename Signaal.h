@@ -9,6 +9,8 @@
 #include "library.h"
 #include "Station.h"
 
+enum SignaalType {Stop,Snelheid};
+
 class Signaal {
 public:
 
@@ -23,7 +25,7 @@ public:
      *
      * @post This method makes sure the Signal object is properly initialized
      */
-    Signaal(int spoor, int limiet, const std::string &type, Station *vorige, Station *volgende);
+    Signaal(int spoor, int limiet, const SignaalType &type, Station *vorige, Station *volgende);
 
     /**
      * @brief this constructor takes a spoor a type, a previous and a next station,
@@ -35,7 +37,7 @@ public:
      *
      * @post This method makes sure the Signal object is properly initialized
      */
-    Signaal(int spoor, const std::string &type, Station *vorige, Station *volgende);
+    Signaal(int spoor, const SignaalType &type, Station *vorige, Station *volgende);
 
     /**
      * @brief this method returns a integer that is the limit, only if the type is a limit
@@ -52,7 +54,7 @@ public:
      *
      * @pre the signal must be properly initialized
      */
-    const std::string &getType() const;
+    const SignaalType &getType() const;
 
     /**
      * @brief this method destroys the object
@@ -67,7 +69,7 @@ public:
 private:
     int spoor;
     int limiet;
-    std::string type;
+    SignaalType type;
     Station* vorige;
     Station* volgende;
 

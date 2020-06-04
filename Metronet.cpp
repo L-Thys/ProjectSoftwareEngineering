@@ -414,7 +414,7 @@ Metronet* readFromXml(const char* file){
                     TiXmlText *text = attribuut->FirstChild()->ToText();
                     if(naam == "limiet"){
                         if (!is_Integer(text->Value())) throw ongeldige_informatie();
-                        spoor = std::atol(text->Value());
+                        limiet = std::atol(text->Value());
                     }
                     else if(naam == "volgende"){
                         if (!is_valid_String(text->Value())) throw ongeldige_informatie();
@@ -443,9 +443,18 @@ Metronet* readFromXml(const char* file){
                     else throw ongeldige_informatie();
                 }
                 if(typenaam == "" || volgende == NULL || vorige == NULL || spoor == -1) throw onvoldoende_informatie();
-
+                SignaalType enumtype;
+                if(typenaam == "STOP"){
+                    if(limiet!=-1) throw ongeldige_informatie();
+                    enumtype=Stop;
+                }
+                else if(typenaam == "SNELHEID"){
+                    if(limiet==-1) throw onvoldoende_informatie();
+                    enumtype=Snelheid;
+                }
+                else throw ongeldige_informatie();
                 // voeg een Signaal met deze informatie toe aan signalen in metronet
-                Signaal* signaal = new Signaal(spoor,limiet,typenaam,vorige,volgende);
+                Signaal* signaal = new Signaal(spoor,limiet,enumtype,vorige,volgende);
                 metronet->addSignaal(signaal);
                 volgende->addSignaal(spoor,signaal);
             }
@@ -769,12 +778,11 @@ TEST_F(ValidMetronetTest, driveAutomaticaly){
 
 
 // tests readFromXml()
-// todo: add signalisatie to correct input & add wronginput tests for signaal
 TEST(readFromXml, CorrectInput){
     std::fstream file;
     file.open("correctinputcerr1.txt", std::ios::out);
     std::streambuf* cout_buf = std::cerr.rdbuf(file.rdbuf());
-    Metronet* metronet = readFromXml("./tests/test.xml");
+    Metronet* metronet = readFromXml("./tests/CorrectInput.xml");
     std::map<std::string, Station *> stations = metronet->getStations();
     std::map<std::string, Station *>::iterator it = stations.begin();
     EXPECT_EQ("A",(it->second)->getNaam());
@@ -797,11 +805,11 @@ TEST(readFromXml, CorrectInput){
 // wrong input: missing station type
 TEST(readFromXml, WrongInput1){
     std::fstream file;
-    file.open("wronginputcerr.txt", std::ios::out);
+    file.open("wronginputcerr1.txt", std::ios::out);
     std::streambuf* cout_buf = std::cerr.rdbuf(file.rdbuf());
     readFromXml("./tests/wrongInput1.xml");
     file.close();
-    std::ifstream readfile ("wronginputcerr.txt");
+    std::ifstream readfile ("wronginputcerr1.txt");
     std::string string;
     std::getline(readfile, string);
     EXPECT_EQ("onvoldoende informatie",string);
@@ -816,11 +824,11 @@ TEST(readFromXml, WrongInput1){
 // wrong input: name of first station is empty
 TEST(readFromXml, WrongInput2){
     std::fstream file;
-    file.open("wronginputcerr.txt", std::ios::out);
+    file.open("wronginputcerr2.txt", std::ios::out);
     std::streambuf* cout_buf = std::cerr.rdbuf(file.rdbuf());
     readFromXml("./tests/wrongInput2.xml");
     file.close();
-    std::ifstream readfile ("wronginputcerr.txt");
+    std::ifstream readfile ("wronginputcerr2.txt");
     std::string string;
     std::getline(readfile, string);
     EXPECT_EQ("ongeldige informatie",string);
@@ -835,11 +843,11 @@ TEST(readFromXml, WrongInput2){
 // wrong input: typo in name tag, resulting in ongeldige informatie
 TEST(readFromXml, WrongInput3){
     std::fstream file;
-    file.open("wronginputcerr.txt", std::ios::out);
+    file.open("wronginputcerr3.txt", std::ios::out);
     std::streambuf* cout_buf = std::cerr.rdbuf(file.rdbuf());
     readFromXml("./tests/wrongInput3.xml");
     file.close();
-    std::ifstream readfile ("wronginputcerr.txt");
+    std::ifstream readfile ("wronginputcerr3.txt");
     std::string string;
     std::getline(readfile, string);
     EXPECT_EQ("ongeldige informatie",string);
@@ -851,14 +859,14 @@ TEST(readFromXml, WrongInput3){
     readfile.close();
 }
 
-// wrong input: invalid name ("A2") and invalid spoor ("A12")
+// wrong input: invalid name ("A2") and invalid lijn ("A12")
 TEST(readFromXml, WrongInput4){
     std::fstream file;
-    file.open("wronginputcerr.txt", std::ios::out);
+    file.open("wronginputcerr4.txt", std::ios::out);
     std::streambuf* cout_buf = std::cerr.rdbuf(file.rdbuf());
     readFromXml("./tests/wrongInput4.xml");
     file.close();
-    std::ifstream readfile ("wronginputcerr.txt");
+    std::ifstream readfile ("wronginputcerr4.txt");
     std::string string;
     std::getline(readfile, string);
     EXPECT_EQ("ongeldige informatie",string);
@@ -872,21 +880,78 @@ TEST(readFromXml, WrongInput4){
     readfile.close();
 }
 
-// wrong input: invalid halte type and invalid spoor type
+// wrong input: invalid halte type, invalid tram type and invalid signaal type
 TEST(readFromXml, WrongInput5){
     std::fstream file;
-    file.open("wronginputcerr.txt", std::ios::out);
+    file.open("wronginputcerr5.txt", std::ios::out);
     std::streambuf* cout_buf = std::cerr.rdbuf(file.rdbuf());
     readFromXml("./tests/wrongInput5.xml");
     file.close();
-    std::ifstream readfile ("wronginputcerr.txt");
+    std::ifstream readfile ("wronginputcerr5.txt");
     std::string string;
     std::getline(readfile, string);
     EXPECT_EQ("ongeldige informatie",string);
     std::getline(readfile, string);
     EXPECT_EQ("ongeldige informatie",string);
     std::getline(readfile, string);
+    EXPECT_EQ("ongeldige informatie",string);
+    std::getline(readfile, string);
     EXPECT_EQ("The metronet from the xml-file isn't consistent",string);
+    std::getline(readfile, string);
+    EXPECT_EQ("",string);
+    std::cerr.rdbuf(cout_buf);
+    readfile.close();
+}
+
+// wrong input: signaal type is SNELHEID but no limiet, and signaal type is STOP but limiet
+TEST(readFromXml, WrongInput6){
+    std::fstream file;
+    file.open("wronginputcerr6.txt", std::ios::out);
+    std::streambuf* cout_buf = std::cerr.rdbuf(file.rdbuf());
+    readFromXml("./tests/wrongInput6.xml");
+    file.close();
+    std::ifstream readfile ("wronginputcerr6.txt");
+    std::string string;
+    std::getline(readfile, string);
+    EXPECT_EQ("onvoldoende informatie",string);
+    std::getline(readfile, string);
+    EXPECT_EQ("ongeldige informatie",string);
+    std::getline(readfile, string);
+    EXPECT_EQ("",string);
+    std::cerr.rdbuf(cout_buf);
+    readfile.close();
+}
+
+// wrong input: empty string vorige in first signaal and no spoor in second
+TEST(readFromXml, WrongInput7){
+    std::fstream file;
+    file.open("wronginputcerr7.txt", std::ios::out);
+    std::streambuf* cout_buf = std::cerr.rdbuf(file.rdbuf());
+    readFromXml("./tests/wrongInput7.xml");
+    file.close();
+    std::ifstream readfile ("wronginputcerr7.txt");
+    std::string string;
+    std::getline(readfile, string);
+    EXPECT_EQ("ongeldige informatie",string);
+    std::getline(readfile, string);
+    EXPECT_EQ("onvoldoende informatie",string);
+    std::getline(readfile, string);
+    EXPECT_EQ("",string);
+    std::cerr.rdbuf(cout_buf);
+    readfile.close();
+}
+
+// wrong input: invalid element (like STATION and TRAM): PERSON
+TEST(readFromXml, WrongInput8){
+    std::fstream file;
+    file.open("wronginputcerr8.txt", std::ios::out);
+    std::streambuf* cout_buf = std::cerr.rdbuf(file.rdbuf());
+    readFromXml("./tests/wrongInput8.xml");
+    file.close();
+    std::ifstream readfile ("wronginputcerr8.txt");
+    std::string string;
+    std::getline(readfile, string);
+    EXPECT_EQ("onherkenbaar element",string);
     std::getline(readfile, string);
     EXPECT_EQ("",string);
     std::cerr.rdbuf(cout_buf);

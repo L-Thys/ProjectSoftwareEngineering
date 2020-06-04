@@ -4,16 +4,17 @@
 
 #include "Signaal.h"
 
-Signaal::Signaal(int spoor, int limiet, const std::string &type, Station *vorige, Station *volgende) : spoor(spoor),
+Signaal::Signaal(int spoor, int limiet, const SignaalType &type, Station *vorige, Station *volgende) : spoor(spoor),
                                                                                                        limiet(limiet),
                                                                                                        type(type),
                                                                                                        vorige(vorige),
                                                                                                        volgende(
                                                                                                                volgende){
+    _propInit = this;
     ENSURE(properlyInitialized(),"A constructor must end in a properlyInitialized state" );
 }
 
-Signaal::Signaal(int spoor, const std::string &type, Station *vorige, Station *volgende) : spoor(spoor), type(type),
+Signaal::Signaal(int spoor, const SignaalType &type, Station *vorige, Station *volgende) : spoor(spoor), type(type),
                                                                                            vorige(vorige),
                                                                                            volgende(volgende) {
     ENSURE(properlyInitialized(),"A constructor must end in a properlyInitialized state" );
@@ -21,11 +22,11 @@ Signaal::Signaal(int spoor, const std::string &type, Station *vorige, Station *v
 
 int Signaal::getLimiet() const {
     REQUIRE(properlyInitialized(), "The Signal was not or not properly initialized befor calling getLimiet");
-    REQUIRE(type == "SNELHEID", "The type of the signal must be \"SNELHEID\" when calling getLimiet");
+    REQUIRE(type == Snelheid, "The type of the signal must be \"SNELHEID\" when calling getLimiet");
     return limiet;
 }
 
-const std::string &Signaal::getType() const {
+const SignaalType &Signaal::getType() const {
     REQUIRE(properlyInitialized(), "The Signal was not or not properly initialized befor calling getType");
     return type;
 }

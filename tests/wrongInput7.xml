@@ -4,7 +4,7 @@
         <volgende>B</volgende>
         <vorige>C</vorige>
         <spoor>12</spoor>
-        <type>Halt</type>
+        <type>Halte</type>
     </STATION>
     <STATION>
         <naam>B</naam>
@@ -22,14 +22,18 @@
     </STATION>
     <TRAM>
         <lijn>12</lijn>
-        <type>pcc</type>
+        <type>PCC</type>
         <beginStation>A</beginStation>
     </TRAM>
     <SIGNAAL>
-    <type>Snelheid</type>
-    <limiet>30</limiet>
-    <vorige>B</vorige>
-    <volgende>C</volgende>
-    <spoor>12</spoor>
-</SIGNAAL>
+        <type>STOP</type>
+        <vorige></vorige>
+        <volgende>B</volgende>
+        <spoor>12</spoor>
+    </SIGNAAL>
+    <SIGNAAL>
+        <type>STOP</type>
+        <vorige>A</vorige>
+        <volgende>B</volgende>
+    </SIGNAAL>
 </root>

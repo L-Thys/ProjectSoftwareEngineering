@@ -115,7 +115,7 @@ bool Albatros::drive() {
             if(_CurrentStation->getVolgende(_Lijn)->findTram(_Lijn)){
                 _TijdTotVerandering ++;
                 Signaal* signaal =_CurrentStation->getVolgende(_Lijn)->getSignaal(_Lijn);
-                if (!_AtStop && signaal != NULL && signaal->getType()=="STOP"){
+                if (!_AtStop && signaal != NULL && signaal->getType()==Stop){
                     _AtStop = true;
                     _CurrentStation->removeTram(this);
                 }
@@ -126,7 +126,7 @@ bool Albatros::drive() {
                 _Onderweg = true;
                 _TijdTotVerandering = 7200/_Speed;
                 Signaal* signaal =_CurrentStation->getVolgende(_Lijn)->getSignaal(_Lijn);
-                if(signaal != NULL && signaal->getType()=="SNELHEID"){
+                if(signaal != NULL && signaal->getType()==Snelheid){
                     _TijdTotVerandering = 7200/signaal->getLimiet();
                 }
                 std::cout << "Tram " << _Lijn << " vertrekt uit station " << _CurrentStation->getNaam() << " richting station " << _CurrentStation->getVolgende(_Lijn)->getNaam() << "."<< std::endl;
@@ -143,7 +143,7 @@ bool Albatros::drive() {
                 _Onderweg = true;
                 _TijdTotVerandering = 7200/_Speed;
                 Signaal* signaal =_CurrentStation->getVolgende(_Lijn)->getSignaal(_Lijn);
-                if(signaal != NULL && signaal->getType()=="SNELHEID"){
+                if(signaal != NULL && signaal->getType()==Snelheid){
                     _TijdTotVerandering = 7200/signaal->getLimiet();
                 }
                 std::cout << "Tram " << _Lijn << " vertrekt uit station " << _CurrentStation->getNaam() << " richting station " << _CurrentStation->getVolgende(_Lijn)->getNaam() << "."<< std::endl;
@@ -193,7 +193,7 @@ bool PCC::drive() {
             if(_CurrentStation->getVolgende(_Lijn)->findTram(_Lijn)){
                 _TijdTotVerandering ++;
                 Signaal* signaal =_CurrentStation->getVolgende(_Lijn)->getSignaal(_Lijn);
-                if (!_AtStop && signaal != NULL && signaal->getType()=="STOP"){
+                if (!_AtStop && signaal != NULL && signaal->getType()==Stop){
                     _AtStop = true;
                     _CurrentStation->removeTram(this);
                 }
@@ -204,7 +204,7 @@ bool PCC::drive() {
                 _Onderweg = true;
                 _TijdTotVerandering = 7200/_Speed;
                 Signaal* signaal =_CurrentStation->getVolgende(_Lijn)->getSignaal(_Lijn);
-                if(signaal != NULL && signaal->getType()=="SNELHEID"){
+                if(signaal != NULL && signaal->getType()==Snelheid){
                     _TijdTotVerandering = 7200/signaal->getLimiet();
                 }
                 std::cout << "Tram " << _Lijn << " vertrekt uit station " << _CurrentStation->getNaam() << " richting station " << _CurrentStation->getVolgende(_Lijn)->getNaam() << "."<< std::endl;
@@ -221,7 +221,7 @@ bool PCC::drive() {
                 _Onderweg = true;
                 _TijdTotVerandering = 7200/_Speed;
                 Signaal* signaal =_CurrentStation->getVolgende(_Lijn)->getSignaal(_Lijn);
-                if(signaal != NULL && signaal->getType()=="SNELHEID"){
+                if(signaal != NULL && signaal->getType()==Snelheid){
                     _TijdTotVerandering = 7200/signaal->getLimiet();
                 }
                 std::cout << "Tram " << _Lijn << " vertrekt uit station " << _CurrentStation->getNaam() << " richting station " << _CurrentStation->getVolgende(_Lijn)->getNaam() << "."<< std::endl;
