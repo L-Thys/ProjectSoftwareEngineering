@@ -15,10 +15,10 @@ Station::Station(const std::string name){
 
 
 Station::Station(const std::string &_Naam, std::map<int,Station*> &_Volgende, std::map<int,Station*> &_Vorige,
-        int _Spoor, StationType _Type)
+                 std::vector<int> _Sporen, StationType _Type)
         : _Naam(_Naam), _Volgende(_Volgende), _Vorige(_Vorige), _Type(_Type) {
     //REQUIRE(is_valid_station_type(_Type),"the variable \"_Type\" has to be a valid station type");
-    Station::_Sporen.push_back(_Spoor);             // because we are not sure what happens if we write _Sporen(_Spoor)
+    Station::_Sporen= _Sporen;             // because we are not sure what happens if we write _Sporen(_Spoor)
     Station::_propInit = this;
 
     // We make sure that the object is properly initialized by using the ENSURE function
@@ -187,6 +187,26 @@ Station::Station(const std::string &naam, const std::pair<int, Station *> &volge
     ENSURE(properlyInitialized(), "A constructor must end in a properlyInitialized state");
 
 }
+
+void Station::setVolgende1(const std::map<int, Station *> &volgende) {
+    _Volgende = volgende;
+}
+
+void Station::setVorige1(const std::map<int, Station *> &vorige) {
+    _Vorige = vorige;
+}
+
+Station::Station(const std::string &_Naam, std::map<int, Station *> &_Volgende, std::map<int, Station *> &_Vorige,
+                 int _Spoor, StationType _Type):
+    _Naam(_Naam), _Volgende(_Volgende), _Vorige(_Vorige), _Type(_Type) {
+        //REQUIRE(is_valid_station_type(_Type),"the variable \"_Type\" has to be a valid station type");
+        Station::_Sporen.push_back(_Spoor);             // because we are not sure what happens if we write _Sporen(_Spoor)
+        Station::_propInit = this;
+
+        // We make sure that the object is properly initialized by using the ENSURE function
+        ENSURE(properlyInitialized(), "A constructor must end in a properlyInitialized state");
+        validStationMembers();
+    }
 
 //---------------------------------//
 //// Tests

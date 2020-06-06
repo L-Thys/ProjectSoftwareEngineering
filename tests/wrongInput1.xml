@@ -1,22 +1,28 @@
 <root>
     <STATION>
         <naam>A</naam>
-        <volgende>B</volgende>
-        <vorige>C</vorige>
-        <spoor>12</spoor>
+        <SPOOR>
+            <spoor>12</spoor>
+            <volgende>B</volgende>
+            <vorige>C</vorige>
+        </SPOOR>
     </STATION>
     <STATION>
         <naam>B</naam>
-        <volgende>C</volgende>
-        <vorige>A</vorige>
-        <spoor>12</spoor>
+        <SPOOR>
+            <spoor>12</spoor>
+            <volgende>C</volgende>
+            <vorige>A</vorige>
+        </SPOOR>
         <type>Halte</type>
     </STATION>
     <STATION>
         <naam>C</naam>
-        <volgende>A</volgende>
-        <vorige>B</vorige>
-        <spoor>12</spoor>
+        <SPOOR>
+            <spoor>12</spoor>
+            <volgende>A</volgende>
+            <vorige>B</vorige>
+        </SPOOR>
         <type>Halte</type>
     </STATION>
     <TRAM>

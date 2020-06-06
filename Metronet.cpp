@@ -280,49 +280,72 @@ Metronet* readFromXml(const char* file){
         try {
             if (type == "STATION"){
                 std::string stationnaam = "";
-                Station* volgende = NULL;
-                Station* vorige = NULL;
-                int spoor=-1;
+                std::map<int,Station*> volgende;
+                std::map<int,Station*> vorige;
+                std::vector<int> sporen;
                 std::string typenaam = "";
 
                 // lees verdere informatie voor het element
                 for(TiXmlNode* attribuut = element->FirstChild(); attribuut != NULL; attribuut = attribuut->NextSibling()){
 
                     std::string naam = attribuut->Value();
-                    if (attribuut->FirstChild() == NULL) throw ongeldige_informatie();
-                    TiXmlText *text = attribuut->FirstChild()->ToText();
+                    TiXmlText *text= NULL;
+                    if (attribuut->FirstChild() != NULL) {
+                        text = attribuut->FirstChild()->ToText();
+                    }
+
                     if(naam == "naam"){
+                        if(text==NULL) throw ongeldige_informatie();
                         if (!is_valid_String(text->Value())) throw ongeldige_informatie();
                         stationnaam = text->Value();
                     }
-                    else if(naam == "volgende"){
-                        if (!is_valid_String(text->Value())) throw ongeldige_informatie();
-                        volgende = metronet->findStation(text->Value());
-                        if(volgende == NULL){
-                            volgende = new Station(text->Value());
-                            metronet->addStation(volgende);
+
+                    else if(naam == "SPOOR"){
+                        int lijn=-1;
+                        Station* volgend=NULL;
+                        Station* vorig=NULL;
+                        for(TiXmlNode* spoorAttribuut = attribuut->FirstChild(); spoorAttribuut != NULL; spoorAttribuut = spoorAttribuut->NextSibling()){
+                            std::string spoornaam = spoorAttribuut->Value();
+
+                            if (attribuut->FirstChild() == NULL) throw ongeldige_informatie();
+                            TiXmlText *spoortext = spoorAttribuut->FirstChild()->ToText();
+
+                            if(spoornaam == "spoor"){
+                                if (!is_Integer(spoortext->Value())) throw ongeldige_informatie();
+                                lijn = std::atol(spoortext->Value());
+                            }
+                            else if(spoornaam == "volgende"){
+                                if (!is_valid_String(spoortext->Value())) throw ongeldige_informatie();
+                                volgend = metronet->findStation(spoortext->Value());
+                                if(volgend == NULL){
+                                    volgend = new Station(spoortext->Value());
+                                    metronet->addStation(volgend);
+                                }
+                            }
+                            else if(spoornaam == "vorige"){
+                                if (!is_valid_String(spoortext->Value())) throw ongeldige_informatie();
+                                vorig = metronet->findStation(spoortext->Value());
+                                if(vorig == NULL) {
+                                    vorig = new Station(spoortext->Value());
+                                    metronet->addStation(vorig);
+                                }
+                            }else throw ongeldige_informatie();
+
                         }
-                    }
-                    else if(naam == "vorige"){
-                        if (!is_valid_String(text->Value())) throw ongeldige_informatie();
-                        vorige = metronet->findStation(text->Value());
-                        if(vorige == NULL) {
-                            vorige = new Station(text->Value());
-                            metronet->addStation(vorige);
-                        }
-                    }
-                    else if(naam == "spoor"){
-                        if (!is_Integer(text->Value())) throw ongeldige_informatie();
-                        spoor = std::atol(text->Value());
+                        if(lijn == -1 || volgend==NULL||vorig==NULL) throw onvoldoende_informatie();
+                        sporen.push_back(lijn);
+                        volgende[lijn]=volgend;
+                        vorige[lijn]=vorig;
                     }
                     else if(naam == "type"){
+                        if(text==NULL) throw ongeldige_informatie();
                         if (!is_valid_station_type(text->Value())) throw ongeldige_informatie();
                         typenaam = text->Value();
                     }
                     else throw ongeldige_informatie();
                 }
-                if(stationnaam == ""|| typenaam == "" || volgende == NULL || vorige == NULL || spoor == -1) throw onvoldoende_informatie();
-
+                if(stationnaam == ""|| typenaam == "" || volgende.empty() || vorige.empty() || sporen.empty()) throw onvoldoende_informatie();
+                // todo: add check to consistence metronet of elk spoor komt maximaal 1 keer voor in een station.
                 StationType enumtype;
                 if(typenaam == "Metrostation") enumtype=Metrostation;
                 else if(typenaam == "Halte") enumtype=Halte;
@@ -330,20 +353,14 @@ Metronet* readFromXml(const char* file){
                 // voeg een Station met deze informatie toe aan stations in metronet of pas een bestaande pointer aan
                 Station* station= metronet->findStation(stationnaam);
                 if(station != NULL){
-                    station->setVolgende(spoor,volgende);
-                    station->setVorige(spoor,vorige);
-                    station->addSpoor(spoor);
+                    station->setVolgende1(volgende);
+                    station->setVorige1(vorige);
+                    station->setSporen(sporen);
                     station->setType(enumtype);
                 }else{
-                    std::map<int,Station*>vorigemap;
-                    vorigemap[spoor]=vorige;
-                    std::map<int,Station*>volgendemap;
-                    volgendemap[spoor]=volgende;
-                    station = new Station(stationnaam,volgendemap,vorigemap,spoor,enumtype);
+                    station = new Station(stationnaam,volgende,vorige,sporen,enumtype);
                     metronet->addStation(station);
                 }
-                vorige->setVolgende(spoor,station);
-                volgende->setVorige(spoor,station);
 
             }
 
@@ -788,7 +805,9 @@ TEST(readFromXml, CorrectInput){
     EXPECT_EQ("A",(it->second)->getNaam());
     EXPECT_EQ("B",(it->second)->getVolgende(12)->getNaam());
     EXPECT_EQ("C",(it->second)->getVorige(12)->getNaam());
-    EXPECT_EQ(Halte,(it->second)->getType());
+    EXPECT_EQ("C",(it->second)->getVolgende(21)->getNaam());
+    EXPECT_EQ("B",(it->second)->getVorige(21)->getNaam());
+    EXPECT_EQ(Metrostation,(it->second)->getType());
     it ++;
     EXPECT_EQ("B",(it->second)->getNaam());
 

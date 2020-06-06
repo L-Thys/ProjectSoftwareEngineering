@@ -46,6 +46,8 @@ public:
      * */
     Station(const std::string &_Naam, std::map<int,Station*> &_Volgende, std::map<int,Station*> &_Vorige, int _Spoor, StationType _Type);
 
+    Station(const std::string &_Naam, std::map<int,Station*> &_Volgende, std::map<int,Station*> &_Vorige, std::vector<int> _Sporen, StationType _Type);
+
     /**
      * @brief constructor of a station, this constructor takes 5 parameters and initialises the whole object at once
      *        all the members that are initialised are strings, those are given in the constructor, only the track
@@ -154,6 +156,10 @@ public:
      *      ENSURE(getVorige()==vorige, "_Vorige should be equal to param vorige")
      */
     void setVorige(int x, Station *vorige);
+
+    void setVolgende1(const std::map<int, Station *> &volgende);
+
+    void setVorige1(const std::map<int, Station *> &vorige);
 
     /**
      * @brief : this method sets _Sporen to the param sporen
