@@ -138,8 +138,8 @@ public:
      *      --> REQUIRE(properlyInitialized(), "Tram was not properly or no initialized before calling drive")
      *
      *
-     * @post _CurrentStation should not be NULL
-     *      --> ENSURE(getCurrentStation() != NULL, "drive was unsuccessful")
+     * @post _TijdTotVerandering should change during this function
+     *      --> ENSURE(previousTijdTotVerandering != _TijdTotVerandering, "drive was unsuccessful, time until next movement change hasn't changed");
      *
      * @param station this is the station from where we move the tram, this isn't necessarily the right one
      *
