@@ -107,11 +107,14 @@ Albatros::Albatros(int lijn, Station *startStation) : Tram(lijn, startStation) {
 
 }
 
-bool Albatros::drive() {
+bool Albatros::drive(std::string& resultstring) {
     REQUIRE(properlyInitialized(), "Tram was not properly or no initialized before calling drive");
     int previousTijdTotVerandering = _TijdTotVerandering;
     _TijdTotVerandering --;
     if(_TijdTotVerandering <= 0){
+        std::ostringstream lijn; // nodig voor resultstring aangezien to_string() pas in c++ 11 werkt
+        lijn <<_Lijn;
+
         bool drive = false;
         if(_AtStop){
             if(!_CurrentStation->getVolgende(_Lijn)->findTram(_Lijn)){
@@ -134,13 +137,17 @@ bool Albatros::drive() {
             _CurrentStation = _CurrentStation->getVolgende(_Lijn);
             if(_CurrentStation == NULL) return false;
 
+
+
             if(_CurrentStation->getType() == Halte){
                 _TijdTotVerandering = 1;
-                std::cout << "Tram " << _Lijn << " stopt niet in halte " << _CurrentStation->getNaam() << " aangezien het een Albatros is, de tram rijdt door naar station"<< _CurrentStation->getVolgende(_Lijn)->getNaam() << std::endl;
+                if(previousTijdTotVerandering == 1) previousTijdTotVerandering --;
+
+                resultstring +=  "Tram " + lijn.str() + " stopt niet in halte " + _CurrentStation->getNaam() + " aangezien het een Albatros is, de tram rijdt door naar station" + _CurrentStation->getVolgende(_Lijn)->getNaam() +"\n";
             }else {
                 _CurrentStation->addTram(this);
                 _TijdTotVerandering = 60;
-                std::cout << "Tram " << _Lijn << " komt aan in station " << _CurrentStation->getNaam() << "." << std::endl;
+                resultstring+=  "Tram " + lijn.str() + " komt aan in station " + _CurrentStation->getNaam() + ".\n" ;
             }
         }
         if(drive){
@@ -151,7 +158,7 @@ bool Albatros::drive() {
             if(signaal != NULL && signaal->getType()==Snelheid){
                 _TijdTotVerandering = 7200/signaal->getLimiet();
             }
-            std::cout << "Tram " << _Lijn << " vertrekt uit station " << _CurrentStation->getNaam() << " richting station " << _CurrentStation->getVolgende(_Lijn)->getNaam() << "."<< std::endl;
+            resultstring += "Tram " + lijn.str() + " vertrekt uit station " + _CurrentStation->getNaam() + " richting station " + _CurrentStation->getVolgende(_Lijn)->getNaam() + ".\n";
         }
     }
     ENSURE(previousTijdTotVerandering != _TijdTotVerandering, "drive was unsuccessful, time until next movement change hasn't changed");
@@ -171,11 +178,13 @@ PCC::PCC(int lijn, Station *startStation) : Tram(lijn, startStation) {
     ENSURE(properlyInitialized(), "A constructor must end in a properlyInitialized state");
 }
 
-bool PCC::drive() {
+bool PCC::drive(std::string& resultstring) {
     REQUIRE(properlyInitialized(), "Tram was not properly or no initialized before calling drive");
     int previousTijdTotVerandering = _TijdTotVerandering;
     _TijdTotVerandering --;
     if(_TijdTotVerandering <= 0){
+        std::ostringstream lijn; // nodig voor resultstring aangezien to_string() pas in c++ 11 werkt
+        lijn <<_Lijn;
         bool drive = false;
         if(_AtStop){
             if(!_CurrentStation->getVolgende(_Lijn)->findTram(_Lijn)){
@@ -200,18 +209,18 @@ bool PCC::drive() {
 
             _CurrentStation->addTram(this);
             _TijdTotVerandering = 60;
-            std::cout << "Tram " << _Lijn << " komt aan in station " << _CurrentStation->getNaam() << "." << std::endl;
+            resultstring+=  "Tram " + lijn.str() + " komt aan in station " + _CurrentStation->getNaam() + ".\n" ;
 
         }
         if(drive){
             _CurrentStation->removeTram(this);
             _Onderweg = true;
-            _TijdTotVerandering = 7200/70; //speed of albatros is 70
+            _TijdTotVerandering = 7200/40; //speed of PCC is 40
             Signaal* signaal =_CurrentStation->getVolgende(_Lijn)->getSignaal(_Lijn);
             if(signaal != NULL && signaal->getType()==Snelheid){
                 _TijdTotVerandering = 7200/signaal->getLimiet();
             }
-            std::cout << "Tram " << _Lijn << " vertrekt uit station " << _CurrentStation->getNaam() << " richting station " << _CurrentStation->getVolgende(_Lijn)->getNaam() << "."<< std::endl;
+            resultstring += "Tram " + lijn.str() + " vertrekt uit station " + _CurrentStation->getNaam() + " richting station " + _CurrentStation->getVolgende(_Lijn)->getNaam() + ".\n";
         }
     }
     ENSURE(previousTijdTotVerandering != _TijdTotVerandering, "drive was unsuccessful, time until next movement change hasn't changed");
@@ -279,16 +288,17 @@ TEST_F(ValidTramTest, properlyInitialized){
 }
 
 TEST_F(ValidTramTest, driveCPP){
-    tram->drive();
+    std::string result;
+    tram->drive(result);
     EXPECT_FALSE(tram->isOnderweg());
     for(int i=1;i<60;i++){
-        tram->drive();
+        tram->drive(result);
     }
     EXPECT_TRUE(tram->isOnderweg());
     EXPECT_FALSE(stationA->findTram(tram));
     EXPECT_EQ(stationA,tram->getCurrentStation());
     for(int i=0;i<180;i++){
-        tram->drive();
+        tram->drive(result);
     }
     EXPECT_TRUE(stationB->findTram(tram));
     EXPECT_EQ(stationB,tram->getCurrentStation());

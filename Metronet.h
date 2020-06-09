@@ -74,6 +74,8 @@ public:
      */
     void makeGraphicalASCII (std::string bestandsnaam) const;
 
+    void coutGraphicalASCII () const;
+
     /**
      * @brief : this method gives the full set of stations back
      *
@@ -210,7 +212,7 @@ public:
      *
      * @param n: the amount of seconds the metronet should simulate
      */
-    void driveAutomaticaly(int n);
+    void driveAutomaticaly(int n, bool cout= false);
 
 private:
     std::map<std::string, Station*> _stations;

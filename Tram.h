@@ -145,7 +145,7 @@ public:
      *
      * @return this method returns a boolean that indicates if the move is successfully executed
      */
-    virtual bool drive() = 0;
+    virtual bool drive(std::string & resultstring) = 0;
 
     /**
      * @brief : this method is the getter of the member voertuignr
@@ -203,7 +203,7 @@ public:
 
     virtual ~Albatros();
 
-    virtual bool drive();
+    virtual bool drive(std::string& resultstring);
 };
 
 class PCC: public Tram{
@@ -212,7 +212,7 @@ public:
 
     virtual ~PCC();
 
-    virtual bool drive();
+    virtual bool drive(std::string& resultstring);
 };
 
 #endif //PSE_TRAM_H

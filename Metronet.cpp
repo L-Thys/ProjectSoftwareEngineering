@@ -85,8 +85,14 @@ bool Metronet::isConsistent() {
 
 void Metronet::makeGraphicalASCII(std::string bestandsnaam) const {
     REQUIRE(properlyInitialized(), "The Metronet was not properly or not initialized before calling findStation");
-    std::ofstream file;
-    file.open(bestandsnaam.c_str());
+    std::fstream file;
+    file.open(bestandsnaam.c_str(),std::ios::out);
+    std::streambuf* cout_buf = std::cout.rdbuf(file.rdbuf());
+    coutGraphicalASCII();
+    std::cout.rdbuf(cout_buf);
+}
+void Metronet::coutGraphicalASCII() const {
+    REQUIRE(properlyInitialized(), "The Metronet was not properly or not initialized before calling findStation");
 
     std::vector<int> vec;       // the set of tracks
 
@@ -113,30 +119,29 @@ void Metronet::makeGraphicalASCII(std::string bestandsnaam) const {
         }
 
         for (unsigned int s = 0; s < cycleOfStations.size(); ++s) {                      // write every station
-            file << "=" + cycleOfStations[s]->getNaam() + "==";
+            std::cout << "=" + cycleOfStations[s]->getNaam() + "==";
         }
-        file << " (spoor " << a << ")" << std::endl;                             // write the track and a endLine
+        std::cout << " (spoor " << a << ")" << std::endl;                             // write the track and a endLine
 
         for (unsigned int s = 0; s < cycleOfStations.size(); ++s) {                      // write every tram
             Tram* t = getStationedTram(cycleOfStations[s], a);
             if (t != NULL) {
-                file << " T ";
+                std::cout << " T ";
             }
             else {
-                file << "   ";
+                std::cout << "   ";
             }
 
             Tram* t2 = getMovingTram(cycleOfStations[s], a);
             if (t2 != NULL){
-                file << "T";
+                std::cout << "T";
             }
             else {
-                file << " ";
+                std::cout << " ";
             }
         }
-        file << "."<<std::endl;
+        std::cout << "."<<std::endl;
     }
-    file.close();
 }
 
 Station * Metronet::getStationOnTrack(int track) const {
@@ -236,14 +241,21 @@ bool Metronet::mapsAreNotEmpty() {
 
 
 
-void Metronet::driveAutomaticaly(int n) {
+void Metronet::driveAutomaticaly(int n, bool cout) {
     // alle stations staan in het begin 60 seconden in hun startstation
     REQUIRE (properlyInitialized(), "The Metronet was not properly or not initialized before calling writeToFile");
     REQUIRE(mapsAreNotEmpty() && isConsistent(), "This object should contain a consistent metronet");
     for (int i = 0; i < n; ++i) {
+        std::string result="";
         for ( unsigned int j = 0; j < _trams.size() ; ++j) {
-            _trams[j]->drive();
+            _trams[j]->drive(result);
         }
+        if(!result.empty()){
+            std::cout << "Seconde " << i << ": " << std::endl;
+            std::cout << result << std::endl;
+            if(cout) coutGraphicalASCII();
+        }
+
     }
 }
 
@@ -784,10 +796,10 @@ TEST_F(ValidMetronetTest, writeToFile){
 
 // tests driveAutomaticaly
 TEST_F(ValidMetronetTest, driveAutomaticaly){
-    metronet->driveAutomaticaly(60);
+    metronet->driveAutomaticaly(60,true);
     EXPECT_TRUE(metronet->getTrams()[0]->isOnderweg());
     EXPECT_FALSE(stations["A"]->findTram(12));
-    metronet->driveAutomaticaly(180);
+    metronet->driveAutomaticaly(180,true);
     EXPECT_FALSE(metronet->getTrams()[0]->isOnderweg());
     EXPECT_EQ(stations["B"],trams[12]->getCurrentStation());
     EXPECT_TRUE(stations["B"]->findTram(12));
@@ -991,7 +1003,7 @@ TEST_F(ValidMetronetTest, ASCIIoneTrack){
     result.close();
     compare.close();
 
-    metronet->driveAutomaticaly(320);
+    metronet->driveAutomaticaly(320,true);
 
     metronet->makeGraphicalASCII("testASCIIresult12.txt");
     std::ifstream result2;
@@ -1069,7 +1081,7 @@ TEST_F(ValidMetronetTest, ASCIImultipleTrack) {
     result.close();
     compare.close();
 
-    metronet->driveAutomaticaly(320);
+    metronet->driveAutomaticaly(320,true);
 
     metronet->makeGraphicalASCII("testASCIIresult22.txt");
     std::ifstream result2 ("testASCIIresult22.txt");
