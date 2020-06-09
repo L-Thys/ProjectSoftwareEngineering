@@ -801,6 +801,7 @@ TEST_F(ValidMetronetTest, driveAutomaticaly){
     EXPECT_FALSE(stations["A"]->findTram(12));
     metronet->driveAutomaticaly(180,true);
     EXPECT_FALSE(metronet->getTrams()[0]->isOnderweg());
+    metronet->getTrams()[0]->getPassengers();
     EXPECT_EQ(stations["B"],trams[12]->getCurrentStation());
     EXPECT_TRUE(stations["B"]->findTram(12));
 }

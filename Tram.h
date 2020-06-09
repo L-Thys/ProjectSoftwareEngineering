@@ -13,17 +13,6 @@ class Tram {
 public:
 
     /**
-     * @brief : the constructor of an object of type Tram, this constructor takes no parameters to initialise the object
-     *          all members will be initialised to their non-consistent value
-     *          _Lijn, _Seats, _Speed : -1
-     *          _StartStation, _CurrentStation : NULL
-     *
-     * @post This constructor will make sure the object is properly initialized
-     *       --> ENSURE (properlyInitialized(), "A constructor must end in a properlyInitialized state");
-     * */
-    Tram();
-
-    /**
      * @brief : the constructor of an object of type Tram, this constructor takes 3 parameters to initialise the object
      *          all members will be initialised by at least one of these parameters
      *          _Seats and _Speed will be initialised according to the type of tram
@@ -171,6 +160,8 @@ public:
      */
     void setVoertuigNr(int voertuigNr);
 
+    int getPassengers() const;
+
     /**
      * @brief this method check whether the tram is on its way/in-between Stations or not
      *
@@ -184,6 +175,7 @@ public:
 protected:
     int _Lijn;
     int _Seats;
+    int _Passengers;
     int _Speed;
     int _VoertuigNr;
     Station* _StartStation;
