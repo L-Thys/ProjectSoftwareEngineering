@@ -162,6 +162,10 @@ public:
 
     int getPassengers() const;
 
+    int getOpbrengst() const;
+
+    void setOpbrengst(int opbrengst);
+
     /**
      * @brief this method check whether the tram is on its way/in-between Stations or not
      *
@@ -178,6 +182,7 @@ protected:
     int _Passengers;
     int _Speed;
     int _VoertuigNr;
+    int _Opbrengst;
     Station* _StartStation;
     Station* _CurrentStation;
     TramType _Type;

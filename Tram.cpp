@@ -22,6 +22,7 @@ Tram::Tram(int lijn, Station *startStation) : _Lijn(lijn), _StartStation(startSt
     _TijdTotVerandering=60;
     _AtStop = false;
     _Passengers = 0;
+    _Opbrengst = 0;
     Tram::_propInit = this;
     // We make sure that the object is properly initialized by using the ENSURE function
     ENSURE(properlyInitialized(), "A constructor must end in a properlyInitialized state");
@@ -89,6 +90,14 @@ int Tram::getPassengers() const {
     return _Passengers;
 }
 
+int Tram::getOpbrengst() const {
+    return _Opbrengst;
+}
+
+void Tram::setOpbrengst(int opbrengst) {
+    _Opbrengst = opbrengst;
+}
+
 
 Albatros::Albatros(int lijn, Station *startStation) : Tram(lijn, startStation) {
     _Seats = 72;
@@ -118,6 +127,7 @@ bool Albatros::drive(std::string& resultstring) {
         else if(!_Onderweg){
             int newPassengers = std::rand()%(_Seats-_Passengers);
             _Passengers += newPassengers;
+            _Opbrengst += 2*newPassengers;
 
             std::ostringstream passagiers; // nodig voor resultstring aangezien to_string() pas in c++ 11 werkt
             passagiers << newPassengers;
@@ -199,6 +209,7 @@ bool PCC::drive(std::string& resultstring) {
         else if(!_Onderweg){
             int newPassengers = std::rand()%(_Seats-_Passengers);
             _Passengers += newPassengers;
+            _Opbrengst += 2*newPassengers;
             std::ostringstream passagiers; // nodig voor resultstring aangezien to_string() pas in c++ 11 werkt
             passagiers << newPassengers;
             if(_CurrentStation->getVolgende(_Lijn)->findTram(_Lijn)){
@@ -318,3 +329,10 @@ TEST_F(ValidTramTest, driveCPP){
     EXPECT_EQ(stationB,tram->getCurrentStation());
 }
 
+TEST_F(ValidTramTest, omzetTest){
+    std::string result;
+    for(int i=0;i<61;i++){
+        tram->drive(result);
+    }
+    EXPECT_EQ(tram->getPassengers()*2,tram->getOpbrengst());
+}
