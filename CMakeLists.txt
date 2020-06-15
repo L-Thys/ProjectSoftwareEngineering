@@ -35,12 +35,19 @@ set(RELEASE_SOURCE_FILES main.cpp )
 # Set source files for DEBUG target
 set(DEBUG_SOURCE_FILES main_test.cpp)
 
+# Set source files for GUI target
+set(GUI_SOURCE_FILES main_gui.cpp)
+
 # Create RELEASE target
 add_executable(PSE ${RELEASE_SOURCE_FILES} ${GENERAL_SOURCE_FILES})
 
 # Create DEBUG target
 add_executable(PSE_debug ${DEBUG_SOURCE_FILES} ${GENERAL_SOURCE_FILES})
 
+# Create DEBUG target
+add_executable(PSE_gui ${GUI_SOURCE_FILES} ${GENERAL_SOURCE_FILES})
+
 # Link library
 target_link_libraries(PSE_debug gtest sfml-graphics sfml-window sfml-system)
 target_link_libraries(PSE gtest sfml-graphics sfml-window sfml-system)
+target_link_libraries(PSE_gui gtest sfml-graphics sfml-window sfml-system)
