@@ -103,7 +103,6 @@ bool Metronet::isConsistent() {
         }
         return false;
     }
-
     return true;
 }
 
