@@ -35,6 +35,8 @@ void Metronet::addTram(Tram *tram) {
 bool Metronet::isConsistent() {
     REQUIRE (properlyInitialized(), "The Metronet was not properly or not initialized before calling isConsistent");
     // -- We check every station in our network -- //
+    std::vector<int> sot;                                   // the vector with all possible tracks
+
     for (std::map<std::string, Station *>::iterator station = _stations.begin();
         station != _stations.end(); station++) {
 
@@ -42,6 +44,8 @@ bool Metronet::isConsistent() {
         if (station->second->getSporen().size()==0) {
             return false;
         }
+
+        std::vector<int> asTracks;
 
         for (unsigned int pcs = 0; pcs < station->second->getSporen().size(); ++pcs) {
             int cs = station->second->getSporen()[pcs];
@@ -57,9 +61,20 @@ bool Metronet::isConsistent() {
                 or !findInVector(cs, station->second->getVorige(cs)->getSporen())) {
                 return false;       // idem
             }
+
+            if (findInVector(cs, asTracks)) {
+                return false;                   // the track cannot occur twice
+            }
+            asTracks.push_back(cs);
+
+            if (!findInVector(cs, sot)) {
+                sot.push_back(cs);
+            }
         }
     }
     // ------------------------------------------- //
+
+    std::vector<int> presTracks;
 
     // -- We now check every tram inside _trams if they are initiated correctly -- //
     // tram is a pair <int Tram*>, we need to take tram.second to get the tram itself
@@ -75,8 +90,18 @@ bool Metronet::isConsistent() {
         if (!findInVector((*tram)->getLijn(), (*tram)->getStartStation()->getSporen())) {
             return false;
         }
+        presTracks.push_back((*tram)->getLijn());
     }
     // --------------------------------------------------------------------------- //
+
+    for (int bleh = 0; bleh < sot.size(); bleh++) {
+        for (int treinie = 0; treinie < _trams.size(); treinie++) {
+            if (_trams[treinie]->getLijn() == sot[bleh]) {
+                break;
+            }
+        }
+        return false;
+    }
 
     return true;
 }
