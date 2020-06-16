@@ -257,7 +257,7 @@ void Metronet::driveAutomaticaly(int n, bool cout) {
         for ( unsigned int j = 0; j < _trams.size() ; ++j) {
             _trams[j]->drive(result);
         }
-        if(!result.empty()){
+        if(!result.empty()&&cout){
             std::cout << "Seconde " << i << ": " << std::endl;
             std::cout << result << std::endl;
             if(cout) coutGraphicalASCII();

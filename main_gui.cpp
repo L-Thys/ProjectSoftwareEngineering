@@ -156,10 +156,8 @@ int main()
                             text.setString(string);
                         }
                     }
-
                 default:
                     break;
-
             }
         }
         if(start||next){
@@ -175,6 +173,13 @@ int main()
                         minutesSinceStart++;
                         secondsSinceStart =0;
                     }else secondsSinceStart++;
+                    std::vector<Tram*> trams = metronet->getTrams();
+                    for ( unsigned int j = 0; j < trams.size() ; ++j) {
+                        std::ostringstream tram;   // stream used for the conversion to string
+                        tram.clear();
+                        tram << "Tram " << trams[j]->getLijn() << ": " << trams[j]->getPassengers() << " passagiers en " << trams[j]->getOpbrengst() << " euro opbrengst\n";
+                        string += tram.str();
+                    }
                     text.setString(string);
                 }else{
 

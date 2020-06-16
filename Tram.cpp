@@ -11,13 +11,7 @@
 Tram::Tram(int lijn, Station *startStation) : _Lijn(lijn), _StartStation(startStation){
     //REQUIRE(is_valid_tram_type(type),"the variable \"type\" has to be a valid tram type");
     Tram::_CurrentStation = _StartStation;
-//    if(type=="Albatros"){
-//        _Seats = 72;
-//        _Speed = 70;
-//    }else if(type ==  "PCC"){
-//        _Seats = 16;
-//        _Speed = 40;
-//    }
+
     _Onderweg = false;
     _TijdTotVerandering=60;
     _AtStop = false;
