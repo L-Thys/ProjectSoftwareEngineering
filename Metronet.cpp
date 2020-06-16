@@ -92,6 +92,11 @@ void Metronet::makeGraphicalASCII(std::string bestandsnaam) const {
     std::cout.rdbuf(cout_buf);
 }
 void Metronet::coutGraphicalASCII() const {
+    std::string string;
+    stringGraphicalASCII(string);
+    std::cout << string;
+}
+void Metronet::stringGraphicalASCII(std::string &string) const {
     REQUIRE(properlyInitialized(), "The Metronet was not properly or not initialized before calling findStation");
 
     std::vector<int> vec;       // the set of tracks
@@ -119,28 +124,30 @@ void Metronet::coutGraphicalASCII() const {
         }
 
         for (unsigned int s = 0; s < cycleOfStations.size(); ++s) {                      // write every station
-            std::cout << "=" + cycleOfStations[s]->getNaam() + "==";
+            string += "=" + cycleOfStations[s]->getNaam() + "==";
         }
-        std::cout << " (spoor " << a << ")" << std::endl;                             // write the track and a endLine
+        std::ostringstream convert;   // stream used for the conversion to string
+        convert << a;
+        string+= " (spoor " + convert.str() + ")\n";                             // write the track and a endLine
 
         for (unsigned int s = 0; s < cycleOfStations.size(); ++s) {                      // write every tram
             Tram* t = getStationedTram(cycleOfStations[s], a);
             if (t != NULL) {
-                std::cout << " T ";
+                string+= " T ";
             }
             else {
-                std::cout << "   ";
+                string+= "   ";
             }
 
             Tram* t2 = getMovingTram(cycleOfStations[s], a);
             if (t2 != NULL){
-                std::cout << "T";
+                string+= "T";
             }
             else {
-                std::cout << " ";
+                string+= " ";
             }
         }
-        std::cout << "."<<std::endl;
+        string+= ".\n";
     }
 }
 

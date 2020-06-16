@@ -76,6 +76,8 @@ public:
 
     void coutGraphicalASCII () const;
 
+    void stringGraphicalASCII (std::string& string) const;
+
     /**
      * @brief : this method gives the full set of stations back
      *
