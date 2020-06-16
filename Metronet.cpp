@@ -95,9 +95,9 @@ bool Metronet::isConsistent() {
     // --------------------------------------------------------------------------- //
 
     // look if every track has at least one tram
-    for (int bleh = 0; bleh < sot.size(); bleh++) {
+    for (unsigned int bleh = 0; bleh < sot.size(); bleh++) {
         bool yn = false;
-        for (int treinie = 0; treinie < _trams.size(); treinie++) {             // check every train
+        for (unsigned int treinie = 0; treinie < _trams.size(); treinie++) {             // check every train
             if (_trams[treinie]->getLijn() == sot[bleh]) {                      // if the track checks out
                 yn = true;
                 break;                                                          // continue the loop
