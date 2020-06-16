@@ -67,7 +67,7 @@ bool Metronet::isConsistent() {
             }
             asTracks.push_back(cs);
 
-            if (!findInVector(cs, sot)) {
+            if (!findInVector(cs, sot)) {       // if the number is not present in the set of tracks, add it
                 sot.push_back(cs);
             }
         }
@@ -94,6 +94,7 @@ bool Metronet::isConsistent() {
     }
     // --------------------------------------------------------------------------- //
 
+    // look if every track has at least one tram
     for (int bleh = 0; bleh < sot.size(); bleh++) {
         for (int treinie = 0; treinie < _trams.size(); treinie++) {
             if (_trams[treinie]->getLijn() == sot[bleh]) {
