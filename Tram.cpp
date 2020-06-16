@@ -221,6 +221,7 @@ bool PCC::drive(std::string& resultstring) {
                 }
             }else{
                 drive = true;
+                resultstring += "Tram " + lijn.str() + " vertrekt uit station " + _CurrentStation->getNaam() + " richting station " + _CurrentStation->getVolgende(_Lijn)->getNaam() + " en " + passagiers.str() + " passagiers stappen op.\n";
             }
         }
         else{
