@@ -27,7 +27,7 @@ endif()
 # set general source files for all targets
 set(GENERAL_SOURCE_FILES tinyXML/tinyxmlparser.cpp tinyXML/tinyxmlerror.cpp tinyXML/tinyxml.h tinyXML/tinyxml.cpp
         tinyXML/tinystr.h tinyXML/tinystr.cpp Station.cpp Station.h Tram.cpp Tram.h library.h Metronet.cpp Metronet.h
-        OurExceptions.cpp OurExceptions.h Spoor.cpp Spoor.h library.cpp Signaal.cpp Signaal.h)
+        OurExceptions.h Spoor.cpp Spoor.h library.cpp Signaal.cpp Signaal.h)
 
 # Set source files for RELEASE target
 set(RELEASE_SOURCE_FILES main.cpp )

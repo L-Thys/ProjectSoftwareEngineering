@@ -74,15 +74,15 @@ void Station::validStationMembers() {
 }
 
 void Station::setVolgende(int x, Station *volgende) {
-    REQUIRE (properlyInitialized(), "The Station was not properly or not initialized before calling Station");
+    REQUIRE (properlyInitialized(), "The Station was not properly or not initialized before calling setVolgende");
     _Volgende[x] = volgende;
-    ENSURE(getVolgende(x)==volgende, "_Volgende should be equal to param volgende");
+    ENSURE(getVolgende(x)==volgende, "x,volgende should be in the map _Volgende");
 }
 
 void Station::setVorige(int x, Station *vorige) {
     REQUIRE (properlyInitialized(), "The Station was not properly or not initialized before calling setVorige");
     _Vorige[x] = vorige;
-    ENSURE(getVorige(x)==vorige, "_Vorige should be equal to param vorige");
+    ENSURE(getVorige(x)==vorige, "x,vorige should be in the map _Vorige");
 }
 
 void Station::setSporen(const std::vector<int> &sporen) {
@@ -142,7 +142,7 @@ bool Station::findTram(int a) {
 }
 
 void Station::addSpoor(int spoor) {
-    REQUIRE (properlyInitialized(), "The Station was not properly or not initialized before calling setSporen");
+    REQUIRE (properlyInitialized(), "The Station was not properly or not initialized before calling addSporen");
     _Sporen.push_back(spoor);
     ENSURE(findInVector(spoor,_Sporen), "param spoor should be in _Sporen after calling addSpoor");
 }
@@ -188,25 +188,19 @@ Station::Station(const std::string &naam, const std::pair<int, Station *> &volge
 
 }
 
-void Station::setVolgende1(const std::map<int, Station *> &volgende) {
+void Station::setVolgendeTo(const std::map<int, Station *> &volgende) {
+    REQUIRE (properlyInitialized(), "The Station was not properly or not initialized before calling setVolgendeTo");
     _Volgende = volgende;
+    ENSURE(_Volgende==volgende, "_Volgende should be equal to param volgende");
 }
 
-void Station::setVorige1(const std::map<int, Station *> &vorige) {
+void Station::setVorigeTo(const std::map<int, Station *> &vorige) {
+    REQUIRE (properlyInitialized(), "The Station was not properly or not initialized before calling setVorigeTo");
     _Vorige = vorige;
+    ENSURE(_Vorige==vorige, "_Vorige should be equal to param vorige");
 }
 
-Station::Station(const std::string &_Naam, std::map<int, Station *> &_Volgende, std::map<int, Station *> &_Vorige,
-                 int _Spoor, StationType _Type):
-    _Naam(_Naam), _Volgende(_Volgende), _Vorige(_Vorige), _Type(_Type) {
-        //REQUIRE(is_valid_station_type(_Type),"the variable \"_Type\" has to be a valid station type");
-        Station::_Sporen.push_back(_Spoor);             // because we are not sure what happens if we write _Sporen(_Spoor)
-        Station::_propInit = this;
 
-        // We make sure that the object is properly initialized by using the ENSURE function
-        ENSURE(properlyInitialized(), "A constructor must end in a properlyInitialized state");
-        validStationMembers();
-    }
 
 //---------------------------------//
 //// Tests

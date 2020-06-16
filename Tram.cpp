@@ -9,7 +9,7 @@
 
 
 Tram::Tram(int lijn, Station *startStation) : _Lijn(lijn), _StartStation(startStation){
-    //REQUIRE(is_valid_tram_type(type),"the variable \"type\" has to be a valid tram type");
+
     Tram::_CurrentStation = _StartStation;
 
     _Onderweg = false;
@@ -81,15 +81,13 @@ Tram::~Tram() {
 }
 
 int Tram::getPassengers() const {
+    REQUIRE (properlyInitialized(), "The Tram was not properly or not initialized before calling getPassengers");
     return _Passengers;
 }
 
 int Tram::getOpbrengst() const {
+    REQUIRE (properlyInitialized(), "The Tram was not properly or not initialized before calling getObrengst");
     return _Opbrengst;
-}
-
-void Tram::setOpbrengst(int opbrengst) {
-    _Opbrengst = opbrengst;
 }
 
 

@@ -30,6 +30,7 @@ bool Metronet::addStation(Station *station) {
 void Metronet::addTram(Tram *tram) {
     REQUIRE (properlyInitialized(), "The Metronet was not properly or not initialized before calling addTram");
     Metronet::_trams.push_back(tram);
+    ENSURE(findInVector(tram,_trams), "the tram should be in the _trams vector");
 }
 
 bool Metronet::isConsistent() {
@@ -297,6 +298,7 @@ void Metronet::driveAutomaticaly(int n, bool cout) {
 void Metronet::addSignaal(Signaal *signaal) {
     REQUIRE (properlyInitialized(), "metronet was not properly or not initialized before calling addSignaal");
     Metronet::_signalen.push_back(signaal);
+    ENSURE(findInVector(signaal, _signalen), "the signaal should be in the _signalen vector");
 }
 
 
@@ -400,8 +402,8 @@ Metronet* readFromXml(const char* file){
                 // voeg een Station met deze informatie toe aan stations in metronet of pas een bestaande pointer aan
                 Station* station= metronet->findStation(stationnaam);
                 if(station != NULL){
-                    station->setVolgende1(volgende);
-                    station->setVorige1(vorige);
+                    station->setVolgendeTo(volgende);
+                    station->setVorigeTo(vorige);
                     station->setSporen(sporen);
                     station->setType(enumtype);
                 }else{
@@ -543,6 +545,20 @@ Metronet* readFromXml(const char* file){
     return metronet;
 }
 
+bool findInVector(Tram *i, const std::vector<Tram *> &goi) {
+    for (std::vector<Tram*>::const_iterator it = goi.begin(); it != goi.end(); ++it){
+        if (i == *it) return true;              // return true if the integer is found
+    }
+    return false;
+}
+
+bool findInVector(Signaal *i, const std::vector<Signaal *> &goi) {
+    for (std::vector<Signaal*>::const_iterator it = goi.begin(); it != goi.end(); ++it){
+        if (i == *it) return true;              // return true if the integer is found
+    }
+    return false;
+}
+
 //---------------------------------//
 //// Tests
 
@@ -551,16 +567,16 @@ public:
     ValidMetronetTest() {
         metronet = new Metronet();
         Station* stationB = new Station("B");
-        std::map<int,Station*> b;
-        b[12] = stationB;
+        std::pair<int,Station*> b(12,stationB);
+
 
         Station* stationC = new Station("C");
-        std::map<int,Station*> c;
-        c[12] = stationC;
+        std::pair<int,Station*> c(12,stationC);
+
 
         Station* stationA = new Station("A", b, c, 12, Halte);
-        std::map<int,Station*> a;
-        a[12] = stationA;
+        std::pair<int,Station*> a(12,stationA);
+
 
         stationB->setVorige(12,stationA);
         stationB->setVolgende(12,stationC);
@@ -621,7 +637,7 @@ TEST_F(ValidMetronetTest, adders){
     Tram* tram = new PCC(1,metronet->findStation("A"));
     metronet->addTram(tram);
 
-    std::map<int,Station*> map;
+    std::pair<int,Station*> map;
 
     Station* station = new Station("Q", map, map,1,Halte);
     metronet->addStation(station);
@@ -751,8 +767,8 @@ TEST(Consistence, stationTrackNotConsistent){
 TEST(Consistence, stationNextTrackNotConsistent){
     Metronet* net = new Metronet();
     Station* st1 = new Station("A");
-    std::map<int, Station*> map;
-    map[2] = st1;
+    std::pair<int, Station*> map(2,st1);
+
 
     Station* st2 = new Station("B", map, map, 2, Halte);
     Tram* tr1 = new PCC(1, st1);
@@ -772,8 +788,8 @@ TEST(Consistence, stationNextTrackNotConsistent){
 TEST(Consistence, tramStartNotConsistent){
     Metronet* net = new Metronet();
     Station* st1 = new Station("A");
-    std::map<int,Station*> map;
-    map[1] = st1;
+    std::pair<int,Station*> map(1,st1);
+
     Station* st2 = new Station("B", map, map, 1,Halte);
     Station* st3 = new Station("C", map, map, 1,Halte);
     Tram* tr1 = new PCC(1, st3);
@@ -794,8 +810,8 @@ TEST(Consistence, tramStartNotConsistent){
 TEST(Consistence, stationStartTrackNotConsistent){
     Metronet* net = new Metronet();
     Station* st1 = new Station("A");
-    std::map<int,Station*> map;
-    map[1] = st1;
+    std::pair<int,Station*> map(1,st1);
+
     Station* st2 = new Station("B", map, map, 1, Halte);
     Tram* tr1 = new PCC(2, st1);
 

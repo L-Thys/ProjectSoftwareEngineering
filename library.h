@@ -16,7 +16,6 @@
 #include "gtest/include/gtest/gtest.h"
 #include <fstream>
 
-// TODO : desing by contract
 
 /**
  * @brief checks if string s is a valid string, according to the specification:
@@ -79,5 +78,7 @@ bool findInVector (std::string s, std::vector<std::string>& gos);
  * @return a boolean, true if the integer is present
  */
 bool findInVector (int i, const std::vector<int>& goi);
+
+
 
 #endif //PSE_LIBRARY_H

@@ -1,11 +1,8 @@
 //
-// Created by lotte on 27.02.20.
+// this file is only used for the PSE executable
 //
 
-#include "tinyXML/tinyxml.h"
 #include "library.h"
-#include "Station.h"
-#include "Tram.h"
 #include "Metronet.h"
 
 int main(){

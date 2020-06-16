@@ -86,7 +86,7 @@
         <naam>Y</naam>
         <type>Halte</type>
         <SPOOR>
-            <spoor>12</spoor>
+            <spoor>6</spoor>
             <volgende>Z</volgende>
             <vorige>X</vorige>
         </SPOOR>
@@ -100,7 +100,7 @@
         <naam>Z</naam>
         <type>Metrostation</type>
         <SPOOR>
-            <spoor>12</spoor>
+            <spoor>6</spoor>
             <volgende>U</volgende>
             <vorige>Y</vorige>
         </SPOOR>
@@ -133,6 +133,6 @@
     <TRAM>
         <lijn>6</lijn>
         <type>Albatros</type>
-        <beginStation>A</beginStation>
+        <beginStation>V</beginStation>
     </TRAM>
 </root>

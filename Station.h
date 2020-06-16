@@ -11,7 +11,6 @@
 
 enum StationType {Halte,Metrostation};
 
-// TODO : all ENSURE bij getters, de operators ook
 class Signaal;
 class Station {
 public:
@@ -27,16 +26,16 @@ public:
      */
     Station(std::string name);
 
+
     /**
      * @brief constructor of a station, this constructor takes 5 parameters and initialises the whole object at once
-     *        all the members that are initialised are strings, those are given in the constructor, only the track
-     *        that is given as member _Spoor is an integer
+     *          this constructs a station with multiple sporen
      *
      * @param _Naam a string that will be the name of our Station
      * @param _Volgende a map that contains the next station when a tram passes through, the key is the track
      * @param _Vorige a map that cointains the previous station, the track is the key
-     * @param _Spoor this is an integer that represents the track (Spoor) that runs through
-     * @param _Type is a string that denotes the type of station
+     * @param _Sporen this is a vector of ints that represent the track (Spoor) that run through the station
+     * @param _Type is StationType enum that denotes the type of station
      *
      * @pre _Type should be a valid Station type
      *      --> REQUIRE(is_valid_station_type(_Type),"the variable \"_Type\" has to be a valid station type");
@@ -44,20 +43,17 @@ public:
      * @post This constructor will make sure the object is properly initialized
      *       --> ENSURE (properlyInitialized(), "A constructor must end in a properlyInitialized state")
      * */
-    Station(const std::string &_Naam, std::map<int,Station*> &_Volgende, std::map<int,Station*> &_Vorige, int _Spoor, StationType _Type);
-
     Station(const std::string &_Naam, std::map<int,Station*> &_Volgende, std::map<int,Station*> &_Vorige, std::vector<int> _Sporen, StationType _Type);
 
     /**
      * @brief constructor of a station, this constructor takes 5 parameters and initialises the whole object at once
-     *        all the members that are initialised are strings, those are given in the constructor, only the track
-     *        that is given as member _Spoor is an integer
+     *        this constructs a station with 1 spoor
      *
      * @param _Naam a string that will be the name of our Station
      * @param _Volgende a pair that contains the next station when a tram passes through, the key is the track
      * @param _Vorige a pair that cointains the previous station, the track is the key
      * @param _Spoor this is an integer that represents a track (Spoor) that runs through
-     * @param _Type is a string that denotes the type of station
+     * @param _Type is StationType enum that denotes the type of station
      *
      * @pre _Type should be a valid Station type
      *      --> REQUIRE(is_valid_station_type(_Type),"the variable \"_Type\" has to be a valid station type");
@@ -118,7 +114,7 @@ public:
      * @pre this object must be properly initialized
      *      --> REQUIRE(properlyInitialized(), "Station was not properly or not initialized before calling getSporen")
      *
-     * @post this method must return a vector of integers,
+     * @post this method must return a vector of *integers*,
      *       an ENSURE is unnecessary due to the consistency of integers in the compiler
      */
     std::vector<int> getSporen();
@@ -132,34 +128,58 @@ public:
     bool properlyInitialized() const;
 
     /**
-     * @brief : this method sets _Volgende to the param volgende
+     * @brief : this method adds x,volgende to the _Volgende map
      *
+     * @param x: the line on which volgende is the next station
      * @param volgende : a pointer to a station
      *
      * @pre : the object must be properly initialized
      *      --> REQUIRE (properlyInitialized(), "The Station was not properly or not initialized before calling setVolgende")
      *
      * @post : _Volgende should be volgende
-     *      ENSURE(getVolgende(x)==volgende, "_Volgende should be equal to param volgende")
+     *      ENSURE(getVolgende(x)==volgende, "x,volgende should be in the map _Volgende")
      */
     void setVolgende(int x, Station *volgende);
 
     /**
-     * @brief : this method sets _Vorige to the param vorige
+     * @brief : this method adds x,vorige to the _Vorige map
      *
+     * @param x: the line on which vorige is the previous station
      * @param vorige : a pointer to a station
      *
      * @pre : the object must be properly initialized
      *      --> REQUIRE (properlyInitialized(), "The Station was not properly or not initialized before calling setVorige")
      *
-     * @post : _Volgende should be volgende
-     *      ENSURE(getVorige()==vorige, "_Vorige should be equal to param vorige")
+     * @post : _Vorige should be vorige
+     *      ENSURE(getVorige(x)==vorige, "x,vorige should be in the map _Vorige")
      */
     void setVorige(int x, Station *vorige);
 
-    void setVolgende1(const std::map<int, Station *> &volgende);
+    /**
+     * @brief : this method sets _Volgende to the param volgende
+     *
+     * @param volgende : a map of pointers to a station, with int key which denotes the line
+     *
+     * @pre : the object must be properly initialized
+     *      --> REQUIRE (properlyInitialized(), "The Station was not properly or not initialized before calling setVolgendeTo")
+     *
+     * @post : _Volgende should be volgende
+     *      ENSURE(_Volgende==volgende, "_Volgende should be equal to param volgende")
+     */
+    void setVolgendeTo(const std::map<int, Station *> &volgende);
 
-    void setVorige1(const std::map<int, Station *> &vorige);
+    /**
+     * @brief : this method sets _Vorige to the param vorige
+     *
+     * @param vorige : a map of pointers to a station, with int key which denotes the line
+     *
+     * @pre : the object must be properly initialized
+     *      --> REQUIRE (properlyInitialized(), "The Station was not properly or not initialized before calling setVorigeTo")
+     *
+     * @post : _Vorige should be vorige
+     *      ENSURE(_Vorige==vorige, "_Vorige should be equal to param vorige")
+     */
+    void setVorigeTo(const std::map<int, Station *> &vorige);
 
     /**
      * @brief : this method sets _Sporen to the param sporen

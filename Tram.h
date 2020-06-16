@@ -13,22 +13,20 @@ class Tram {
 public:
 
     /**
-     * @brief : the constructor of an object of type Tram, this constructor takes 3 parameters to initialise the object
+     * @brief : the constructor of an object of type Tram, this constructor takes 2 parameters to initialise the object
      *          all members will be initialised by at least one of these parameters
-     *          _Seats and _Speed will be initialised according to the type of tram
      *
      * @param lijn : an integer which indicates on which line this Tram rides
      * @param startStation : a pointer to the station where the Tram begins its trajectory
-     * @param type : a string that denotes the type of tram (must be a valid tram type)
-     *
-     * @pre : this constructor requires that type is a valid tram type
-     *      --> REQUIRE(is_valid_tram_type(type),"the variable \"type\" has to be a valid tram type")
      *
      * @post This constructor will make sure the object is properly initialized
      *       --> ENSURE (properlyInitialized(), "A constructor must end in a properlyInitialized state")
      * */
     Tram(int lijn, Station *startStation);
 
+    /**
+     * brief: destructor
+     */
     virtual ~Tram();
 
     /**
@@ -130,7 +128,6 @@ public:
      * @post _TijdTotVerandering should change during this function
      *      --> ENSURE(previousTijdTotVerandering != _TijdTotVerandering, "drive was unsuccessful, time until next movement change hasn't changed");
      *
-     * @param station this is the station from where we move the tram, this isn't necessarily the right one
      *
      * @return this method returns a boolean that indicates if the move is successfully executed
      */
@@ -142,7 +139,7 @@ public:
      * @return : int: het voertuignr
      *
      * @pre : the object must be properly initialized
-     *      --> REQUIRE (properlyInitialized(), "The Tram was not properly or not initialized before calling getStartStation")
+     *      --> REQUIRE (properlyInitialized(), "The Tram was not properly or not initialized before calling getVoertuignr")
      *
      */
     int getVoertuigNr() const;
@@ -160,11 +157,27 @@ public:
      */
     void setVoertuigNr(int voertuigNr);
 
+    /**
+     * @brief : this method is the getter of the member passengers
+     *
+     * @param voertuigNr : an int which shows how many passengers are currently on the tram
+     *
+     * @pre : the object must be properly initialized
+     *      --> REQUIRE (properlyInitialized(), "The Tram was not properly or not initialized before calling getPassengers")
+     *
+     */
     int getPassengers() const;
 
+    /**
+     * @brief : this method is the getter of the member opbrengs
+     *
+     * @param voertuigNr : an int which shows how much money the tram has made
+     *
+     * @pre : the object must be properly initialized
+     *      --> REQUIRE (properlyInitialized(), "The Tram was not properly or not initialized before calling getOpbrengs")
+     *
+     */
     int getOpbrengst() const;
-
-    void setOpbrengst(int opbrengst);
 
     /**
      * @brief this method check whether the tram is on its way/in-between Stations or not
@@ -196,19 +209,75 @@ protected:
 
 class Albatros: public Tram{
 public:
+    /**
+     * @brief : the constructor of an object of type Albatros, this constructor takes 2 parameters to initialise the object
+     *          all members will be initialised by at least one of these parameters
+     *
+     * @param lijn : an integer which indicates on which line this Tram rides
+     * @param startStation : a pointer to the station where the Tram begins its trajectory
+     *
+     *
+     * @post This constructor will make sure the object is properly initialized
+     *       --> ENSURE (properlyInitialized(), "A constructor must end in a properlyInitialized state")
+     * */
     Albatros(int lijn, Station *startStation);
 
+    /**
+     * @brief: destructor
+     */
     virtual ~Albatros();
 
+    /**
+     * @brief this method moves, if possible, the Tram which is located in the given station
+     *        to the next station.
+     *
+     * @pre the object must be properly initialized
+     *      --> REQUIRE(properlyInitialized(), "Tram was not properly or no initialized before calling drive")
+     *
+     *
+     * @post _TijdTotVerandering should change during this function
+     *      --> ENSURE(previousTijdTotVerandering != _TijdTotVerandering, "drive was unsuccessful, time until next movement change hasn't changed");
+     *
+     *
+     * @return this method returns a boolean that indicates if the move is successfully executed
+     */
     virtual bool drive(std::string& resultstring);
 };
 
 class PCC: public Tram{
 public:
+    /**
+     * @brief : the constructor of an object of type PCC, this constructor takes 2 parameters to initialise the object
+     *          all members will be initialised by at least one of these parameters
+     *
+     * @param lijn : an integer which indicates on which line this Tram rides
+     * @param startStation : a pointer to the station where the Tram begins its trajectory
+     *
+     *
+     * @post This constructor will make sure the object is properly initialized
+     *       --> ENSURE (properlyInitialized(), "A constructor must end in a properlyInitialized state")
+     * */
     PCC(int lijn, Station *startStation);
 
+    /**
+     * @brief: destructor
+     */
     virtual ~PCC();
 
+    /**
+     * @brief this method moves, if possible, the Tram which is located in the given station
+     *        to the next station.
+     *
+     * @pre the object must be properly initialized
+     *      --> REQUIRE(properlyInitialized(), "Tram was not properly or no initialized before calling drive")
+     *
+     *
+     * @post _TijdTotVerandering should change during this function
+     *      --> ENSURE(previousTijdTotVerandering != _TijdTotVerandering, "drive was unsuccessful, time until next movement change hasn't changed");
+     *
+     *
+     * @return this method returns a boolean that indicates if the move is successfully executed
+     */
     virtual bool drive(std::string& resultstring);
 };
 
