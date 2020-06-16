@@ -23,7 +23,6 @@ protected:
      * @return a pointer to a Tram, is NULL if there is no on that part of the track
      * @pre The Metronet must be properly initialized
      *      --> REQUIRE(properlyInitialized(), "The Metronet was not properly or not initialized before calling findStation");
-
      */
     Tram* getMovingTram (Station* station, int a) const ;
 
@@ -207,7 +206,7 @@ public:
      * @pre this object must be properly initialized
      *      --> REQUIRE (properlyInitialized(), "The Metronet was not properly or not initialized before calling writeToFile")
      *
-     * @pre : there's at least one station in _stations and at least one tram in _trams
+     * @pre there's at least one station in _stations and at least one tram in _trams
      *      and the metronet is consistent
      *      --> REQUIRE(mapsAreNotEmpty() && isConsistent(), "this object should contain a consistent metronet")
      *
