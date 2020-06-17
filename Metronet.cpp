@@ -744,6 +744,30 @@ TEST(Consistence, stationOneTrackNoTram){
     delete net;
 }
 
+TEST(Consistence, station2TimesSameTrack){
+    Metronet* net = new Metronet();
+    Station* st1 = new Station("A");
+    Station* st2 = new Station("B");
+
+    std::vector<int> vec; vec.push_back(1); vec.push_back(1);
+    st1->setVorige(1, st2);
+    st1->setVolgende(1, st2);
+
+    st1->setSporen(vec);
+
+    st2->setVolgende(1, st1);
+    st2->setVorige(1, st1);
+
+    st2->setSporen(vec);
+
+    Tram* tr1 = new PCC(1, st1);
+    net->addStation(st1);
+    net->addStation(st2);
+    net->addTram(tr1);
+    EXPECT_FALSE(net->isConsistent());
+    delete net;
+}
+
 
 // the test with a wrong previous station
 TEST(Consistence, stationPreviousNull){
